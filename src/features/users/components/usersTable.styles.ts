@@ -35,6 +35,7 @@ export const usersTableSx = {
   },
   table: {
     minWidth: 900,
+    tableLayout: "fixed",
     "& .MuiTableCell-root": {
       borderBottom: "1px solid var(--app-divider)",
       color: "var(--app-text)",
@@ -79,5 +80,10 @@ export const usersTableSx = {
   actionsBtn: {
     color: "var(--app-text-muted)",
     "&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
+  },
+  emptyState: {
+    color: "var(--app-text-muted)",
+    textAlign: "center",
+    py: 6,
   },
 } as const;

@@ -22,6 +22,14 @@ export function UsersTable({ users }: { users: UserRow[] }) {
       sx={usersTableSx.tableContainer}
     >
       <Table sx={usersTableSx.table} aria-label="users table">
+        <colgroup>
+          <col style={{ width: 220 }} />
+          <col style={{ width: 190 }} />
+          <col style={{ width: 300 }} />
+          <col style={{ width: 180 }} />
+          <col style={{ width: 220 }} />
+          <col style={{ width: 56 }} />
+        </colgroup>
         <TableHead>
           <TableRow>
             <TableCell sx={usersTableSx.headCell}>First Name</TableCell>
@@ -40,9 +48,15 @@ export function UsersTable({ users }: { users: UserRow[] }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((u) => (
-            <UsersTableRow key={u.id} user={u} />
-          ))}
+          {users.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={6} sx={usersTableSx.emptyState}>
+                Users not found
+              </TableCell>
+            </TableRow>
+          ) : (
+            users.map((u) => <UsersTableRow key={u.id} user={u} />)
+          )}
         </TableBody>
       </Table>
     </TableContainer>
