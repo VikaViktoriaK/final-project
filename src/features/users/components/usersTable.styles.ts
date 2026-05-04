@@ -4,6 +4,29 @@ export const usersTableSx = {
     px: { xs: 2, md: 3 },
     py: { xs: 3, md: 4 },
   },
+  topBar: {
+    display: "flex",
+    alignItems: "center",
+    mb: 2,
+  },
+  searchField: {
+    width: "min(640px, 100%)",
+    "& .MuiInputBase-root": {
+      borderRadius: 999,
+      backgroundColor: "var(--app-control-bg)",
+      border: "1px solid var(--app-control-border)",
+      color: "var(--app-text)",
+    },
+    "& .MuiInputBase-input": {
+      py: 1.35,
+    },
+    "& .MuiSvgIcon-root": {
+      color: "var(--app-text-muted)",
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: "none",
+    },
+  },
   tableContainer: {
     backgroundColor: "var(--app-bg)",
     border: "none",

@@ -4,6 +4,8 @@
   --app-divider: rgba(255, 255, 255, 0.08);
   --app-text: rgba(255, 255, 255, 0.92);
   --app-text-muted: rgba(255, 255, 255, 0.68);
+  --app-control-bg: rgba(255, 255, 255, 0.08);
+  --app-control-border: rgba(255, 255, 255, 0.12);
 }
 
 html,
