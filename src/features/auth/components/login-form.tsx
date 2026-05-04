@@ -1,9 +1,18 @@
 "use client";
-import { TextField, Button, Stack, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Stack,
+  Typography,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import NextLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
+import { useLazyQuery } from "@apollo/client/react";
+import { LOGIN_QUERY } from "../graphql/login.query";
 
 function LoginForm() {
   const {
@@ -18,8 +27,13 @@ function LoginForm() {
     },
   });
 
+  const [login, { loading, error }] = useLazyQuery(LOGIN_QUERY, {
+    fetchPolicy: "no-cache",
+  });
+
   const onSubmit = async (data: LoginFormValues) => {
-    console.log(data);
+    const result = await login({ variables: { auth: data } });
+    console.log(result.data);
   };
 
   return (
@@ -58,10 +72,11 @@ function LoginForm() {
         type="submit"
         variant="contained"
         color="primary"
-        disabled={isSubmitting}
+        disabled={isSubmitting || loading}
       >
-        Sign in
+        {loading ? <CircularProgress size={20} /> : "Sign in"}
       </Button>
+      {error && <Alert severity="error">{error.message}</Alert>}
     </Stack>
   );
 }
