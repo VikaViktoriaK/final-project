@@ -1,0 +1,18 @@
+:root {
+  --app-bg: #1f1f1f;
+  --app-surface: #2a2a2a;
+  --app-divider: rgba(255, 255, 255, 0.08);
+  --app-text: rgba(255, 255, 255, 0.92);
+  --app-text-muted: rgba(255, 255, 255, 0.68);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
