@@ -22,28 +22,20 @@ export function UsersTable({ users }: { users: UserRow[] }) {
       sx={usersTableSx.tableContainer}
     >
       <Table sx={usersTableSx.table} aria-label="users table">
-        <colgroup>
-          <col style={{ width: 220 }} />
-          <col style={{ width: 190 }} />
-          <col style={{ width: 300 }} />
-          <col style={{ width: 180 }} />
-          <col style={{ width: 220 }} />
-          <col style={{ width: 56 }} />
-        </colgroup>
         <TableHead>
           <TableRow>
-            <TableCell sx={usersTableSx.headCell}>First Name</TableCell>
-            <TableCell sx={usersTableSx.headCell}>Last Name</TableCell>
-            <TableCell sx={usersTableSx.headCell}>Email</TableCell>
-            <TableCell sx={usersTableSx.headCell}>
-              <Box
-                sx={{ display: "inline-flex", alignItems: "center", gap: 0.75 }}
-              >
+            <TableCell sx={usersTableSx.headFirstNameCell}>
+              First Name
+            </TableCell>
+            <TableCell sx={usersTableSx.headLastNameCell}>Last Name</TableCell>
+            <TableCell sx={usersTableSx.headEmailCell}>Email</TableCell>
+            <TableCell sx={usersTableSx.headDepartmentCell}>
+              <Box sx={usersTableSx.headDepartmentLabel}>
                 <span>Department</span>
                 <ArrowUpwardIcon />
               </Box>
             </TableCell>
-            <TableCell sx={usersTableSx.headCell}>Position</TableCell>
+            <TableCell sx={usersTableSx.headPositionCell}>Position</TableCell>
             <TableCell sx={usersTableSx.headCell} />
           </TableRow>
         </TableHead>

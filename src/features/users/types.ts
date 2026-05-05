@@ -1,4 +1,4 @@
-export type UserRow = {
+export interface UserRow {
   id: string;
   firstName: string;
   lastName: string;
@@ -6,4 +6,4 @@ export type UserRow = {
   department: string;
   position: string;
   avatarUrl?: string;
-};
+}

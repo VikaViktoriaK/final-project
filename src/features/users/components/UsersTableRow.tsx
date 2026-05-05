@@ -8,8 +8,8 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import type { UserRow } from "../types";
 import { usersTableSx } from "./usersTable.styles";
+import type { UserRow } from "@/features/users/types";
 
 function initials(firstName: string, lastName: string) {
   const a = (firstName?.[0] ?? "").toUpperCase();
@@ -20,7 +20,7 @@ function initials(firstName: string, lastName: string) {
 export function UsersTableRow({ user }: { user: UserRow }) {
   return (
     <TableRow sx={usersTableSx.row}>
-      <TableCell>
+      <TableCell sx={usersTableSx.firstNameCell}>
         <Box sx={usersTableSx.nameCell}>
           <Avatar src={user.avatarUrl} sx={usersTableSx.avatar}>
             {initials(user.firstName, user.lastName)}
@@ -28,26 +28,22 @@ export function UsersTableRow({ user }: { user: UserRow }) {
           <Typography variant="body2">{user.firstName}</Typography>
         </Box>
       </TableCell>
-      <TableCell>
+      <TableCell sx={usersTableSx.lastNameCell}>
         <Typography variant="body2">{user.lastName}</Typography>
       </TableCell>
-      <TableCell>
+      <TableCell sx={usersTableSx.emailCell}>
         <Typography variant="body2" sx={usersTableSx.email}>
           {user.email}
         </Typography>
       </TableCell>
-      <TableCell>
+      <TableCell sx={usersTableSx.departmentCell}>
         <Typography variant="body2">{user.department}</Typography>
       </TableCell>
-      <TableCell>
+      <TableCell sx={usersTableSx.positionCell}>
         <Typography variant="body2">{user.position}</Typography>
       </TableCell>
       <TableCell sx={usersTableSx.actionsCell}>
-        <IconButton
-          aria-label="row actions"
-          size="small"
-          sx={usersTableSx.actionsBtn}
-        >
+        <IconButton size="small" sx={usersTableSx.actionsBtn}>
           <MoreVertIcon fontSize="small" />
         </IconButton>
       </TableCell>

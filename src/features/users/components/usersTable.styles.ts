@@ -6,8 +6,10 @@ export const usersTableSx = {
   },
   topBar: {
     display: "flex",
+    justifyContent: "space-between",
     alignItems: "center",
-    mb: 2,
+    mb: 3,
+    gap: 2,
   },
   searchField: {
     width: "min(640px, 100%)",
@@ -16,12 +18,21 @@ export const usersTableSx = {
       backgroundColor: "var(--app-control-bg)",
       border: "1px solid var(--app-control-border)",
       color: "var(--app-text)",
+      transition: "all 0.2s ease-in-out",
+      "&.Mui-focused": {
+        borderColor: "var(--app-text-muted)",
+        backgroundColor: "rgba(255, 255, 255, 0.05)",
+      },
     },
     "& .MuiInputBase-input": {
       py: 1.35,
     },
     "& .MuiSvgIcon-root": {
       color: "var(--app-text-muted)",
+      transition: "color 0.2s",
+    },
+    "& .Mui-focused .MuiSvgIcon-root": {
+      color: "var(--app-text)",
     },
     "& .MuiOutlinedInput-notchedOutline": {
       border: "none",
@@ -51,6 +62,81 @@ export const usersTableSx = {
       fontSize: 16,
       color: "var(--app-text-muted)",
     },
+  },
+  headFirstNameCell: {
+    color: "var(--app-text-muted)",
+    fontWeight: 600,
+    letterSpacing: 0.2,
+    whiteSpace: "nowrap",
+    width: 220,
+    "& .MuiSvgIcon-root": {
+      fontSize: 16,
+      color: "var(--app-text-muted)",
+    },
+  },
+  headLastNameCell: {
+    color: "var(--app-text-muted)",
+    fontWeight: 600,
+    letterSpacing: 0.2,
+    whiteSpace: "nowrap",
+    width: 190,
+    "& .MuiSvgIcon-root": {
+      fontSize: 16,
+      color: "var(--app-text-muted)",
+    },
+  },
+  headEmailCell: {
+    color: "var(--app-text-muted)",
+    fontWeight: 600,
+    letterSpacing: 0.2,
+    whiteSpace: "nowrap",
+    width: 300,
+    "& .MuiSvgIcon-root": {
+      fontSize: 16,
+      color: "var(--app-text-muted)",
+    },
+  },
+  headDepartmentCell: {
+    color: "var(--app-text-muted)",
+    fontWeight: 600,
+    letterSpacing: 0.2,
+    whiteSpace: "nowrap",
+    width: 180,
+    "& .MuiSvgIcon-root": {
+      fontSize: 16,
+      color: "var(--app-text-muted)",
+    },
+  },
+  headPositionCell: {
+    color: "var(--app-text-muted)",
+    fontWeight: 600,
+    letterSpacing: 0.2,
+    whiteSpace: "nowrap",
+    width: 220,
+    "& .MuiSvgIcon-root": {
+      fontSize: 16,
+      color: "var(--app-text-muted)",
+    },
+  },
+  headDepartmentLabel: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 0.75,
+  },
+  firstNameCell: {
+    width: 220,
+  },
+  lastNameCell: {
+    width: 190,
+  },
+  emailCell: {
+    width: 300,
+  },
+  departmentCell: {
+    width: 180,
+  },
+  positionCell: {
+    width: 220,
   },
   row: {
     "&:hover": { backgroundColor: "rgba(255,255,255,0.03)" },
@@ -85,5 +171,66 @@ export const usersTableSx = {
     color: "var(--app-text-muted)",
     textAlign: "center",
     py: 6,
+  },
+  usersFilter: {
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
+  },
+  usersFilterSelect: {
+    minWidth: 160,
+    "& .MuiInputBase-root": {
+      color: "var(--app-text)",
+      backgroundColor: "var(--app-control-bg)",
+      borderRadius: 999,
+      fontSize: "0.875rem",
+      transition: "all 0.2s ease-in-out",
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "var(--app-control-border)",
+      },
+      "&:hover .MuiOutlinedInput-notchedOutline": {
+        borderColor: "var(--app-text-muted)",
+      },
+      "&.Mui-focused": {
+        backgroundColor: "rgba(255, 255, 255, 0.05)",
+        "& .MuiOutlinedInput-notchedOutline": {
+          borderColor: "var(--app-text-muted)",
+          borderWidth: "1px",
+        },
+      },
+    },
+    "& .MuiInputLabel-root": {
+      color: "var(--app-text-muted)",
+      fontSize: "0.875rem",
+      "&.Mui-focused": {
+        color: "var(--app-text)",
+      },
+    },
+    "& .MuiSvgIcon-root": {
+      color: "var(--app-text-muted)",
+    },
+    "& .Mui-focused .MuiSvgIcon-root": {
+      color: "var(--app-text)",
+    },
+  },
+  usersFilterOrderBtn: {
+    border: "1px solid var(--app-control-border)",
+    color: "var(--app-text-muted)",
+    backgroundColor: "var(--app-control-bg)",
+    transition: "all 0.2s",
+    "&:hover": {
+      backgroundColor: "rgba(255,255,255,0.08)",
+      borderColor: "var(--app-text-muted)",
+      color: "var(--app-text)",
+    },
+    "&.MuiIconButton-root": {
+      color: "var(--app-text-muted)",
+    },
+    "&:active": {
+      color: "var(--app-text)",
+    },
+  },
+  usersPageContainer: {
+    p: 3,
   },
 } as const;

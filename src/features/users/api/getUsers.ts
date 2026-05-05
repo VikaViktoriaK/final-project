@@ -38,8 +38,8 @@ export function useUsersQuery() {
   const users: UserRow[] =
     query.data?.users?.map((u) => ({
       id: u.id,
-      firstName: u.profile?.first_name ?? "",
-      lastName: u.profile?.last_name ?? "",
+      firstName: (u.profile?.first_name ?? "").trim(),
+      lastName: (u.profile?.last_name ?? "").trim(),
       email: u.email,
       department: u.department_name ?? "",
       position: u.position_name ?? "",
