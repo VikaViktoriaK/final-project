@@ -7,14 +7,37 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
 import { useLazyQuery } from "@apollo/client/react";
 import { LOGIN_QUERY } from "../graphql/login.query";
+import { saveAuthTokens } from "../lib/auth-storage";
+
+type LoginQueryData = {
+  login: {
+    access_token: string;
+    refresh_token: string;
+    user: {
+      id: string;
+      email: string;
+      role: string;
+      profile: {
+        full_name: string;
+        avatar: string | null;
+      };
+    };
+  };
+};
+
+type LoginQueryVariables = {
+  auth: LoginFormValues;
+};
 
 function LoginForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -27,13 +50,22 @@ function LoginForm() {
     },
   });
 
-  const [login, { loading, error }] = useLazyQuery(LOGIN_QUERY, {
+  const [login, { loading, error }] = useLazyQuery<
+    LoginQueryData,
+    LoginQueryVariables
+  >(LOGIN_QUERY, {
     fetchPolicy: "no-cache",
   });
 
   const onSubmit = async (data: LoginFormValues) => {
     const result = await login({ variables: { auth: data } });
-    console.log(result.data);
+    if (result.data?.login) {
+      saveAuthTokens(
+        result.data.login.access_token,
+        result.data.login.refresh_token,
+      );
+      router.push("/employees");
+    }
   };
 
   return (
