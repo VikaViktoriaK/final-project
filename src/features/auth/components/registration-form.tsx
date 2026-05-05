@@ -92,7 +92,7 @@ function RegistrationForm() {
         error={!!errors.password}
         helperText={errors.password?.message}
         fullWidth
-        autoComplete="current-password"
+        autoComplete="new-password"
       />
       <TextField
         label="Confirm Password"
@@ -102,6 +102,7 @@ function RegistrationForm() {
         error={!!errors.confirmPassword}
         helperText={errors.confirmPassword?.message}
         fullWidth
+        autoComplete="new-password"
       />
       <Button
         type="submit"
