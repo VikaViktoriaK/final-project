@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Box from "@mui/material/Box";
+import { useRouter } from "next/navigation";
 import { PageLoader } from "@/components/PageLoader";
 import { UsersTable } from "@/features/users/components/UsersTable";
 import { UsersSearch } from "@/features/users/components/UsersSearch";
@@ -12,6 +13,7 @@ import { usersTableSx } from "@/features/users/components/usersTable.styles";
 import type { UserRow } from "@/features/users/types";
 
 export default function UsersPage() {
+  const router = useRouter();
   const [query, setQuery] = React.useState("");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = React.useState<keyof UserRow>("firstName");
@@ -67,6 +69,9 @@ export default function UsersPage() {
           onEditUser={(user) => {
             setEditingUser(user);
             setEditOpen(true);
+          }}
+          onViewUser={(user) => {
+            router.push(`/users/${user.id}`);
           }}
         />
       )}

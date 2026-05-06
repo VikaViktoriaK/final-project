@@ -48,3 +48,14 @@ export const getCurrentUserId = (): string | null => {
   if (typeof idValue === "number") return String(idValue);
   return null;
 };
+
+export const getCurrentUserRole = (): string | null => {
+  const token = getAccessToken();
+  if (!token) return null;
+  const payload = decodeJwtPayload(token);
+  if (!payload) return null;
+
+  const roleValue = payload.role;
+  if (typeof roleValue === "string") return roleValue;
+  return null;
+};

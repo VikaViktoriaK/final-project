@@ -17,9 +17,10 @@ import { usersTableSx } from "./usersTable.styles";
 type UsersTableProps = {
   users: UserRow[];
   onEditUser: (user: UserRow) => void;
+  onViewUser: (user: UserRow) => void;
 };
 
-export function UsersTable({ users, onEditUser }: UsersTableProps) {
+export function UsersTable({ users, onEditUser, onViewUser }: UsersTableProps) {
   return (
     <TableContainer
       component={Paper}
@@ -53,7 +54,12 @@ export function UsersTable({ users, onEditUser }: UsersTableProps) {
             </TableRow>
           ) : (
             users.map((u) => (
-              <UsersTableRow key={u.id} user={u} onEdit={onEditUser} />
+              <UsersTableRow
+                key={u.id}
+                user={u}
+                onEdit={onEditUser}
+                onView={onViewUser}
+              />
             ))
           )}
         </TableBody>
