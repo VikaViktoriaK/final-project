@@ -1,4 +1,4 @@
-import { LoginFormValues } from "../schemas/login.schema";
+import type { LoginFormValues } from "../schemas/login.schema";
 
 type AuthUser = {
   id: string;
@@ -32,11 +32,11 @@ type LoginQueryVariables = {
   auth: LoginFormValues;
 };
 
-type SignupQueryData = {
+type SignupMutationData = {
   signup: AuthResult;
 };
 
-type SignupQueryVariables = {
+type SignupMutationVariables = {
   auth: { email: string; password: string };
 };
 
@@ -55,8 +55,8 @@ export type {
   ForgotPasswordMutationVariables,
   LoginQueryData,
   LoginQueryVariables,
-  SignupQueryData,
-  SignupQueryVariables,
+  SignupMutationData,
+  SignupMutationVariables,
   ResetPasswordMutationData,
   ResetPasswordMutationVariables,
 };

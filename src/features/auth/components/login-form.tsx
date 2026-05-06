@@ -15,7 +15,8 @@ import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
 import { useLazyQuery } from "@apollo/client/react";
 import { LOGIN_QUERY } from "../graphql/login.query";
 import { saveAuthTokens } from "../lib/auth-storage";
-import { LoginQueryData, LoginQueryVariables } from "../types/auth.types";
+import type { LoginQueryData, LoginQueryVariables } from "../types/auth.types";
+
 function LoginForm() {
   const router = useRouter();
   const {

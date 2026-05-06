@@ -17,7 +17,7 @@ import {
 import { useMutation } from "@apollo/client/react";
 import { FORGOT_PASSWORD_MUTATION } from "../graphql/forgot-password.mutation";
 import { useState } from "react";
-import {
+import type {
   ForgotPasswordMutationData,
   ForgotPasswordMutationVariables,
 } from "../types/auth.types";

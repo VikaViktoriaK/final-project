@@ -14,7 +14,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupFormValues } from "../schemas/signup.schema";
 import { useMutation } from "@apollo/client/react";
 import { SIGNUP_MUTATION } from "../graphql/signup.mutation";
-import { SignupQueryData, SignupQueryVariables } from "../types/auth.types";
+import type {
+  SignupMutationData,
+  SignupMutationVariables,
+} from "../types/auth.types";
 
 function RegistrationForm() {
   const router = useRouter();
@@ -32,8 +35,8 @@ function RegistrationForm() {
   });
 
   const [signup, { loading, error }] = useMutation<
-    SignupQueryData,
-    SignupQueryVariables
+    SignupMutationData,
+    SignupMutationVariables
   >(SIGNUP_MUTATION);
 
   const onSubmit = async (data: SignupFormValues) => {

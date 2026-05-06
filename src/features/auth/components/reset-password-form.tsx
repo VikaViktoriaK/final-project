@@ -19,7 +19,7 @@ import {
 import { useState } from "react";
 import NextLink from "next/link";
 
-import {
+import type {
   ResetPasswordMutationData,
   ResetPasswordMutationVariables,
 } from "../types/auth.types";
