@@ -4,12 +4,15 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { usersTableSx } from "./usersTable.styles";
 import type { UserRow } from "@/features/users/types";
+import { getCurrentUserId } from "@/features/auth/lib/auth-storage";
 
 function initials(firstName: string, lastName: string) {
   const a = (firstName?.[0] ?? "").toUpperCase();
@@ -17,7 +20,27 @@ function initials(firstName: string, lastName: string) {
   return `${a}${b}` || "U";
 }
 
-export function UsersTableRow({ user }: { user: UserRow }) {
+type UsersTableRowProps = {
+  user: UserRow;
+  onEdit: (user: UserRow) => void;
+};
+
+export function UsersTableRow({ user, onEdit }: UsersTableRowProps) {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const currentUserId = getCurrentUserId();
+  const canEdit = currentUserId === user.id;
+  const menuOpen = Boolean(anchorEl);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    if (!canEdit) return;
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => setAnchorEl(null);
+  const handleEdit = () => {
+    handleMenuClose();
+    onEdit(user);
+  };
+
   return (
     <TableRow sx={usersTableSx.row}>
       <TableCell sx={usersTableSx.firstNameCell}>
@@ -43,9 +66,22 @@ export function UsersTableRow({ user }: { user: UserRow }) {
         <Typography variant="body2">{user.position}</Typography>
       </TableCell>
       <TableCell sx={usersTableSx.actionsCell}>
-        <IconButton size="small" sx={usersTableSx.actionsBtn}>
+        <IconButton
+          size="small"
+          sx={usersTableSx.actionsBtn}
+          onClick={handleMenuOpen}
+          disabled={!canEdit}
+        >
           <MoreVertIcon fontSize="small" />
         </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={menuOpen}
+          onClose={handleMenuClose}
+          sx={usersTableSx.rowMenu}
+        >
+          <MenuItem onClick={handleEdit}>Edit</MenuItem>
+        </Menu>
       </TableCell>
     </TableRow>
   );

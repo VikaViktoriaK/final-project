@@ -21,3 +21,30 @@ export const clearAuthTokens = (): void => {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
 };
+
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length < 2) return null;
+    const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const normalized =
+      payload + "=".repeat((4 - (payload.length % 4 || 4)) % 4);
+    const decoded = atob(normalized);
+    return JSON.parse(decoded) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+export const getCurrentUserId = (): string | null => {
+  const token = getAccessToken();
+  if (!token) return null;
+  const payload = decodeJwtPayload(token);
+  if (!payload) return null;
+
+  const idValue =
+    payload.id ?? payload.sub ?? payload.userId ?? payload.user_id;
+  if (typeof idValue === "string") return idValue;
+  if (typeof idValue === "number") return String(idValue);
+  return null;
+};
