@@ -19,6 +19,7 @@ import {
   useUserEditOptionsQuery,
 } from "../api/updateUser";
 import { usersTableSx } from "./usersTable.styles";
+import { getCurrentUserRole } from "@/features/auth/lib/auth-storage";
 
 type UserEditDialogProps = {
   open: boolean;
@@ -57,6 +58,39 @@ function getInitialForm(user: UserRow | null): FormState {
   };
 }
 
+function extractGraphqlErrorMessage(err: unknown): string {
+  const anyErr = err as {
+    message?: string;
+    graphQLErrors?: Array<{
+      message?: string;
+      extensions?: {
+        response?: {
+          message?: unknown;
+          error?: unknown;
+          statusCode?: unknown;
+        };
+      };
+    }>;
+  };
+
+  const gql = anyErr?.graphQLErrors?.[0];
+  const extMsg = gql?.extensions?.response?.message;
+  if (Array.isArray(extMsg)) return extMsg.filter(Boolean).join(", ");
+  if (typeof extMsg === "string") return extMsg;
+  const response = gql?.extensions?.response;
+  if (response) {
+    try {
+      return JSON.stringify(response);
+    } catch {
+      // ignore
+    }
+  }
+  if (typeof gql?.message === "string" && gql.message) return gql.message;
+  if (typeof anyErr?.message === "string" && anyErr.message)
+    return anyErr.message;
+  return "Bad Request";
+}
+
 export function UserEditDialog({
   open,
   user,
@@ -64,6 +98,7 @@ export function UserEditDialog({
   onSaved,
 }: UserEditDialogProps) {
   const [form, setForm] = React.useState<FormState>(() => getInitialForm(user));
+  const [submitError, setSubmitError] = React.useState<string | null>(null);
   const [updateUser, { loading: updatingUser, error: updateUserError }] =
     useUpdateUserMutation();
   const [
@@ -72,6 +107,7 @@ export function UserEditDialog({
   ] = useUpdateProfileMutation();
   const { data: optionsData, loading: loadingOptions } =
     useUserEditOptionsQuery();
+  const isAdmin = getCurrentUserRole() === "Admin";
 
   const handleField =
     (key: keyof FormState) =>
@@ -82,25 +118,58 @@ export function UserEditDialog({
   const handleSave = async () => {
     if (!user) return;
 
-    await updateUser({
-      variables: {
-        user: {
-          userId: user.id,
-          role: form.role,
-          ...(form.departmentId ? { departmentId: form.departmentId } : {}),
-          ...(form.positionId ? { positionId: form.positionId } : {}),
+    setSubmitError(null);
+
+    const firstName = form.firstName.trim();
+    const lastName = form.lastName.trim();
+
+    if (isAdmin) {
+      const userUpdate: {
+        userId: string;
+        role?: string;
+        departmentId?: string;
+        positionId?: string;
+      } = {
+        userId: user.id,
+        ...(form.departmentId ? { departmentId: form.departmentId } : {}),
+        ...(form.positionId ? { positionId: form.positionId } : {}),
+        role: form.role,
+      };
+
+      try {
+        await updateUser({
+          variables: {
+            user: userUpdate,
+          },
+        });
+      } catch (e) {
+        console.error("updateUser failed", {
+          variables: userUpdate,
+          error: e,
+        });
+        setSubmitError(`updateUser: ${extractGraphqlErrorMessage(e)}`);
+        return;
+      }
+    }
+
+    const firstNameToSend = firstName || user.firstName;
+    const lastNameToSend = lastName || user.lastName;
+
+    try {
+      await updateProfile({
+        variables: {
+          profile: {
+            userId: user.id,
+            first_name: firstNameToSend,
+            last_name: lastNameToSend,
+          },
         },
-      },
-    });
-    await updateProfile({
-      variables: {
-        profile: {
-          userId: user.id,
-          first_name: form.firstName.trim(),
-          last_name: form.lastName.trim(),
-        },
-      },
-    });
+      });
+    } catch (e) {
+      console.error("updateProfile failed", e);
+      setSubmitError(`updateProfile: ${extractGraphqlErrorMessage(e)}`);
+      return;
+    }
 
     onSaved();
     onClose();
@@ -171,6 +240,7 @@ export function UserEditDialog({
             fullWidth
             sx={usersTableSx.editDialogField}
             slotProps={{ select: { MenuProps: selectMenuProps } }}
+            disabled={!isAdmin}
           >
             {departments.map((department) => (
               <MenuItem key={department.id} value={department.id}>
@@ -186,6 +256,7 @@ export function UserEditDialog({
             fullWidth
             sx={usersTableSx.editDialogField}
             slotProps={{ select: { MenuProps: selectMenuProps } }}
+            disabled={!isAdmin}
           >
             {positions.map((position) => (
               <MenuItem key={position.id} value={position.id}>
@@ -202,6 +273,7 @@ export function UserEditDialog({
               fullWidth
               sx={usersTableSx.editDialogField}
               slotProps={{ select: { MenuProps: selectMenuProps } }}
+              disabled={!isAdmin}
             >
               {roleOptions.map((role) => (
                 <MenuItem key={role} value={role}>
@@ -211,6 +283,7 @@ export function UserEditDialog({
             </TextField>
           </Box>
         </Box>
+        {submitError ? <Alert severity="error">{submitError}</Alert> : null}
         {error ? <Alert severity="error">{error.message}</Alert> : null}
       </DialogContent>
       <DialogActions sx={usersTableSx.editDialogActions}>

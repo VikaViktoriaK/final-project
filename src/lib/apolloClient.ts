@@ -4,6 +4,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import { getAccessToken } from "@/features/auth/lib/auth-storage";
 
 function getGraphqlUri() {
@@ -36,12 +37,64 @@ export function createApolloClient() {
     }
     return forward(operation);
   });
+
+  const errorLink = onError((err: unknown) => {
+    const maybeErr = err as {
+      graphQLErrors?: unknown[];
+      networkError?: unknown;
+      operation?: { operationName?: string; variables?: unknown };
+    };
+
+    const graphQLErrors = maybeErr?.graphQLErrors;
+    const networkError = maybeErr?.networkError;
+    const operation = maybeErr?.operation;
+
+    const normalizeGraphqlError = (e: unknown) => {
+      const maybe = e as {
+        message?: unknown;
+        path?: unknown;
+        extensions?: unknown;
+      };
+      return {
+        message: typeof maybe?.message === "string" ? maybe.message : undefined,
+        path: maybe?.path,
+        extensions: maybe?.extensions,
+      };
+    };
+
+    if (Array.isArray(graphQLErrors) && graphQLErrors.length > 0) {
+      console.error("GraphQL errors", {
+        operation: operation?.operationName,
+        variables: operation?.variables,
+        graphQLErrors: graphQLErrors.map(normalizeGraphqlError),
+      });
+    }
+    if (networkError) {
+      console.error("GraphQL network error", {
+        operation: operation?.operationName,
+        variables: operation?.variables,
+        networkError,
+      });
+    }
+  });
   const httpLink = new HttpLink({
     uri: resolvedUri,
+    fetch: async (input, init) => {
+      const res = await fetch(input, init);
+      if (!res.ok) {
+        try {
+          const text = await res.clone().text();
+          console.error("GraphQL HTTP error", res.status, text);
+        } catch {
+          console.error("GraphQL HTTP error", res.status);
+        }
+      }
+      return res;
+    },
   });
 
   return new ApolloClient({
-    link: authLink.concat(httpLink),
+    link: ApolloLink.from([errorLink, authLink, httpLink]),
     cache: new InMemoryCache(),
   });
 }

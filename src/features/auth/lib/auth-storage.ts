@@ -1,29 +1,38 @@
 const ACCESS_TOKEN_KEY = "hrm_access_token";
 const REFRESH_TOKEN_KEY = "hrm_refresh_token";
 
+function hasBrowserStorage(): boolean {
+  return typeof window !== "undefined" && typeof localStorage !== "undefined";
+}
+
 export const saveAuthTokens = (
   accessToken: string,
   refreshToken: string,
 ): void => {
+  if (!hasBrowserStorage()) return;
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
 };
 
 export const getAccessToken = (): string | null => {
+  if (!hasBrowserStorage()) return null;
   return localStorage.getItem(ACCESS_TOKEN_KEY);
 };
 
 export const getRefreshToken = (): string | null => {
+  if (!hasBrowserStorage()) return null;
   return localStorage.getItem(REFRESH_TOKEN_KEY);
 };
 
 export const clearAuthTokens = (): void => {
+  if (!hasBrowserStorage()) return;
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
 };
 
 function decodeJwtPayload(token: string): Record<string, unknown> | null {
   try {
+    if (typeof atob === "undefined") return null;
     const parts = token.split(".");
     if (parts.length < 2) return null;
     const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
