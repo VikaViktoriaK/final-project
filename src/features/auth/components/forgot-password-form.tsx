@@ -17,14 +17,10 @@ import {
 import { useMutation } from "@apollo/client/react";
 import { FORGOT_PASSWORD_MUTATION } from "../graphql/forgot-password.mutation";
 import { useState } from "react";
-
-type ForgotPasswordMutationData = {
-  forgotPassword: null;
-};
-
-type ForgotPasswordMutationVariables = {
-  auth: { email: string };
-};
+import {
+  ForgotPasswordMutationData,
+  ForgotPasswordMutationVariables,
+} from "../types/auth.types";
 
 function ForgotPasswordForm() {
   const [isSuccess, setIsSuccess] = useState(false);

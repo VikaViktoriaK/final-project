@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupFormValues } from "../schemas/signup.schema";
 import { useMutation } from "@apollo/client/react";
 import { SIGNUP_MUTATION } from "../graphql/signup.mutation";
+import { SignupQueryData, SignupQueryVariables } from "../types/auth.types";
 
 function RegistrationForm() {
   const router = useRouter();
@@ -29,25 +30,6 @@ function RegistrationForm() {
       confirmPassword: "",
     },
   });
-  type SignupQueryData = {
-    signup: {
-      access_token: string;
-      refresh_token: string;
-      user: {
-        id: string;
-        email: string;
-        role: string;
-        profile: {
-          full_name: string;
-          avatar: string | null;
-        };
-      };
-    };
-  };
-
-  type SignupQueryVariables = {
-    auth: { email: string; password: string };
-  };
 
   const [signup, { loading, error }] = useMutation<
     SignupQueryData,

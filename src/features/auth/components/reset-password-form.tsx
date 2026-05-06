@@ -19,13 +19,10 @@ import {
 import { useState } from "react";
 import NextLink from "next/link";
 
-type ResetPasswordMutationData = {
-  resetPassword: null;
-};
-
-type ResetPasswordMutationVariables = {
-  auth: { newPassword: string };
-};
+import {
+  ResetPasswordMutationData,
+  ResetPasswordMutationVariables,
+} from "../types/auth.types";
 
 function ResetPasswordForm() {
   const [isSuccess, setIsSuccess] = useState(false);
