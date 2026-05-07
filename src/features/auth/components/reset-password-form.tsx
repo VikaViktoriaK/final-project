@@ -1,14 +1,11 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@apollo/client/react";
 import {
   resetPasswordSchema,
   type ResetPasswordFormValues,
 } from "../schemas/reset-password.schema";
-import { RESET_PASSWORD_MUTATION } from "../graphql/reset-password.mutation";
 import {
   Alert,
   Button,
@@ -16,18 +13,12 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
 import NextLink from "next/link";
-
-import type {
-  ResetPasswordMutationData,
-  ResetPasswordMutationVariables,
-} from "../types/auth.types";
+import useResetPassword from "../hooks/use-reset-password";
 
 function ResetPasswordForm() {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const { loading, error, resetPasswordUser, isSuccess, token } =
+    useResetPassword();
   const {
     register,
     handleSubmit,
@@ -37,36 +28,11 @@ function ResetPasswordForm() {
     defaultValues: { newPassword: "", confirmNewPassword: "" },
   });
 
-  const [resetPassword, { loading, error }] = useMutation<
-    ResetPasswordMutationData,
-    ResetPasswordMutationVariables
-  >(RESET_PASSWORD_MUTATION);
-
-  const onSubmit = async (data: ResetPasswordFormValues) => {
-    try {
-      if (!token) {
-        throw new Error("Token is required");
-      }
-      setIsSuccess(false);
-      await resetPassword({
-        variables: { auth: { newPassword: data.newPassword } },
-        context: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      });
-      setIsSuccess(true);
-    } catch {
-      setIsSuccess(false);
-    }
-  };
-
   return (
     <Stack
       spacing={2}
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(resetPasswordUser)}
       noValidate
     >
       <TextField
