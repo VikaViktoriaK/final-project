@@ -19,7 +19,7 @@ import {
   useUserEditOptionsQuery,
 } from "../api/updateUser";
 import { usersTableSx } from "./usersTable.styles";
-import { getCurrentUserRole } from "@/features/auth/lib/auth-storage";
+import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 
 type UserEditDialogProps = {
   open: boolean;
@@ -107,7 +107,8 @@ export function UserEditDialog({
   ] = useUpdateProfileMutation();
   const { data: optionsData, loading: loadingOptions } =
     useUserEditOptionsQuery();
-  const isAdmin = getCurrentUserRole() === "Admin";
+  const { role } = useAuthSnapshot();
+  const isAdmin = role === "Admin";
 
   const handleField =
     (key: keyof FormState) =>

@@ -1,8 +1,15 @@
+import { useSyncExternalStore } from "react";
+
 const ACCESS_TOKEN_KEY = "hrm_access_token";
 const REFRESH_TOKEN_KEY = "hrm_refresh_token";
 
 function hasBrowserStorage(): boolean {
   return typeof window !== "undefined" && typeof localStorage !== "undefined";
+}
+
+function emitAuthStorageChanged() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event("auth-storage-changed"));
 }
 
 export const saveAuthTokens = (
@@ -12,6 +19,7 @@ export const saveAuthTokens = (
   if (!hasBrowserStorage()) return;
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+  emitAuthStorageChanged();
 };
 
 export const getAccessToken = (): string | null => {
@@ -28,6 +36,7 @@ export const clearAuthTokens = (): void => {
   if (!hasBrowserStorage()) return;
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
+  emitAuthStorageChanged();
 };
 
 function decodeJwtPayload(token: string): Record<string, unknown> | null {
@@ -68,3 +77,51 @@ export const getCurrentUserRole = (): string | null => {
   if (typeof roleValue === "string") return roleValue;
   return null;
 };
+
+type AuthSnapshot = {
+  userId: string | null;
+  role: string | null;
+};
+
+const EMPTY_AUTH_SNAPSHOT: AuthSnapshot = {
+  userId: null,
+  role: null,
+};
+
+let lastClientSnapshot: AuthSnapshot = EMPTY_AUTH_SNAPSHOT;
+
+function getClientAuthSnapshot(): AuthSnapshot {
+  const nextUserId = getCurrentUserId();
+  const nextRole = getCurrentUserRole();
+
+  if (
+    lastClientSnapshot.userId === nextUserId &&
+    lastClientSnapshot.role === nextRole
+  ) {
+    return lastClientSnapshot;
+  }
+
+  lastClientSnapshot = {
+    userId: nextUserId,
+    role: nextRole,
+  };
+  return lastClientSnapshot;
+}
+
+function subscribeAuthSnapshot(onStoreChange: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener("auth-storage-changed", onStoreChange);
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener("auth-storage-changed", onStoreChange);
+  };
+}
+
+export function useAuthSnapshot(): AuthSnapshot {
+  return useSyncExternalStore(
+    subscribeAuthSnapshot,
+    getClientAuthSnapshot,
+    () => EMPTY_AUTH_SNAPSHOT,
+  );
+}

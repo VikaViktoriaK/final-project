@@ -12,10 +12,7 @@ import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { usersTableSx } from "./usersTable.styles";
 import type { UserRow } from "@/features/users/types";
-import {
-  getCurrentUserId,
-  getCurrentUserRole,
-} from "@/features/auth/lib/auth-storage";
+import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 
 function initials(firstName: string, lastName: string) {
   const a = (firstName?.[0] ?? "").toUpperCase();
@@ -37,9 +34,8 @@ export function UsersTableRow({
   onDelete,
 }: UsersTableRowProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const currentUserId = getCurrentUserId();
-  const currentUserRole = getCurrentUserRole();
-  const isAdmin = currentUserRole === "Admin";
+  const { userId: currentUserId, role } = useAuthSnapshot();
+  const isAdmin = role === "Admin";
   const canEdit = isAdmin || currentUserId === user.id;
   const menuOpen = Boolean(anchorEl);
 

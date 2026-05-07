@@ -18,7 +18,7 @@ import { useUsersQuery } from "@/features/users/api/getUsers";
 import { useDeleteUserMutation } from "@/features/users/api/deleteUser";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
 import type { UserRow } from "@/features/users/types";
-import { getCurrentUserRole } from "@/features/auth/lib/auth-storage";
+import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 
 export default function UsersPage() {
   const router = useRouter();
@@ -33,7 +33,8 @@ export default function UsersPage() {
 
   const { users, loading, error, refetch } = useUsersQuery();
   const [deleteUser, { loading: deleting }] = useDeleteUserMutation();
-  const isAdmin = getCurrentUserRole() === "Admin";
+  const { role } = useAuthSnapshot();
+  const isAdmin = role === "Admin";
 
   const normalize = React.useCallback(
     (value: string) => value.trim().toLowerCase(),
@@ -53,6 +54,13 @@ export default function UsersPage() {
     return result.sort((a, b) => {
       const aValue = normalize(String(a[orderBy] ?? ""));
       const bValue = normalize(String(b[orderBy] ?? ""));
+      const aEmpty = !aValue;
+      const bEmpty = !bValue;
+
+      // Always keep filled values above empty ones.
+      if (aEmpty && !bEmpty) return 1;
+      if (!aEmpty && bEmpty) return -1;
+      if (aEmpty && bEmpty) return 0;
 
       if (order === "asc") {
         return aValue.localeCompare(bValue, undefined, { sensitivity: "base" });

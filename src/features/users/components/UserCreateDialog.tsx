@@ -49,6 +49,14 @@ const createUserSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters long.")
     .max(20, "Password is too long."),
+  firstName: z
+    .string()
+    .trim()
+    .min(2, "First name must be at least 2 characters long."),
+  lastName: z
+    .string()
+    .trim()
+    .min(2, "Last name must be at least 2 characters long."),
 });
 
 export function UserCreateDialog({
@@ -61,6 +69,8 @@ export function UserCreateDialog({
   const [fieldErrors, setFieldErrors] = React.useState<{
     email?: string;
     password?: string;
+    firstName?: string;
+    lastName?: string;
   }>({});
   const [createUser, { loading, error }] = useCreateUserMutation();
   const { data: optionsData, loading: loadingOptions } =
@@ -70,7 +80,12 @@ export function UserCreateDialog({
     (key: keyof FormState) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setForm((prev) => ({ ...prev, [key]: event.target.value }));
-      if (key === "email" || key === "password") {
+      if (
+        key === "email" ||
+        key === "password" ||
+        key === "firstName" ||
+        key === "lastName"
+      ) {
         setFieldErrors((prev) => ({ ...prev, [key]: undefined }));
       }
     };
@@ -79,6 +94,8 @@ export function UserCreateDialog({
     const validation = createUserSchema.safeParse({
       email: form.email.trim(),
       password: form.password,
+      firstName: form.firstName,
+      lastName: form.lastName,
     });
 
     if (!validation.success) {
@@ -86,6 +103,8 @@ export function UserCreateDialog({
       setFieldErrors({
         email: flattened.email?.[0],
         password: flattened.password?.[0],
+        firstName: flattened.firstName?.[0],
+        lastName: flattened.lastName?.[0],
       });
       setSubmitError(null);
       return;
@@ -176,6 +195,8 @@ export function UserCreateDialog({
             value={form.firstName}
             onChange={handleField("firstName")}
             fullWidth
+            error={Boolean(fieldErrors.firstName)}
+            helperText={fieldErrors.firstName}
             sx={usersTableSx.editDialogField}
           />
           <TextField
@@ -183,6 +204,8 @@ export function UserCreateDialog({
             value={form.lastName}
             onChange={handleField("lastName")}
             fullWidth
+            error={Boolean(fieldErrors.lastName)}
+            helperText={fieldErrors.lastName}
             sx={usersTableSx.editDialogField}
           />
           <TextField
