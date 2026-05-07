@@ -7,18 +7,13 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import NextLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
-import { useLazyQuery } from "@apollo/client/react";
-import { LOGIN_QUERY } from "../graphql/login.query";
-import { saveAuthTokens } from "../lib/auth-storage";
-import type { LoginQueryData, LoginQueryVariables } from "../types/auth.types";
-
+import { type LoginFormValues, loginSchema } from "../schemas/login.schema";
+import useLogin from "../hooks/use-login";
 function LoginForm() {
-  const router = useRouter();
+  const { loading, error, loginUser } = useLogin();
   const {
     register,
     handleSubmit,
@@ -31,28 +26,10 @@ function LoginForm() {
     },
   });
 
-  const [login, { loading, error }] = useLazyQuery<
-    LoginQueryData,
-    LoginQueryVariables
-  >(LOGIN_QUERY, {
-    fetchPolicy: "no-cache",
-  });
-
-  const onSubmit = async (data: LoginFormValues) => {
-    const result = await login({ variables: { auth: data } });
-    if (result.data?.login) {
-      saveAuthTokens(
-        result.data.login.access_token,
-        result.data.login.refresh_token,
-      );
-      router.push("/employees");
-    }
-  };
-
   return (
     <Stack
       spacing={2}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(loginUser)}
       component="form"
       noValidate
     >
