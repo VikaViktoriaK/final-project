@@ -12,6 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
+import { z } from "zod";
 import { useCreateUserMutation } from "../api/createUser";
 import { useUserEditOptionsQuery } from "../api/updateUser";
 import { usersTableSx } from "./usersTable.styles";
@@ -42,6 +43,14 @@ const DEFAULT_FORM: FormState = {
   role: "Employee",
 };
 
+const createUserSchema = z.object({
+  email: z.string().email("Invalid email format."),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long.")
+    .max(20, "Password is too long."),
+});
+
 export function UserCreateDialog({
   open,
   onClose,
@@ -49,6 +58,10 @@ export function UserCreateDialog({
 }: UserCreateDialogProps) {
   const [form, setForm] = React.useState<FormState>(DEFAULT_FORM);
   const [submitError, setSubmitError] = React.useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = React.useState<{
+    email?: string;
+    password?: string;
+  }>({});
   const [createUser, { loading, error }] = useCreateUserMutation();
   const { data: optionsData, loading: loadingOptions } =
     useUserEditOptionsQuery();
@@ -57,14 +70,28 @@ export function UserCreateDialog({
     (key: keyof FormState) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setForm((prev) => ({ ...prev, [key]: event.target.value }));
+      if (key === "email" || key === "password") {
+        setFieldErrors((prev) => ({ ...prev, [key]: undefined }));
+      }
     };
 
   const handleSubmit = async () => {
-    if (!form.email.trim() || !form.password.trim()) {
-      setSubmitError("Email and Password are required");
+    const validation = createUserSchema.safeParse({
+      email: form.email.trim(),
+      password: form.password,
+    });
+
+    if (!validation.success) {
+      const flattened = validation.error.flatten().fieldErrors;
+      setFieldErrors({
+        email: flattened.email?.[0],
+        password: flattened.password?.[0],
+      });
+      setSubmitError(null);
       return;
     }
 
+    setFieldErrors({});
     setSubmitError(null);
 
     try {
@@ -130,6 +157,8 @@ export function UserCreateDialog({
             value={form.email}
             onChange={handleField("email")}
             fullWidth
+            error={Boolean(fieldErrors.email)}
+            helperText={fieldErrors.email}
             sx={usersTableSx.editDialogField}
           />
           <TextField
@@ -138,6 +167,8 @@ export function UserCreateDialog({
             value={form.password}
             onChange={handleField("password")}
             fullWidth
+            error={Boolean(fieldErrors.password)}
+            helperText={fieldErrors.password}
             sx={usersTableSx.editDialogField}
           />
           <TextField
