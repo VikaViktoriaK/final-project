@@ -14,16 +14,9 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormValues,
 } from "../schemas/forgot-password.schema";
-import { useMutation } from "@apollo/client/react";
-import { FORGOT_PASSWORD_MUTATION } from "../graphql/forgot-password.mutation";
-import { useState } from "react";
-import type {
-  ForgotPasswordMutationData,
-  ForgotPasswordMutationVariables,
-} from "../types/auth.types";
-
+import useForgotPassword from "../hooks/use-forgot-password";
 function ForgotPasswordForm() {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const { loading, error, forgotPasswordUser, isSuccess } = useForgotPassword();
   const {
     register,
     handleSubmit,
@@ -33,27 +26,10 @@ function ForgotPasswordForm() {
     defaultValues: { email: "" },
   });
 
-  const [forgotPassword, { loading, error }] = useMutation<
-    ForgotPasswordMutationData,
-    ForgotPasswordMutationVariables
-  >(FORGOT_PASSWORD_MUTATION);
-
-  const onSubmit = async (data: ForgotPasswordFormValues) => {
-    setIsSuccess(false);
-    try {
-      await forgotPassword({
-        variables: { auth: { email: data.email } },
-      });
-      setIsSuccess(true);
-    } catch {
-      setIsSuccess(false);
-    }
-  };
-
   return (
     <Stack
       spacing={2}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(forgotPasswordUser)}
       component="form"
       noValidate
     >
