@@ -8,19 +8,12 @@ import {
   Alert,
 } from "@mui/material";
 import NextLink from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupFormValues } from "../schemas/signup.schema";
-import { useMutation } from "@apollo/client/react";
-import { SIGNUP_MUTATION } from "../graphql/signup.mutation";
-import type {
-  SignupMutationData,
-  SignupMutationVariables,
-} from "../types/auth.types";
-
+import useRegistration from "../hooks/use-registration";
 function RegistrationForm() {
-  const router = useRouter();
+  const { loading, error, registerUser } = useRegistration();
   const {
     register,
     handleSubmit,
@@ -34,24 +27,10 @@ function RegistrationForm() {
     },
   });
 
-  const [signup, { loading, error }] = useMutation<
-    SignupMutationData,
-    SignupMutationVariables
-  >(SIGNUP_MUTATION);
-
-  const onSubmit = async (data: SignupFormValues) => {
-    const result = await signup({
-      variables: { auth: { email: data.email, password: data.password } },
-    });
-    if (result.data?.signup) {
-      router.push("/login");
-    }
-  };
-
   return (
     <Stack
       spacing={2}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(registerUser)}
       component="form"
       noValidate
     >
