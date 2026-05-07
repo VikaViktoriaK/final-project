@@ -18,9 +18,15 @@ type UsersTableProps = {
   users: UserRow[];
   onEditUser: (user: UserRow) => void;
   onViewUser: (user: UserRow) => void;
+  onDeleteUser: (user: UserRow) => void;
 };
 
-export function UsersTable({ users, onEditUser, onViewUser }: UsersTableProps) {
+export function UsersTable({
+  users,
+  onEditUser,
+  onViewUser,
+  onDeleteUser,
+}: UsersTableProps) {
   return (
     <TableContainer
       component={Paper}
@@ -59,6 +65,7 @@ export function UsersTable({ users, onEditUser, onViewUser }: UsersTableProps) {
                 user={u}
                 onEdit={onEditUser}
                 onView={onViewUser}
+                onDelete={onDeleteUser}
               />
             ))
           )}

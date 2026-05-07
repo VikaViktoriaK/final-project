@@ -27,9 +27,15 @@ type UsersTableRowProps = {
   user: UserRow;
   onEdit: (user: UserRow) => void;
   onView: (user: UserRow) => void;
+  onDelete: (user: UserRow) => void;
 };
 
-export function UsersTableRow({ user, onEdit, onView }: UsersTableRowProps) {
+export function UsersTableRow({
+  user,
+  onEdit,
+  onView,
+  onDelete,
+}: UsersTableRowProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const currentUserId = getCurrentUserId();
   const currentUserRole = getCurrentUserRole();
@@ -48,6 +54,10 @@ export function UsersTableRow({ user, onEdit, onView }: UsersTableRowProps) {
   const handleView = () => {
     handleMenuClose();
     onView(user);
+  };
+  const handleDelete = () => {
+    handleMenuClose();
+    onDelete(user);
   };
 
   return (
@@ -90,6 +100,14 @@ export function UsersTableRow({ user, onEdit, onView }: UsersTableRowProps) {
         >
           <MenuItem onClick={handleView}>View profile</MenuItem>
           {canEdit ? <MenuItem onClick={handleEdit}>Edit</MenuItem> : null}
+          {isAdmin ? (
+            <MenuItem
+              onClick={handleDelete}
+              sx={usersTableSx.rowMenuDeleteItem}
+            >
+              Delete
+            </MenuItem>
+          ) : null}
         </Menu>
       </TableCell>
     </TableRow>
