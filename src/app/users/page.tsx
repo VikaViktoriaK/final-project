@@ -13,6 +13,7 @@ import { UsersTable } from "@/features/users/components/UsersTable";
 import { UsersSearch } from "@/features/users/components/UsersSearch";
 import { UsersFilter } from "@/features/users/components/UsersFilter";
 import { UserEditDialog } from "@/features/users/components/UserEditDialog";
+import { UserCreateDialog } from "@/features/users/components/UserCreateDialog";
 import { useUsersQuery } from "@/features/users/api/getUsers";
 import { useDeleteUserMutation } from "@/features/users/api/deleteUser";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
@@ -26,6 +27,7 @@ export default function UsersPage() {
   const [orderBy, setOrderBy] = React.useState<keyof UserRow>("firstName");
   const [editingUser, setEditingUser] = React.useState<UserRow | null>(null);
   const [isEditOpen, setEditOpen] = React.useState(false);
+  const [isCreateOpen, setCreateOpen] = React.useState(false);
   const [deletingUser, setDeletingUser] = React.useState<UserRow | null>(null);
   const [isDeleteOpen, setDeleteOpen] = React.useState(false);
 
@@ -64,12 +66,23 @@ export default function UsersPage() {
     <Box sx={usersTableSx.usersPageContainer}>
       <Box sx={usersTableSx.topBar}>
         <UsersSearch value={query} onChange={setQuery} />
-        <UsersFilter
-          order={order}
-          orderBy={orderBy}
-          onOrderChange={setOrder}
-          onOrderByChange={setOrderBy}
-        />
+        <Box sx={usersTableSx.topBarActions}>
+          <UsersFilter
+            order={order}
+            orderBy={orderBy}
+            onOrderChange={setOrder}
+            onOrderByChange={setOrderBy}
+          />
+          {isAdmin ? (
+            <Button
+              variant="contained"
+              sx={usersTableSx.addUserBtn}
+              onClick={() => setCreateOpen(true)}
+            >
+              Add user
+            </Button>
+          ) : null}
+        </Box>
       </Box>
       {error ? <Box color="error.main">{error.message}</Box> : null}
       {loading ? (
@@ -97,6 +110,14 @@ export default function UsersPage() {
         user={editingUser}
         onClose={() => setEditOpen(false)}
         onSaved={() => {
+          void refetch();
+        }}
+      />
+      <UserCreateDialog
+        key={isCreateOpen ? "create-open" : "create-closed"}
+        open={isCreateOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreated={() => {
           void refetch();
         }}
       />

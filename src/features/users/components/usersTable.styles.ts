@@ -11,6 +11,23 @@ export const usersTableSx = {
     mb: 3,
     gap: 2,
   },
+  topBarActions: {
+    display: "flex",
+    alignItems: "center",
+    gap: 1.5,
+  },
+  addUserBtn: {
+    borderRadius: 999,
+    height: 40,
+    px: 2.25,
+    textTransform: "none",
+    fontWeight: 600,
+    backgroundColor: "rgba(255,255,255,0.18)",
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: "rgba(255,255,255,0.28)",
+    },
+  },
   searchField: {
     width: "min(640px, 100%)",
     "& .MuiInputBase-root": {
