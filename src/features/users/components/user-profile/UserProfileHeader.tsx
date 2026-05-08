@@ -4,17 +4,29 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
 import {
-  USER_PROFILE_STATIC_DATA,
+  USER_PROFILE_FALLBACK_MEMBER_SINCE,
   USER_PROFILE_UPLOAD_HINT,
 } from "@/features/users/constants/userProfile.constants";
+import type { UserRow } from "@/features/users/types";
 import { userProfileSx } from "./userProfile.styles";
 
-export function UserProfileHeader() {
+type UserProfileHeaderProps = {
+  user: UserRow;
+};
+
+export function UserProfileHeader({ user }: UserProfileHeaderProps) {
+  const fullName = `${user.firstName} ${user.lastName}`.trim() || "User";
+  const avatarInitial = (
+    user.firstName?.[0] ??
+    user.email?.[0] ??
+    "U"
+  ).toUpperCase();
+
   return (
     <>
       <Box sx={userProfileSx.headerRow}>
-        <Avatar sx={userProfileSx.avatar}>
-          {USER_PROFILE_STATIC_DATA.firstName.slice(0, 1)}
+        <Avatar src={user.avatarUrl} sx={userProfileSx.avatar}>
+          {avatarInitial}
         </Avatar>
         <Box sx={userProfileSx.uploadBlock}>
           <Button
@@ -32,14 +44,10 @@ export function UserProfileHeader() {
         </Box>
       </Box>
       <Box sx={userProfileSx.identity}>
-        <Typography sx={userProfileSx.fullName}>
-          {USER_PROFILE_STATIC_DATA.fullName}
-        </Typography>
-        <Typography sx={userProfileSx.email}>
-          {USER_PROFILE_STATIC_DATA.email}
-        </Typography>
+        <Typography sx={userProfileSx.fullName}>{fullName}</Typography>
+        <Typography sx={userProfileSx.email}>{user.email}</Typography>
         <Typography sx={userProfileSx.memberSince}>
-          {USER_PROFILE_STATIC_DATA.memberSince}
+          {USER_PROFILE_FALLBACK_MEMBER_SINCE}
         </Typography>
       </Box>
     </>
