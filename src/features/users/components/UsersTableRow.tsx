@@ -10,6 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { usersTableSx } from "./usersTable.styles";
 import type { UserRow } from "@/features/users/types";
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
@@ -93,6 +94,13 @@ export function UsersTableRow({
         <Typography variant="body2">{user.position}</Typography>
       </TableCell>
       <TableCell sx={usersTableSx.actionsCell}>
+        <IconButton
+          size="small"
+          sx={usersTableSx.actionsBtnChevron}
+          onClick={handleView}
+        >
+          <ChevronRightIcon fontSize="small" />
+        </IconButton>
         <IconButton
           size="small"
           sx={usersTableSx.actionsBtn}
