@@ -2,11 +2,13 @@
 
 import * as React from "react";
 import Box from "@mui/material/Box";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 import { PageLoader } from "@/components/PageLoader";
 import { UsersTable } from "@/features/users/components/UsersTable";
@@ -14,6 +16,7 @@ import { UsersSearch } from "@/features/users/components/UsersSearch";
 import { UsersFilter } from "@/features/users/components/UsersFilter";
 import { UserEditDialog } from "@/features/users/components/UserEditDialog";
 import { UserCreateDialog } from "@/features/users/components/UserCreateDialog";
+import { SidebarStub } from "@/features/users/components/SidebarStub";
 import { useUsersQuery } from "@/features/users/api/getUsers";
 import { useDeleteUserMutation } from "@/features/users/api/deleteUser";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
@@ -71,47 +74,55 @@ export function UsersPage() {
   }, [normalize, order, orderBy, query, users]);
 
   return (
-    <Box sx={usersTableSx.usersPageContainer}>
-      <Box sx={usersTableSx.topBar}>
-        <UsersSearch value={query} onChange={setQuery} />
-        <Box sx={usersTableSx.topBarActions}>
-          <UsersFilter
-            order={order}
-            orderBy={orderBy}
-            onOrderChange={setOrder}
-            onOrderByChange={setOrderBy}
-          />
-          {isAdmin ? (
-            <Button
-              variant="contained"
-              sx={usersTableSx.addUserBtn}
-              onClick={() => setCreateOpen(true)}
-            >
-              Add user
-            </Button>
-          ) : null}
+    <Box sx={usersTableSx.pageLayout}>
+      <SidebarStub />
+      <Box sx={usersTableSx.usersPageContainer}>
+        <Breadcrumbs aria-label="breadcrumb" sx={usersTableSx.breadcrumbs}>
+          <Typography component="span" sx={usersTableSx.breadcrumbItemActive}>
+            Employees
+          </Typography>
+        </Breadcrumbs>
+        <Box sx={usersTableSx.topBar}>
+          <UsersSearch value={query} onChange={setQuery} />
+          <Box sx={usersTableSx.topBarActions}>
+            <UsersFilter
+              order={order}
+              orderBy={orderBy}
+              onOrderChange={setOrder}
+              onOrderByChange={setOrderBy}
+            />
+            {isAdmin ? (
+              <Button
+                variant="text"
+                sx={usersTableSx.addUserBtn}
+                onClick={() => setCreateOpen(true)}
+              >
+                + Create user
+              </Button>
+            ) : null}
+          </Box>
         </Box>
+        {error ? <Box color="error.main">{error.message}</Box> : null}
+        {loading ? (
+          <PageLoader />
+        ) : (
+          <UsersTable
+            users={processedUsers}
+            onEditUser={(user) => {
+              setEditingUser(user);
+              setEditOpen(true);
+            }}
+            onViewUser={(user) => {
+              router.push(`/users/${user.id}`);
+            }}
+            onDeleteUser={(user) => {
+              if (!isAdmin) return;
+              setDeletingUser(user);
+              setDeleteOpen(true);
+            }}
+          />
+        )}
       </Box>
-      {error ? <Box color="error.main">{error.message}</Box> : null}
-      {loading ? (
-        <PageLoader />
-      ) : (
-        <UsersTable
-          users={processedUsers}
-          onEditUser={(user) => {
-            setEditingUser(user);
-            setEditOpen(true);
-          }}
-          onViewUser={(user) => {
-            router.push(`/users/${user.id}`);
-          }}
-          onDeleteUser={(user) => {
-            if (!isAdmin) return;
-            setDeletingUser(user);
-            setDeleteOpen(true);
-          }}
-        />
-      )}
       <UserEditDialog
         key={`${editingUser?.id ?? "user-edit-dialog"}-${isEditOpen ? "open" : "closed"}`}
         open={isEditOpen}

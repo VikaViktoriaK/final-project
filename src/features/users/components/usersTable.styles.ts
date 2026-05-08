@@ -1,4 +1,31 @@
 export const usersTableSx = {
+  pageLayout: {
+    minHeight: "100vh",
+    display: "grid",
+    gridTemplateColumns: { xs: "1fr", md: "180px minmax(0, 1fr)" },
+    gap: { xs: 2, md: 3 },
+    px: { xs: 2, md: 3 },
+    py: { xs: 2, md: 3 },
+  },
+  sidebarStub: {
+    display: { xs: "none", md: "flex" },
+    alignItems: "flex-start",
+    color: "var(--app-text-muted)",
+    borderRight: "1px solid var(--app-divider)",
+    pt: 1.5,
+    pr: 2,
+  },
+  breadcrumbs: {
+    mb: 1.5,
+    "& .MuiBreadcrumbs-separator": {
+      color: "var(--app-text-muted)",
+    },
+  },
+  breadcrumbItemActive: {
+    color: "var(--app-text-muted)",
+    fontSize: 14,
+    fontWeight: 600,
+  },
   page: {
     minHeight: "100vh",
     px: { xs: 2, md: 3 },
@@ -18,14 +45,15 @@ export const usersTableSx = {
   },
   addUserBtn: {
     borderRadius: 999,
-    height: 40,
-    px: 2.25,
-    textTransform: "none",
-    fontWeight: 600,
-    backgroundColor: "rgba(255,255,255,0.18)",
-    color: "#fff",
+    height: 36,
+    px: 1.25,
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
+    fontSize: 12,
+    fontWeight: 700,
+    color: "#df4d4d",
     "&:hover": {
-      backgroundColor: "rgba(255,255,255,0.28)",
+      backgroundColor: "rgba(223,77,77,0.10)",
     },
   },
   searchField: {
@@ -248,7 +276,7 @@ export const usersTableSx = {
     },
   },
   usersPageContainer: {
-    p: 3,
+    p: 0,
   },
   rowMenu: {
     "& .MuiPaper-root": {
