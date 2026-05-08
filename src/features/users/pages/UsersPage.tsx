@@ -60,7 +60,6 @@ export function UsersPage() {
       const aEmpty = !aValue;
       const bEmpty = !bValue;
 
-      // Always keep filled values above empty ones.
       if (aEmpty && !bEmpty) return 1;
       if (!aEmpty && bEmpty) return -1;
       if (aEmpty && bEmpty) return 0;
@@ -83,7 +82,9 @@ export function UsersPage() {
           </Typography>
         </Breadcrumbs>
         <Box sx={usersTableSx.topBar}>
-          <UsersSearch value={query} onChange={setQuery} />
+          <Box sx={usersTableSx.topBarSearch}>
+            <UsersSearch value={query} onChange={setQuery} />
+          </Box>
           <Box sx={usersTableSx.topBarActions}>
             <UsersFilter
               order={order}

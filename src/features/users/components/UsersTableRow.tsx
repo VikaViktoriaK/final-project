@@ -58,18 +58,30 @@ export function UsersTableRow({
 
   return (
     <TableRow sx={usersTableSx.row}>
+      <TableCell sx={usersTableSx.avatarCell}>
+        <Avatar src={user.avatarUrl} sx={usersTableSx.avatar}>
+          {initials(user.firstName, user.lastName)}
+        </Avatar>
+      </TableCell>
       <TableCell sx={usersTableSx.firstNameCell}>
         <Box sx={usersTableSx.nameCell}>
-          <Avatar src={user.avatarUrl} sx={usersTableSx.avatar}>
-            {initials(user.firstName, user.lastName)}
-          </Avatar>
           <Typography variant="body2">{user.firstName}</Typography>
         </Box>
       </TableCell>
-      <TableCell sx={usersTableSx.lastNameCell}>
+      <TableCell
+        sx={{
+          ...usersTableSx.lastNameCell,
+          ...usersTableSx.lastNameCellMobileHidden,
+        }}
+      >
         <Typography variant="body2">{user.lastName}</Typography>
       </TableCell>
-      <TableCell sx={usersTableSx.emailCell}>
+      <TableCell
+        sx={{
+          ...usersTableSx.emailCell,
+          ...usersTableSx.emailCellMobileHidden,
+        }}
+      >
         <Typography variant="body2" sx={usersTableSx.email}>
           {user.email}
         </Typography>

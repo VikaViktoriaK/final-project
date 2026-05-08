@@ -20,6 +20,7 @@ export function UsersSearch({
       placeholder="Search"
       variant="outlined"
       size="small"
+      fullWidth
       sx={usersTableSx.searchField}
       slotProps={{
         input: {

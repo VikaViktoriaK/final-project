@@ -2,18 +2,30 @@ export const usersTableSx = {
   pageLayout: {
     minHeight: "100vh",
     display: "grid",
-    gridTemplateColumns: { xs: "1fr", md: "180px minmax(0, 1fr)" },
-    gap: { xs: 2, md: 3 },
-    px: { xs: 2, md: 3 },
-    py: { xs: 2, md: 3 },
+    gridTemplateColumns: "1fr",
+    gap: 2,
+    px: 2,
+    py: 2,
+    "@media (min-width: 768px)": {
+      gridTemplateColumns: "140px minmax(0, 1fr)",
+      gap: 3,
+      px: 3,
+      py: 3,
+    },
+    "@media (min-width: 1200px)": {
+      gridTemplateColumns: "180px minmax(0, 1fr)",
+    },
   },
   sidebarStub: {
-    display: { xs: "none", md: "flex" },
+    display: "none",
     alignItems: "flex-start",
     color: "var(--app-text-muted)",
     borderRight: "1px solid var(--app-divider)",
     pt: 1.5,
     pr: 2,
+    "@media (min-width: 768px)": {
+      display: "flex",
+    },
   },
   breadcrumbs: {
     mb: 1.5,
@@ -22,7 +34,7 @@ export const usersTableSx = {
     },
   },
   breadcrumbItemActive: {
-    color: "var(--app-text-muted)",
+    color: "var(--app-text)",
     fontSize: 14,
     fontWeight: 600,
   },
@@ -37,11 +49,24 @@ export const usersTableSx = {
     alignItems: "center",
     mb: 3,
     gap: 2,
+    "@media (max-width: 768px)": {
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
+  },
+  topBarSearch: {
+    flex: 1,
+    minWidth: 0,
+    pr: 2,
   },
   topBarActions: {
     display: "flex",
     alignItems: "center",
     gap: 1.5,
+    "@media (max-width: 768px)": {
+      width: "100%",
+      justifyContent: "space-between",
+    },
   },
   addUserBtn: {
     borderRadius: 999,
@@ -58,6 +83,10 @@ export const usersTableSx = {
   },
   searchField: {
     width: "min(640px, 100%)",
+    maxWidth: "100%",
+    "@media (max-width: 1024px)": {
+      width: "100%",
+    },
     "& .MuiInputBase-root": {
       borderRadius: 999,
       backgroundColor: "var(--app-control-bg)",
@@ -87,10 +116,10 @@ export const usersTableSx = {
     backgroundColor: "var(--app-bg)",
     border: "none",
     borderRadius: 0,
-    overflow: "visible",
+    overflowX: "auto",
   },
   table: {
-    minWidth: 900,
+    minWidth: 980,
     tableLayout: "fixed",
     "& .MuiTableCell-root": {
       borderBottom: "1px solid var(--app-divider)",
@@ -108,12 +137,16 @@ export const usersTableSx = {
       color: "var(--app-text-muted)",
     },
   },
+  headAvatarCell: {
+    width: 64,
+    color: "var(--app-text-muted)",
+  },
   headFirstNameCell: {
     color: "var(--app-text-muted)",
     fontWeight: 600,
     letterSpacing: 0.2,
     whiteSpace: "nowrap",
-    width: 220,
+    width: 170,
     "& .MuiSvgIcon-root": {
       fontSize: 16,
       color: "var(--app-text-muted)",
@@ -130,6 +163,11 @@ export const usersTableSx = {
       color: "var(--app-text-muted)",
     },
   },
+  headLastNameCellMobileHidden: {
+    "@media (max-width: 767px)": {
+      display: "none",
+    },
+  },
   headEmailCell: {
     color: "var(--app-text-muted)",
     fontWeight: 600,
@@ -139,6 +177,11 @@ export const usersTableSx = {
     "& .MuiSvgIcon-root": {
       fontSize: 16,
       color: "var(--app-text-muted)",
+    },
+  },
+  headEmailCellMobileHidden: {
+    "@media (max-width: 767px)": {
+      display: "none",
     },
   },
   headDepartmentCell: {
@@ -169,13 +212,27 @@ export const usersTableSx = {
     gap: 0.75,
   },
   firstNameCell: {
-    width: 220,
+    width: 170,
+  },
+  avatarCell: {
+    width: 64,
+    textAlign: "center",
   },
   lastNameCell: {
     width: 190,
   },
+  lastNameCellMobileHidden: {
+    "@media (max-width: 767px)": {
+      display: "none",
+    },
+  },
   emailCell: {
     width: 300,
+  },
+  emailCellMobileHidden: {
+    "@media (max-width: 767px)": {
+      display: "none",
+    },
   },
   departmentCell: {
     width: 180,
@@ -189,8 +246,7 @@ export const usersTableSx = {
   nameCell: {
     display: "flex",
     alignItems: "center",
-    gap: 1.5,
-    minWidth: 170,
+    minWidth: 0,
   },
   avatar: {
     width: 34,

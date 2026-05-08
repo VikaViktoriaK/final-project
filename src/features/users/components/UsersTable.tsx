@@ -36,11 +36,26 @@ export function UsersTable({
       <Table sx={usersTableSx.table} aria-label="users table">
         <TableHead>
           <TableRow>
+            <TableCell sx={usersTableSx.headAvatarCell} />
             <TableCell sx={usersTableSx.headFirstNameCell}>
               First Name
             </TableCell>
-            <TableCell sx={usersTableSx.headLastNameCell}>Last Name</TableCell>
-            <TableCell sx={usersTableSx.headEmailCell}>Email</TableCell>
+            <TableCell
+              sx={{
+                ...usersTableSx.headLastNameCell,
+                ...usersTableSx.headLastNameCellMobileHidden,
+              }}
+            >
+              Last Name
+            </TableCell>
+            <TableCell
+              sx={{
+                ...usersTableSx.headEmailCell,
+                ...usersTableSx.headEmailCellMobileHidden,
+              }}
+            >
+              Email
+            </TableCell>
             <TableCell sx={usersTableSx.headDepartmentCell}>
               <Box sx={usersTableSx.headDepartmentLabel}>
                 <span>Department</span>
@@ -54,7 +69,7 @@ export function UsersTable({
         <TableBody>
           {users.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} sx={usersTableSx.emptyState}>
+              <TableCell colSpan={7} sx={usersTableSx.emptyState}>
                 Users not found
               </TableCell>
             </TableRow>
