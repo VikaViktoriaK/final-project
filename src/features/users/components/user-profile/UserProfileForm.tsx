@@ -121,7 +121,7 @@ export function UserProfileForm({
           slotProps={{ htmlInput: { readOnly: !canEditProfile } }}
           sx={[
             userProfileSx.field,
-            !canEditProfile ? userProfileSx.fieldReadOnly : undefined,
+            !canEditProfile ? userProfileSx.fieldReadOnly : {},
           ]}
         />
         <TextField
@@ -131,7 +131,7 @@ export function UserProfileForm({
           slotProps={{ htmlInput: { readOnly: !canEditProfile } }}
           sx={[
             userProfileSx.field,
-            !canEditProfile ? userProfileSx.fieldReadOnly : undefined,
+            !canEditProfile ? userProfileSx.fieldReadOnly : {},
           ]}
         />
         {canEditProfile ? (
