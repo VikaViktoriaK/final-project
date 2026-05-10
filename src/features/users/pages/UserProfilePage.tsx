@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import NextLink from "next/link";
 import { useParams } from "next/navigation";
 import { PageLoader } from "@/components/PageLoader";
-import { useUsersQuery } from "@/features/users/api/getUsers";
+import { useUserQuery } from "@/features/users/api/getUser";
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { SidebarStub } from "@/features/users/components/SidebarStub";
 import { UserProfileTabs } from "@/features/users/components/user-profile/UserProfileTabs";
@@ -32,11 +32,10 @@ function formatMemberSince(createdAt?: string) {
 export function UserProfilePage() {
   const params = useParams<{ userId: string }>();
   const userId = params?.userId ?? "";
-  const { users, loading, error, refetch } = useUsersQuery();
+  const { user, loading, error, refetch } = useUserQuery(userId);
   const { userId: currentUserId, role } = useAuthSnapshot();
   const isAdmin = role === "Admin";
 
-  const user = users.find((item) => item.id === userId);
   const breadcrumbName = user
     ? `${user.firstName} ${user.lastName}`.trim() || user.email
     : "User";

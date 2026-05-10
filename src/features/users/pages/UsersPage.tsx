@@ -114,7 +114,7 @@ export function UsersPage() {
               setEditOpen(true);
             }}
             onViewUser={(user) => {
-              router.push(`/users/${user.id}`);
+              router.push(`/users/${user.id}/profile`);
             }}
             onDeleteUser={(user) => {
               if (!isAdmin) return;
