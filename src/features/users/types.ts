@@ -3,6 +3,7 @@ export interface UserRow {
   firstName: string;
   lastName: string;
   email: string;
+  createdAt?: string;
   departmentId?: string;
   department: string;
   positionId?: string;

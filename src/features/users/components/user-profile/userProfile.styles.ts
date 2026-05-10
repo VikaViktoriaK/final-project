@@ -18,8 +18,6 @@ export const userProfileSx = {
   },
   container: {
     width: "100%",
-    maxWidth: 980,
-    mx: "auto",
   },
   breadcrumbs: {
     mb: 2,
@@ -113,6 +111,11 @@ export const userProfileSx = {
     mt: 0.5,
     fontSize: 15,
   },
+  editSection: {
+    width: "100%",
+    maxWidth: 980,
+    mx: "auto",
+  },
   formGrid: {
     display: "grid",
     gridTemplateColumns: "1fr",
@@ -137,28 +140,47 @@ export const userProfileSx = {
         borderColor: "rgba(255,255,255,0.4)",
       },
       "&.Mui-focused fieldset": {
-        borderColor: "var(--app-control-border)",
+        borderColor: "#df4d4d",
       },
     },
     "& .MuiSvgIcon-root": {
       color: "var(--app-text-muted)",
     },
   },
+  fieldReadOnly: {
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "var(--app-text-muted)",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+      borderColor: "var(--app-control-border)",
+    },
+  },
   updateBtnWrap: {
     display: "flex",
     justifyContent: "flex-end",
     mt: 3,
+    width: "100%",
+    "@media (min-width: 768px)": {
+      width: "calc(50% - 8px)",
+      ml: "auto",
+    },
   },
   updateBtn: {
-    minWidth: 300,
+    width: "100%",
+    height: 56,
+    minWidth: 0,
     borderRadius: 999,
     fontWeight: 700,
   },
   updateBtnDisabled: {
-    backgroundColor: "rgba(255,255,255,0.18)",
-    color: "rgba(255,255,255,0.55)",
+    backgroundColor: "rgba(255,255,255,0.12)",
+    color: "rgba(255,255,255,0.7)",
     "&:hover": {
-      backgroundColor: "rgba(255,255,255,0.24)",
+      backgroundColor: "rgba(255,255,255,0.12)",
+    },
+    "&.Mui-disabled": {
+      color: "rgba(255,255,255,0.7)",
+      backgroundColor: "rgba(255,255,255,0.12)",
     },
   },
   updateBtnActive: {

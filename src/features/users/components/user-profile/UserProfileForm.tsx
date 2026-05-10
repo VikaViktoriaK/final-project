@@ -16,7 +16,6 @@ import { userProfileSx } from "./userProfile.styles";
 type UserProfileFormProps = {
   user: UserRow;
   canEditProfile: boolean;
-  isAdmin: boolean;
   onUpdated: () => Promise<unknown> | void;
 };
 
@@ -39,7 +38,6 @@ function toFormState(user: UserRow): ProfileFormState {
 export function UserProfileForm({
   user,
   canEditProfile,
-  isAdmin,
   onUpdated,
 }: UserProfileFormProps) {
   const initialForm = React.useMemo(() => toFormState(user), [user]);
@@ -90,7 +88,7 @@ export function UserProfileForm({
         });
       }
 
-      if (isAdmin && adminPartChanged) {
+      if (canEditProfile && adminPartChanged) {
         await updateUser({
           variables: {
             user: {
@@ -121,43 +119,65 @@ export function UserProfileForm({
           value={form.firstName}
           onChange={handleFieldChange("firstName")}
           slotProps={{ htmlInput: { readOnly: !canEditProfile } }}
-          sx={userProfileSx.field}
+          sx={[
+            userProfileSx.field,
+            !canEditProfile ? userProfileSx.fieldReadOnly : undefined,
+          ]}
         />
         <TextField
           label={USER_PROFILE_FORM_LABELS.lastName}
           value={form.lastName}
           onChange={handleFieldChange("lastName")}
           slotProps={{ htmlInput: { readOnly: !canEditProfile } }}
-          sx={userProfileSx.field}
+          sx={[
+            userProfileSx.field,
+            !canEditProfile ? userProfileSx.fieldReadOnly : undefined,
+          ]}
         />
-        <TextField
-          select
-          label={USER_PROFILE_FORM_LABELS.department}
-          value={form.departmentId}
-          onChange={handleFieldChange("departmentId")}
-          disabled={!isAdmin}
-          sx={userProfileSx.field}
-        >
-          {departmentOptions.map((option) => (
-            <MenuItem key={option.id} value={option.id}>
-              {option.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          select
-          label={USER_PROFILE_FORM_LABELS.position}
-          value={form.positionId}
-          onChange={handleFieldChange("positionId")}
-          disabled={!isAdmin}
-          sx={userProfileSx.field}
-        >
-          {positionOptions.map((option) => (
-            <MenuItem key={option.id} value={option.id}>
-              {option.name}
-            </MenuItem>
-          ))}
-        </TextField>
+        {canEditProfile ? (
+          <TextField
+            select
+            label={USER_PROFILE_FORM_LABELS.department}
+            value={form.departmentId}
+            onChange={handleFieldChange("departmentId")}
+            sx={userProfileSx.field}
+          >
+            {departmentOptions.map((option) => (
+              <MenuItem key={option.id} value={option.id}>
+                {option.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        ) : (
+          <TextField
+            label={USER_PROFILE_FORM_LABELS.department}
+            value={user.department}
+            slotProps={{ htmlInput: { readOnly: true } }}
+            sx={[userProfileSx.field, userProfileSx.fieldReadOnly]}
+          />
+        )}
+        {canEditProfile ? (
+          <TextField
+            select
+            label={USER_PROFILE_FORM_LABELS.position}
+            value={form.positionId}
+            onChange={handleFieldChange("positionId")}
+            sx={userProfileSx.field}
+          >
+            {positionOptions.map((option) => (
+              <MenuItem key={option.id} value={option.id}>
+                {option.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        ) : (
+          <TextField
+            label={USER_PROFILE_FORM_LABELS.position}
+            value={user.position}
+            slotProps={{ htmlInput: { readOnly: true } }}
+            sx={[userProfileSx.field, userProfileSx.fieldReadOnly]}
+          />
+        )}
       </Box>
       {submitError ? (
         <Typography sx={userProfileSx.formError}>{submitError}</Typography>

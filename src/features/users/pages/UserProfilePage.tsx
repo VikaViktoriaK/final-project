@@ -2,7 +2,9 @@
 
 import Box from "@mui/material/Box";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+import NextLink from "next/link";
 import { useParams } from "next/navigation";
 import { PageLoader } from "@/components/PageLoader";
 import { useUsersQuery } from "@/features/users/api/getUsers";
@@ -12,6 +14,20 @@ import { UserProfileTabs } from "@/features/users/components/user-profile/UserPr
 import { UserProfileHeader } from "@/features/users/components/user-profile/UserProfileHeader";
 import { UserProfileForm } from "@/features/users/components/user-profile/UserProfileForm";
 import { userProfileSx } from "@/features/users/components/user-profile/userProfile.styles";
+
+function formatMemberSince(createdAt?: string) {
+  if (!createdAt) return "A memmer sinse -";
+  const timestamp = Number(createdAt);
+  const date = Number.isNaN(timestamp)
+    ? new Date(createdAt)
+    : new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return "A memmer sinse -";
+  return `A memmer sinse ${date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  })}`;
+}
 
 export function UserProfilePage() {
   const params = useParams<{ userId: string }>();
@@ -24,6 +40,7 @@ export function UserProfilePage() {
   const breadcrumbName = user
     ? `${user.firstName} ${user.lastName}`.trim() || user.email
     : "User";
+  const memberSinceText = formatMemberSince(user?.createdAt);
   const canEditProfile = Boolean(
     user && (isAdmin || currentUserId === user.id),
   );
@@ -33,9 +50,14 @@ export function UserProfilePage() {
       <SidebarStub />
       <Box sx={userProfileSx.container}>
         <Breadcrumbs aria-label="breadcrumb" sx={userProfileSx.breadcrumbs}>
-          <Typography component="span" sx={userProfileSx.breadcrumbLink}>
+          <Link
+            component={NextLink}
+            href="/users"
+            underline="hover"
+            sx={userProfileSx.breadcrumbLink}
+          >
             Employees
-          </Typography>
+          </Link>
           <Typography component="span" sx={userProfileSx.breadcrumbActive}>
             {breadcrumbName}
           </Typography>
@@ -48,15 +70,20 @@ export function UserProfilePage() {
         {!loading && !error && !user ? (
           <Typography sx={userProfileSx.email}>User not found.</Typography>
         ) : null}
-        {!loading && !error && user ? <UserProfileHeader user={user} /> : null}
         {!loading && !error && user ? (
-          <UserProfileForm
-            key={`${user.id}:${user.firstName}:${user.lastName}:${user.departmentId ?? ""}:${user.positionId ?? ""}`}
-            user={user}
-            canEditProfile={canEditProfile}
-            isAdmin={isAdmin}
-            onUpdated={refetch}
-          />
+          <Box sx={userProfileSx.editSection}>
+            <UserProfileHeader user={user} memberSinceText={memberSinceText} />
+          </Box>
+        ) : null}
+        {!loading && !error && user ? (
+          <Box sx={userProfileSx.editSection}>
+            <UserProfileForm
+              key={`${user.id}:${user.firstName}:${user.lastName}:${user.departmentId ?? ""}:${user.positionId ?? ""}`}
+              user={user}
+              canEditProfile={canEditProfile}
+              onUpdated={refetch}
+            />
+          </Box>
         ) : null}
       </Box>
     </Box>

@@ -12,9 +12,13 @@ import { userProfileSx } from "./userProfile.styles";
 
 type UserProfileHeaderProps = {
   user: UserRow;
+  memberSinceText: string;
 };
 
-export function UserProfileHeader({ user }: UserProfileHeaderProps) {
+export function UserProfileHeader({
+  user,
+  memberSinceText,
+}: UserProfileHeaderProps) {
   const fullName = `${user.firstName} ${user.lastName}`.trim() || "User";
   const avatarInitial = (
     user.firstName?.[0] ??
@@ -47,7 +51,7 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
         <Typography sx={userProfileSx.fullName}>{fullName}</Typography>
         <Typography sx={userProfileSx.email}>{user.email}</Typography>
         <Typography sx={userProfileSx.memberSince}>
-          {USER_PROFILE_FALLBACK_MEMBER_SINCE}
+          {memberSinceText || USER_PROFILE_FALLBACK_MEMBER_SINCE}
         </Typography>
       </Box>
     </>

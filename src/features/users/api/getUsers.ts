@@ -7,6 +7,7 @@ export const GET_USERS = gql`
     users {
       id
       email
+      created_at
       role
       department {
         id
@@ -29,6 +30,7 @@ type GetUsersResponse = {
   users: Array<{
     id: string;
     email: string;
+    created_at?: string | null;
     role?: string | null;
     department?: {
       id: string;
@@ -55,6 +57,7 @@ export function useUsersQuery() {
       firstName: (u.profile?.first_name ?? "").trim(),
       lastName: (u.profile?.last_name ?? "").trim(),
       email: u.email,
+      createdAt: u.created_at ?? undefined,
       departmentId: u.department?.id ?? undefined,
       role: u.role ?? "",
       department: u.department_name ?? "",
