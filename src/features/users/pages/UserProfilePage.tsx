@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { useParams } from "next/navigation";
 import { PageLoader } from "@/components/PageLoader";
 import { useUsersQuery } from "@/features/users/api/getUsers";
+import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { SidebarStub } from "@/features/users/components/SidebarStub";
 import { UserProfileTabs } from "@/features/users/components/user-profile/UserProfileTabs";
 import { UserProfileHeader } from "@/features/users/components/user-profile/UserProfileHeader";
@@ -15,12 +16,17 @@ import { userProfileSx } from "@/features/users/components/user-profile/userProf
 export function UserProfilePage() {
   const params = useParams<{ userId: string }>();
   const userId = params?.userId ?? "";
-  const { users, loading, error } = useUsersQuery();
+  const { users, loading, error, refetch } = useUsersQuery();
+  const { userId: currentUserId, role } = useAuthSnapshot();
+  const isAdmin = role === "Admin";
 
   const user = users.find((item) => item.id === userId);
   const breadcrumbName = user
     ? `${user.firstName} ${user.lastName}`.trim() || user.email
     : "User";
+  const canEditProfile = Boolean(
+    user && (isAdmin || currentUserId === user.id),
+  );
 
   return (
     <Box sx={userProfileSx.pageLayout}>
@@ -43,7 +49,15 @@ export function UserProfilePage() {
           <Typography sx={userProfileSx.email}>User not found.</Typography>
         ) : null}
         {!loading && !error && user ? <UserProfileHeader user={user} /> : null}
-        {!loading && !error && user ? <UserProfileForm user={user} /> : null}
+        {!loading && !error && user ? (
+          <UserProfileForm
+            key={`${user.id}:${user.firstName}:${user.lastName}:${user.departmentId ?? ""}:${user.positionId ?? ""}`}
+            user={user}
+            canEditProfile={canEditProfile}
+            isAdmin={isAdmin}
+            onUpdated={refetch}
+          />
+        ) : null}
       </Box>
     </Box>
   );

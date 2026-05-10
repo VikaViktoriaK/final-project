@@ -137,7 +137,7 @@ export const userProfileSx = {
         borderColor: "rgba(255,255,255,0.4)",
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#df4d4d",
+        borderColor: "var(--app-control-border)",
       },
     },
     "& .MuiSvgIcon-root": {
@@ -152,11 +152,24 @@ export const userProfileSx = {
   updateBtn: {
     minWidth: 300,
     borderRadius: 999,
+    fontWeight: 700,
+  },
+  updateBtnDisabled: {
     backgroundColor: "rgba(255,255,255,0.18)",
     color: "rgba(255,255,255,0.55)",
-    fontWeight: 700,
     "&:hover": {
       backgroundColor: "rgba(255,255,255,0.24)",
     },
+  },
+  updateBtnActive: {
+    backgroundColor: "#df4d4d",
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: "#cf3d3d",
+    },
+  },
+  formError: {
+    color: "#ffb4b4",
+    mt: 1.5,
   },
 } as const;
