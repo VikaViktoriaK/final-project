@@ -68,6 +68,17 @@ export const userProfileSx = {
     fontSize: 40,
     fontWeight: 500,
   },
+  avatarButton: {
+    border: 0,
+    padding: 0,
+    background: "transparent",
+    cursor: "pointer",
+    borderRadius: "50%",
+    lineHeight: 0,
+    "&:disabled": {
+      cursor: "default",
+    },
+  },
   uploadBlock: {
     minWidth: 220,
   },

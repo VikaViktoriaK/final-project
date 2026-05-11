@@ -29,6 +29,12 @@ export const UPDATE_PROFILE = gql`
   }
 `;
 
+export const UPLOAD_AVATAR = gql`
+  mutation UploadAvatar($avatar: UploadAvatarInput!) {
+    uploadAvatar(avatar: $avatar)
+  }
+`;
+
 export const GET_USER_EDIT_OPTIONS = gql`
   query UserEditOptions {
     departments {
@@ -59,12 +65,25 @@ export type UpdateProfileVariables = {
   };
 };
 
+export type UploadAvatarVariables = {
+  avatar: {
+    userId: string;
+    base64: string;
+    size: number;
+    type: string;
+  };
+};
+
 export function useUpdateUserMutation() {
   return useMutation<unknown, UpdateUserVariables>(UPDATE_USER);
 }
 
 export function useUpdateProfileMutation() {
   return useMutation<unknown, UpdateProfileVariables>(UPDATE_PROFILE);
+}
+
+export function useUploadAvatarMutation() {
+  return useMutation<unknown, UploadAvatarVariables>(UPLOAD_AVATAR);
 }
 
 type OptionItem = { id: string; name: string };

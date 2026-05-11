@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Box from "@mui/material/Box";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
@@ -14,6 +15,7 @@ import { UserProfileTabs } from "@/features/users/components/user-profile/UserPr
 import { UserProfileHeader } from "@/features/users/components/user-profile/UserProfileHeader";
 import { UserProfileForm } from "@/features/users/components/user-profile/UserProfileForm";
 import { userProfileSx } from "@/features/users/components/user-profile/userProfile.styles";
+import type { UserRow } from "@/features/users/types";
 
 function formatMemberSince(createdAt?: string) {
   if (!createdAt) return "A memmer sinse -";
@@ -27,6 +29,55 @@ function formatMemberSince(createdAt?: string) {
     day: "2-digit",
     year: "numeric",
   })}`;
+}
+
+type AvatarUploadState = {
+  previewUrl: string;
+  base64: string;
+  size: number;
+  type: string;
+};
+
+function UserProfileEditSection({
+  user,
+  memberSinceText,
+  canEditProfile,
+  onUserUpdated,
+}: {
+  user: UserRow;
+  memberSinceText: string;
+  canEditProfile: boolean;
+  onUserUpdated: () => Promise<unknown>;
+}) {
+  const [avatarUpload, setAvatarUpload] = React.useState<
+    AvatarUploadState | undefined
+  >(undefined);
+
+  return (
+    <>
+      <Box sx={userProfileSx.editSection}>
+        <UserProfileHeader
+          user={user}
+          memberSinceText={memberSinceText}
+          canEditProfile={canEditProfile}
+          avatarPreviewUrl={avatarUpload?.previewUrl}
+          onAvatarSelected={setAvatarUpload}
+        />
+      </Box>
+      <Box sx={userProfileSx.editSection}>
+        <UserProfileForm
+          key={`${user.id}:${user.firstName}:${user.lastName}:${user.departmentId ?? ""}:${user.positionId ?? ""}`}
+          user={user}
+          canEditProfile={canEditProfile}
+          avatarUpload={avatarUpload}
+          onUpdated={async () => {
+            await onUserUpdated();
+            setAvatarUpload(undefined);
+          }}
+        />
+      </Box>
+    </>
+  );
 }
 
 export function UserProfilePage() {
@@ -70,19 +121,13 @@ export function UserProfilePage() {
           <Typography sx={userProfileSx.email}>User not found.</Typography>
         ) : null}
         {!loading && !error && user ? (
-          <Box sx={userProfileSx.editSection}>
-            <UserProfileHeader user={user} memberSinceText={memberSinceText} />
-          </Box>
-        ) : null}
-        {!loading && !error && user ? (
-          <Box sx={userProfileSx.editSection}>
-            <UserProfileForm
-              key={`${user.id}:${user.firstName}:${user.lastName}:${user.departmentId ?? ""}:${user.positionId ?? ""}`}
-              user={user}
-              canEditProfile={canEditProfile}
-              onUpdated={refetch}
-            />
-          </Box>
+          <UserProfileEditSection
+            key={`${user.id}:${user.avatarUrl ?? ""}`}
+            user={user}
+            memberSinceText={memberSinceText}
+            canEditProfile={canEditProfile}
+            onUserUpdated={refetch}
+          />
         ) : null}
       </Box>
     </Box>

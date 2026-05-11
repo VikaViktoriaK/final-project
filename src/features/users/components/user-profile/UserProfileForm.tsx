@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import {
   useUpdateProfileMutation,
+  useUploadAvatarMutation,
   useUpdateUserMutation,
   useUserEditOptionsQuery,
 } from "@/features/users/api/updateUser";
@@ -16,6 +17,12 @@ import { userProfileSx } from "./userProfile.styles";
 type UserProfileFormProps = {
   user: UserRow;
   canEditProfile: boolean;
+  avatarUpload?: {
+    previewUrl: string;
+    base64: string;
+    size: number;
+    type: string;
+  };
   onUpdated: () => Promise<unknown> | void;
 };
 
@@ -35,9 +42,61 @@ function toFormState(user: UserRow): ProfileFormState {
   };
 }
 
+const MSG_AVATAR_UPLOAD_UNAVAILABLE =
+  "We couldn’t save your photo. Please try again in a moment or use a smaller image. If this keeps happening, contact support.";
+
+const MSG_AVATAR_CLOUDINARY =
+  "Photo upload isn’t configured correctly on the server (missing or invalid cloud storage keys). Ask your administrator to set real API keys in the API environment, not placeholders like API_KEY.";
+
+function formatProfileSubmitError(error: unknown): string {
+  const blob =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : error && typeof error === "object"
+          ? (() => {
+              try {
+                return JSON.stringify(error);
+              } catch {
+                return String(error);
+              }
+            })()
+          : String(error);
+
+  if (
+    blob.includes("ENAMETOOLONG") ||
+    blob.includes('"errno":-36') ||
+    blob.includes('"errno": -36') ||
+    (blob.includes('"code":"ENAMETOOLONG"') && blob.includes('"path"'))
+  ) {
+    return MSG_AVATAR_UPLOAD_UNAVAILABLE;
+  }
+
+  if (
+    blob.includes("Must supply api_key") ||
+    blob.includes("cloudinary") ||
+    blob.includes("Unknown API key") ||
+    (blob.includes("http_code") &&
+      blob.includes("401") &&
+      blob.includes("API_KEY"))
+  ) {
+    return MSG_AVATAR_CLOUDINARY;
+  }
+
+  if (error instanceof Error && error.message.trim()) {
+    return error.message;
+  }
+  if (blob.trim() && blob.length < 500) {
+    return blob;
+  }
+  return "Failed to update profile.";
+}
+
 export function UserProfileForm({
   user,
   canEditProfile,
+  avatarUpload,
   onUpdated,
 }: UserProfileFormProps) {
   const initialForm = React.useMemo(() => toFormState(user), [user]);
@@ -45,6 +104,8 @@ export function UserProfileForm({
   const [submitError, setSubmitError] = React.useState<string | null>(null);
   const [updateProfile, { loading: isUpdatingProfile }] =
     useUpdateProfileMutation();
+  const [uploadAvatar, { loading: isUploadingAvatar }] =
+    useUploadAvatarMutation();
   const [updateUser, { loading: isUpdatingUser }] = useUpdateUserMutation();
   const { data: optionsData } = useUserEditOptionsQuery();
 
@@ -52,9 +113,10 @@ export function UserProfileForm({
     form.firstName !== initialForm.firstName ||
     form.lastName !== initialForm.lastName ||
     form.departmentId !== initialForm.departmentId ||
-    form.positionId !== initialForm.positionId;
+    form.positionId !== initialForm.positionId ||
+    Boolean(avatarUpload && avatarUpload.previewUrl !== user.avatarUrl);
 
-  const isSubmitting = isUpdatingProfile || isUpdatingUser;
+  const isSubmitting = isUpdatingProfile || isUpdatingUser || isUploadingAvatar;
   const canSubmit = canEditProfile && isDirty && !isSubmitting;
 
   const handleFieldChange =
@@ -75,14 +137,30 @@ export function UserProfileForm({
       const adminPartChanged =
         form.departmentId !== initialForm.departmentId ||
         form.positionId !== initialForm.positionId;
+      const avatarChanged = Boolean(
+        avatarUpload && avatarUpload.previewUrl !== user.avatarUrl,
+      );
 
-      if (profileChanged) {
+      if (profileChanged || avatarChanged) {
         await updateProfile({
           variables: {
             profile: {
               userId: user.id,
               first_name: trimmedFirstName || user.firstName,
               last_name: trimmedLastName || user.lastName,
+            },
+          },
+        });
+      }
+
+      if (canEditProfile && avatarChanged && avatarUpload) {
+        await uploadAvatar({
+          variables: {
+            avatar: {
+              userId: user.id,
+              base64: avatarUpload.base64,
+              size: avatarUpload.size,
+              type: avatarUpload.type,
             },
           },
         });
@@ -102,9 +180,7 @@ export function UserProfileForm({
 
       await onUpdated();
     } catch (error) {
-      setSubmitError(
-        error instanceof Error ? error.message : "Failed to update profile.",
-      );
+      setSubmitError(formatProfileSubmitError(error));
     }
   };
 

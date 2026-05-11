@@ -1,3 +1,4 @@
+import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,30 +14,86 @@ import { userProfileSx } from "./userProfile.styles";
 type UserProfileHeaderProps = {
   user: UserRow;
   memberSinceText: string;
+  canEditProfile: boolean;
+  avatarPreviewUrl?: string;
+  onAvatarSelected: (avatar: {
+    previewUrl: string;
+    /** Same as previewUrl: full data URL for upload mutation compatibility. */
+    base64: string;
+    size: number;
+    type: string;
+  }) => void;
 };
 
 export function UserProfileHeader({
   user,
   memberSinceText,
+  canEditProfile,
+  avatarPreviewUrl,
+  onAvatarSelected,
 }: UserProfileHeaderProps) {
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const fullName = `${user.firstName} ${user.lastName}`.trim() || "User";
   const avatarInitial = (
     user.firstName?.[0] ??
     user.email?.[0] ??
     "U"
   ).toUpperCase();
+  const avatarSrc = avatarPreviewUrl ?? user.avatarUrl;
+
+  const openFileDialog = () => {
+    if (!canEditProfile) return;
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        // Send full data URL in `base64` so Cloudinary treats it as inline image, not a filesystem path.
+        onAvatarSelected({
+          previewUrl: reader.result,
+          base64: reader.result,
+          size: file.size,
+          type: file.type,
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+  };
 
   return (
     <>
       <Box sx={userProfileSx.headerRow}>
-        <Avatar src={user.avatarUrl} sx={userProfileSx.avatar}>
-          {avatarInitial}
-        </Avatar>
+        <Box
+          component="button"
+          type="button"
+          sx={userProfileSx.avatarButton}
+          onClick={openFileDialog}
+          disabled={!canEditProfile}
+          aria-label="Upload avatar image"
+        >
+          <Avatar src={avatarSrc} sx={userProfileSx.avatar}>
+            {avatarInitial}
+          </Avatar>
+        </Box>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/jpg,image/gif"
+          hidden
+          onChange={handleFileChange}
+        />
         <Box sx={userProfileSx.uploadBlock}>
           <Button
             variant="text"
             startIcon={<UploadOutlinedIcon />}
             sx={userProfileSx.uploadBtn}
+            onClick={openFileDialog}
+            disabled={!canEditProfile}
           >
             <Typography component="span" sx={userProfileSx.uploadText}>
               Upload avatar image
