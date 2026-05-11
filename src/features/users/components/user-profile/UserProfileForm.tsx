@@ -10,7 +10,11 @@ import {
   useUpdateUserMutation,
   useUserEditOptionsQuery,
 } from "@/features/users/api/updateUser";
-import { USER_PROFILE_FORM_LABELS } from "@/features/users/constants/userProfile.constants";
+import {
+  USER_PROFILE_AVATAR_MAX_BYTES,
+  USER_PROFILE_AVATAR_SIZE_ERROR,
+  USER_PROFILE_FORM_LABELS,
+} from "@/features/users/constants/userProfile.constants";
 import type { UserRow } from "@/features/users/types";
 import { userProfileSx } from "./userProfile.styles";
 
@@ -140,6 +144,14 @@ export function UserProfileForm({
       const avatarChanged = Boolean(
         avatarUpload && avatarUpload.previewUrl !== user.avatarUrl,
       );
+      if (
+        avatarChanged &&
+        avatarUpload &&
+        avatarUpload.size > USER_PROFILE_AVATAR_MAX_BYTES
+      ) {
+        setSubmitError(USER_PROFILE_AVATAR_SIZE_ERROR);
+        return;
+      }
 
       if (profileChanged || avatarChanged) {
         await updateProfile({

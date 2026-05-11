@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
 import {
+  USER_PROFILE_AVATAR_MAX_BYTES,
+  USER_PROFILE_AVATAR_SIZE_ERROR,
   USER_PROFILE_FALLBACK_MEMBER_SINCE,
   USER_PROFILE_UPLOAD_HINT,
 } from "@/features/users/constants/userProfile.constants";
@@ -33,6 +35,9 @@ export function UserProfileHeader({
   onAvatarSelected,
 }: UserProfileHeaderProps) {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  const [uploadSizeError, setUploadSizeError] = React.useState<string | null>(
+    null,
+  );
   const fullName = `${user.firstName} ${user.lastName}`.trim() || "User";
   const avatarInitial = (
     user.firstName?.[0] ??
@@ -43,12 +48,19 @@ export function UserProfileHeader({
 
   const openFileDialog = () => {
     if (!canEditProfile) return;
+    setUploadSizeError(null);
     fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    if (file.size > USER_PROFILE_AVATAR_MAX_BYTES) {
+      setUploadSizeError(USER_PROFILE_AVATAR_SIZE_ERROR);
+      event.target.value = "";
+      return;
+    }
+    setUploadSizeError(null);
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
@@ -102,6 +114,11 @@ export function UserProfileHeader({
           <Typography sx={userProfileSx.uploadHint}>
             {USER_PROFILE_UPLOAD_HINT}
           </Typography>
+          {uploadSizeError ? (
+            <Typography sx={userProfileSx.formError} role="alert">
+              {uploadSizeError}
+            </Typography>
+          ) : null}
         </Box>
       </Box>
       <Box sx={userProfileSx.identity}>
