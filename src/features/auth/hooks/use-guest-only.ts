@@ -1,30 +1,18 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getAccessToken } from "../lib/auth-storage";
-
-function subscribe() {
-  return () => {};
-}
-
-function getSnapshot() {
-  return getAccessToken();
-}
-
-function getServerSnapshot() {
-  return null;
-}
+import useAuthToken from "./use-auth-token";
 
 function useGuestOnly() {
   const router = useRouter();
-  const token = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const token = useAuthToken();
 
   const isGuest = !token;
 
   useEffect(() => {
     if (token) {
-      router.replace("/employees");
+      router.replace("/users");
     }
   }, [token, router]);
 

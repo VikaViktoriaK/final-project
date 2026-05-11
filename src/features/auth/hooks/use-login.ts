@@ -22,7 +22,7 @@ function useLogin() {
         result.data.login.access_token,
         result.data.login.refresh_token,
       );
-      router.push("/employees");
+      router.push("/users");
     }
   };
   return { loading, error, loginUser };

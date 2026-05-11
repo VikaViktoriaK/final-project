@@ -1,24 +1,12 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getAccessToken } from "../lib/auth-storage";
-
-function subscribe() {
-  return () => {};
-}
-
-function getSnapshot() {
-  return getAccessToken();
-}
-
-function getServerSnapshot() {
-  return null;
-}
+import useAuthToken from "./use-auth-token";
 
 function useRequireAuth() {
   const router = useRouter();
-  const token = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const token = useAuthToken();
 
   const isAuthorized = Boolean(token);
 
