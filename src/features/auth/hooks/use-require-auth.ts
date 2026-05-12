@@ -8,15 +8,15 @@ function useRequireAuth() {
   const router = useRouter();
   const token = useAuthToken();
 
-  const isAuthorized = Boolean(token);
+  const isChecking = token === undefined;
+  const isAuthorized = typeof token === "string";
 
   useEffect(() => {
-    if (!token) {
+    if (token === null) {
       router.replace("/login");
     }
   }, [token, router]);
-
-  return { isAuthorized };
+  return { isChecking, isAuthorized };
 }
 
 export default useRequireAuth;

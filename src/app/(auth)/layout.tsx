@@ -10,7 +10,11 @@ type AuthLayoutProps = {
 };
 
 function AuthLayout({ children }: AuthLayoutProps) {
-  const { isGuest } = useGuestOnly();
+  const { isGuest, isChecking } = useGuestOnly();
+
+  if (isChecking) {
+    return null;
+  }
 
   if (!isGuest) {
     return null;

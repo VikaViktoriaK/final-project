@@ -8,15 +8,15 @@ function useGuestOnly() {
   const router = useRouter();
   const token = useAuthToken();
 
-  const isGuest = !token;
+  const isChecking = token === undefined;
+  const isGuest = token === null;
 
   useEffect(() => {
-    if (token) {
+    if (typeof token === "string") {
       router.replace("/users");
     }
   }, [token, router]);
-
-  return { isGuest };
+  return { isChecking, isGuest };
 }
 
 export default useGuestOnly;

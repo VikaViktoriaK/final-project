@@ -8,8 +8,10 @@ type DashboardLayoutProps = {
 };
 
 function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { isAuthorized } = useRequireAuth();
-
+  const { isChecking, isAuthorized } = useRequireAuth();
+  if (isChecking) {
+    return null;
+  }
   if (!isAuthorized) {
     return null;
   }
