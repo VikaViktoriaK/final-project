@@ -52,7 +52,22 @@ const MSG_AVATAR_UPLOAD_UNAVAILABLE =
 const MSG_AVATAR_CLOUDINARY =
   "Photo upload isn’t configured correctly on the server (missing or invalid cloud storage keys). Ask your administrator to set real API keys in the API environment, not placeholders like API_KEY.";
 
-function formatProfileSubmitError(error: unknown): string {
+function firstGraphQLErrorMessage(error: unknown): string | null {
+  if (!error || typeof error !== "object") return null;
+  const e = error as {
+    graphQLErrors?: ReadonlyArray<{ message?: string }>;
+    networkError?: {
+      result?: { errors?: ReadonlyArray<{ message?: string }> };
+    };
+  };
+  const gql = e.graphQLErrors?.[0]?.message;
+  if (typeof gql === "string" && gql.trim()) return gql.trim();
+  const net = e.networkError?.result?.errors?.[0]?.message;
+  if (typeof net === "string" && net.trim()) return net.trim();
+  return null;
+}
+
+export function formatProfileSubmitError(error: unknown): string {
   const blob =
     error instanceof Error
       ? error.message
@@ -86,6 +101,11 @@ function formatProfileSubmitError(error: unknown): string {
       blob.includes("API_KEY"))
   ) {
     return MSG_AVATAR_CLOUDINARY;
+  }
+
+  const gqlMsg = firstGraphQLErrorMessage(error);
+  if (gqlMsg) {
+    return gqlMsg;
   }
 
   if (error instanceof Error && error.message.trim()) {

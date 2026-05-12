@@ -13,7 +13,15 @@ import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { SidebarStub } from "@/features/users/components/SidebarStub";
 import { UserProfileTabs } from "@/features/users/components/user-profile/UserProfileTabs";
 import { UserProfileHeader } from "@/features/users/components/user-profile/UserProfileHeader";
-import { UserProfileForm } from "@/features/users/components/user-profile/UserProfileForm";
+import {
+  UserProfileForm,
+  formatProfileSubmitError,
+} from "@/features/users/components/user-profile/UserProfileForm";
+import { useDeleteAvatarMutation } from "@/features/users/api/updateUser";
+import {
+  USER_PROFILE_DISCARD_AVATAR_SELECTION,
+  USER_PROFILE_REMOVE_PROFILE_PHOTO,
+} from "@/features/users/constants/userProfile.constants";
 import { userProfileSx } from "@/features/users/components/user-profile/userProfile.styles";
 import type { UserRow } from "@/features/users/types";
 
@@ -52,6 +60,43 @@ function UserProfileEditSection({
   const [avatarUpload, setAvatarUpload] = React.useState<
     AvatarUploadState | undefined
   >(undefined);
+  const [avatarActionError, setAvatarActionError] = React.useState<
+    string | null
+  >(null);
+  const [deleteAvatar, { loading: isDeletingAvatar }] =
+    useDeleteAvatarMutation();
+
+  const handleAvatarSelected = React.useCallback((next: AvatarUploadState) => {
+    setAvatarActionError(null);
+    setAvatarUpload(next);
+  }, []);
+
+  const hasServerAvatar = Boolean(user.avatarUrl);
+  const hasPendingAvatar = Boolean(avatarUpload);
+  const canRemoveAvatar =
+    canEditProfile && (hasPendingAvatar || hasServerAvatar);
+
+  const removeAvatarButtonLabel = avatarUpload
+    ? USER_PROFILE_DISCARD_AVATAR_SELECTION
+    : USER_PROFILE_REMOVE_PROFILE_PHOTO;
+
+  const handleRemoveAvatar = async () => {
+    setAvatarActionError(null);
+    try {
+      if (avatarUpload) {
+        setAvatarUpload(undefined);
+        return;
+      }
+      if (user.avatarUrl) {
+        await deleteAvatar({
+          variables: { avatar: { userId: user.id } },
+        });
+        await onUserUpdated();
+      }
+    } catch (error) {
+      setAvatarActionError(formatProfileSubmitError(error));
+    }
+  };
 
   return (
     <>
@@ -61,8 +106,20 @@ function UserProfileEditSection({
           memberSinceText={memberSinceText}
           canEditProfile={canEditProfile}
           avatarPreviewUrl={avatarUpload?.previewUrl}
-          onAvatarSelected={setAvatarUpload}
+          onAvatarSelected={handleAvatarSelected}
+          onRemoveAvatar={handleRemoveAvatar}
+          canRemoveAvatar={canRemoveAvatar}
+          removeAvatarButtonLabel={removeAvatarButtonLabel}
+          isRemovingAvatar={isDeletingAvatar}
         />
+        {avatarActionError ? (
+          <Typography
+            sx={[userProfileSx.formError, { mt: 1, textAlign: "center" }]}
+            role="alert"
+          >
+            {avatarActionError}
+          </Typography>
+        ) : null}
       </Box>
       <Box sx={userProfileSx.editSection}>
         <UserProfileForm

@@ -35,6 +35,13 @@ export const UPLOAD_AVATAR = gql`
   }
 `;
 
+/** Same argument name as `uploadAvatar(avatar: …)` — uses `avatar` for `DeleteAvatarInput`. */
+export const DELETE_AVATAR = gql`
+  mutation DeleteAvatar($avatar: DeleteAvatarInput!) {
+    deleteAvatar(avatar: $avatar)
+  }
+`;
+
 export const GET_USER_EDIT_OPTIONS = gql`
   query UserEditOptions {
     departments {
@@ -84,6 +91,16 @@ export function useUpdateProfileMutation() {
 
 export function useUploadAvatarMutation() {
   return useMutation<unknown, UploadAvatarVariables>(UPLOAD_AVATAR);
+}
+
+export type DeleteAvatarVariables = {
+  avatar: {
+    userId: string;
+  };
+};
+
+export function useDeleteAvatarMutation() {
+  return useMutation<unknown, DeleteAvatarVariables>(DELETE_AVATAR);
 }
 
 type OptionItem = { id: string; name: string };

@@ -61,11 +61,11 @@ export const userProfileSx = {
     mb: 3,
   },
   avatar: {
-    width: 88,
-    height: 88,
+    width: 152,
+    height: 152,
     bgcolor: "rgba(255,255,255,0.35)",
     color: "rgba(0,0,0,0.45)",
-    fontSize: 40,
+    fontSize: 69,
     fontWeight: 500,
   },
   avatarButton: {
@@ -82,32 +82,69 @@ export const userProfileSx = {
   uploadBlock: {
     minWidth: 220,
   },
+  avatarDropZone: {
+    borderRadius: 2,
+    border: "none",
+    px: 0,
+    py: 0,
+    transition: "background-color 0.15s ease",
+    outline: 0,
+  },
+  avatarDropZoneActive: {
+    backgroundColor: "rgba(223,77,77,0.12)",
+    borderRadius: 2,
+  },
+  avatarDropZoneDisabled: {
+    opacity: 0.55,
+    pointerEvents: "none",
+  },
+  removePhotoBtn: {
+    mt: 1,
+    textTransform: "none",
+    fontSize: 14,
+    color: "#ffb4b4",
+    px: 0,
+    minWidth: 0,
+    "&:hover": {
+      backgroundColor: "transparent",
+      textDecoration: "underline",
+    },
+    "&.Mui-disabled": {
+      color: "rgba(255,180,180,0.5)",
+    },
+  },
   uploadBtn: {
     color: "var(--app-text)",
     justifyContent: "flex-start",
     textTransform: "none",
     px: 0,
     minWidth: 0,
-    fontSize: 28,
-    lineHeight: 1,
+    fontSize: 22,
+    lineHeight: 1.2,
     "&:hover": {
       backgroundColor: "transparent",
-      color: "#fff",
+      color: "var(--app-text)",
+    },
+    "& .MuiButton-startIcon": {
+      color: "var(--app-text)",
     },
   },
   uploadText: {
     color: "var(--app-text)",
-    fontSize: 28,
+    fontSize: 22,
   },
   uploadHint: {
     color: "var(--app-text-muted)",
-    fontSize: 14,
+    fontSize: 13,
+    mt: 0.5,
+    display: "block",
   },
   identity: {
     textAlign: "center",
     mb: 4,
   },
   fullName: {
+    color: "var(--app-text)",
     fontSize: 34,
     fontWeight: 500,
     lineHeight: 1.2,
