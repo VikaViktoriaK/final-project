@@ -1,8 +1,10 @@
 "use client";
 import {
   Alert,
+  Box,
   Button,
   CircularProgress,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -15,6 +17,7 @@ import {
   type ForgotPasswordFormValues,
 } from "../schemas/forgot-password.schema";
 import useForgotPassword from "../hooks/use-forgot-password";
+import { authFormStyles } from "../styles/auth-form.styles";
 function ForgotPasswordForm() {
   const { loading, error, forgotPasswordUser, isSuccess } = useForgotPassword();
   const {
@@ -28,17 +31,21 @@ function ForgotPasswordForm() {
 
   return (
     <Stack
-      spacing={2}
+      sx={authFormStyles.centeredForm}
       onSubmit={handleSubmit(forgotPasswordUser)}
       component="form"
       noValidate
     >
-      <Typography variant="h2" component="h1">
-        Forgot password?
-      </Typography>
-      <NextLink href="/login">Sign in</NextLink>
+      <Box sx={authFormStyles.headerText}>
+        <Typography variant="h2" component="h1" sx={authFormStyles.title}>
+          Forgot password
+        </Typography>
+        <Typography sx={authFormStyles.subtitle}>
+          We will send you an email with further instructions
+        </Typography>
+      </Box>
       <TextField
-        label="Email"
+        sx={authFormStyles.textField}
         type="email"
         placeholder="Email"
         {...register("email")}
@@ -48,6 +55,7 @@ function ForgotPasswordForm() {
         autoComplete="email"
       />
       <Button
+        sx={authFormStyles.submitButton}
         type="submit"
         variant="contained"
         color="primary"
@@ -61,6 +69,9 @@ function ForgotPasswordForm() {
           "Forgot password"
         )}
       </Button>
+      <Link component={NextLink} href="/login" sx={authFormStyles.textAction}>
+        Cancel
+      </Link>
       {error && <Alert severity="error">{error.message}</Alert>}
       {isSuccess && (
         <Alert severity="success">

@@ -1,7 +1,9 @@
 "use client";
 
+import { Box } from "@mui/material";
 import type { ReactNode } from "react";
 import useGuestOnly from "@/features/auth/hooks/use-guest-only";
+import { authFormStyles } from "@/features/auth/styles/auth-form.styles";
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -14,7 +16,11 @@ function AuthLayout({ children }: AuthLayoutProps) {
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <Box sx={authFormStyles.pageContainer}>
+      <Box sx={authFormStyles.formContainer}>{children}</Box>
+    </Box>
+  );
 }
 
 export default AuthLayout;
