@@ -55,6 +55,8 @@ export const userLanguagesSx = {
     flexWrap: "wrap",
     mt: "auto",
     pt: 3,
+    pr: { xs: 4, sm: 8 },
+    pl: 0,
   },
   addLanguageBtn: {
     textTransform: "uppercase",
@@ -91,5 +93,131 @@ export const userLanguagesSx = {
   errorText: {
     color: "#ffb4b4",
     fontSize: 14,
+  },
+  languageDialog: {
+    "& .MuiDialog-paper": {
+      bgcolor: "var(--app-surface)",
+      backgroundImage: "none",
+      borderRadius: 2,
+      maxWidth: 440,
+      width: "100%",
+    },
+  },
+  dialogTitleRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 2,
+    pr: 0.5,
+    pt: 1,
+    pb: 0.5,
+  },
+  dialogTitleText: {
+    fontSize: 20,
+    fontWeight: 700,
+    color: "var(--app-text)",
+    letterSpacing: 0.2,
+  },
+  dialogCloseBtn: {
+    color: "var(--app-text)",
+    "&:hover": {
+      bgcolor: "rgba(255,255,255,0.08)",
+    },
+  },
+  dialogContent: {
+    pt: 2,
+    px: 3,
+    pb: 2,
+    display: "flex",
+    flexDirection: "column",
+    gap: 2.5,
+    minWidth: 280,
+  },
+  dialogField: {
+    "& .MuiInputLabel-root": {
+      color: "var(--app-text-muted)",
+    },
+    "& .MuiOutlinedInput-root": {
+      color: "var(--app-text)",
+      "& fieldset": {
+        borderColor: "var(--app-control-border)",
+      },
+      "&:hover fieldset": {
+        borderColor: "rgba(255,255,255,0.4)",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#df4d4d",
+      },
+    },
+    "& .MuiSvgIcon-root": {
+      color: "var(--app-text-muted)",
+    },
+  },
+  dialogActions: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 2,
+    px: 3,
+    pb: 3,
+    pt: 1,
+  },
+  dialogCancelBtn: {
+    borderRadius: 999,
+    px: 3,
+    py: 1,
+    minWidth: 120,
+    textTransform: "uppercase",
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 0.6,
+    color: "var(--app-text-muted)",
+    borderColor: "var(--app-control-border)",
+    "&:hover": {
+      borderColor: "rgba(255,255,255,0.35)",
+      bgcolor: "rgba(255,255,255,0.04)",
+    },
+  },
+  dialogConfirmBtn: {
+    borderRadius: 999,
+    px: 3,
+    py: 1,
+    minWidth: 120,
+    textTransform: "uppercase",
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 0.6,
+    bgcolor: "#df4d4d",
+    color: "#fff",
+    boxShadow: "none",
+    "&:hover": {
+      bgcolor: "#cf3d3d",
+      boxShadow: "none",
+    },
+    "&.Mui-disabled": {
+      bgcolor: "rgba(223,77,77,0.35)",
+      color: "rgba(255,255,255,0.7)",
+    },
+  },
+  dialogRemoveConfirmBtn: {
+    borderRadius: 999,
+    px: 3,
+    py: 1,
+    minWidth: 120,
+    textTransform: "uppercase",
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 0.6,
+    bgcolor: "#df4d4d",
+    color: "#fff",
+    boxShadow: "none",
+    "&:hover": {
+      bgcolor: "#cf3d3d",
+      boxShadow: "none",
+    },
+    "&.Mui-disabled": {
+      bgcolor: "rgba(223,77,77,0.35)",
+      color: "rgba(255,255,255,0.7)",
+    },
   },
 } as const;

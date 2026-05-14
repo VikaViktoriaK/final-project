@@ -10,3 +10,9 @@ export type UserLanguageRow = {
   name: string;
   proficiency: string;
 };
+
+/** Item from root `languages` catalog query (shape may vary — adjust fields to match API). */
+export type LanguageCatalogItem = {
+  id?: string | null;
+  name: string;
+};

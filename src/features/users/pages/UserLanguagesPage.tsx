@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
-import Snackbar from "@mui/material/Snackbar";
 import Typography from "@mui/material/Typography";
 import NextLink from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -19,16 +18,19 @@ import { userLanguagesSx } from "@/features/users/components/user-profile/userLa
 import { useProfileWithLanguagesQuery } from "@/features/users/api/userLanguages";
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { isNativeProficiency } from "@/features/users/components/user-profile/userLanguages.utils";
-
-const SNACKBAR_NOT_IMPLEMENTED = "This action is not available yet.";
+import {
+  AddUserLanguageDialog,
+  RemoveUserLanguageDialog,
+} from "@/features/users/components/user-profile/UserLanguageDialogs";
 
 export function UserLanguagesPage() {
   const router = useRouter();
   const params = useParams<{ userId: string }>();
   const userId = params?.userId ?? "";
-  const { userId: authUserId } = useAuthSnapshot();
+  const { userId: authUserId, role } = useAuthSnapshot();
 
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [addOpen, setAddOpen] = React.useState(false);
+  const [removeOpen, setRemoveOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (authUserId === null) {
@@ -38,10 +40,14 @@ export function UserLanguagesPage() {
 
   const graphQlEnabled = Boolean(userId && authUserId);
 
-  const { data, loading, error } = useProfileWithLanguagesQuery(
+  const { data, loading, error, refetch } = useProfileWithLanguagesQuery(
     userId,
     graphQlEnabled,
   );
+
+  const isAdmin = role === "Admin";
+  const canManageLanguages =
+    Boolean(authUserId) && (isAdmin || authUserId === userId);
 
   const displayName = React.useMemo(() => {
     const p = data?.profile;
@@ -52,14 +58,6 @@ export function UserLanguagesPage() {
 
   const languages = data?.profile?.languages ?? [];
   const errorMessage = error?.message ?? null;
-
-  const handleAddLanguage = () => {
-    setSnackbarOpen(true);
-  };
-
-  const handleRemoveLanguages = () => {
-    setSnackbarOpen(true);
-  };
 
   return (
     <Box sx={userProfileSx.pageLayout}>
@@ -130,38 +128,51 @@ export function UserLanguagesPage() {
                     ))}
                   </Box>
                 )}
-                <Box sx={userLanguagesSx.actionsRow}>
-                  <Button
-                    type="button"
-                    variant="text"
-                    startIcon={<AddIcon />}
-                    sx={userLanguagesSx.addLanguageBtn}
-                    onClick={handleAddLanguage}
-                  >
-                    Add language
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="text"
-                    startIcon={<DeleteIcon />}
-                    sx={userLanguagesSx.removeLanguagesBtn}
-                    onClick={handleRemoveLanguages}
-                  >
-                    Remove languages
-                  </Button>
-                </Box>
+                {canManageLanguages ? (
+                  <Box sx={userLanguagesSx.actionsRow}>
+                    <Button
+                      type="button"
+                      variant="text"
+                      startIcon={<AddIcon />}
+                      sx={userLanguagesSx.addLanguageBtn}
+                      onClick={() => setAddOpen(true)}
+                    >
+                      Add language
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="text"
+                      startIcon={<DeleteIcon />}
+                      sx={userLanguagesSx.removeLanguagesBtn}
+                      onClick={() => setRemoveOpen(true)}
+                    >
+                      Remove languages
+                    </Button>
+                  </Box>
+                ) : null}
               </Box>
             ) : null}
           </>
         )}
       </Box>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={4000}
-        onClose={() => setSnackbarOpen(false)}
-        message={SNACKBAR_NOT_IMPLEMENTED}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
+      {canManageLanguages ? (
+        <>
+          <AddUserLanguageDialog
+            open={addOpen}
+            onClose={() => setAddOpen(false)}
+            userId={userId}
+            currentLanguages={languages}
+            onCompleted={() => refetch()}
+          />
+          <RemoveUserLanguageDialog
+            open={removeOpen}
+            onClose={() => setRemoveOpen(false)}
+            userId={userId}
+            currentLanguages={languages}
+            onCompleted={() => refetch()}
+          />
+        </>
+      ) : null}
     </Box>
   );
 }
