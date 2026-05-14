@@ -8,12 +8,12 @@
   --app-control-border: rgba(255, 255, 255, 0.12);
 }
 
-html,
-body {
+html {
   height: 100%;
 }
 
 body {
+  min-height: 100%;
   margin: 0;
   background: var(--app-bg);
   color: var(--app-text);

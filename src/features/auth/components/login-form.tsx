@@ -15,26 +15,10 @@ import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
 import { useLazyQuery } from "@apollo/client/react";
 import { LOGIN_QUERY } from "../graphql/login.query";
 import { saveAuthTokens } from "../lib/auth-storage";
-
-type LoginQueryData = {
-  login: {
-    access_token: string;
-    refresh_token: string;
-    user: {
-      id: string;
-      email: string;
-      role: string;
-      profile: {
-        full_name: string;
-        avatar: string | null;
-      };
-    };
-  };
-};
-
-type LoginQueryVariables = {
-  auth: LoginFormValues;
-};
+import type {
+  LoginQueryData,
+  LoginQueryVariables,
+} from "../types/auth-graphql.types";
 
 function LoginForm() {
   const router = useRouter();

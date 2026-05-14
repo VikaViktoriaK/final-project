@@ -17,19 +17,29 @@ interface UsersFilterProps {
   onOrderByChange: (property: keyof UserRow) => void;
 }
 
+const SORT_OPTIONS: { value: keyof UserRow; label: string }[] = [
+  { value: "firstName", label: "First Name" },
+  { value: "lastName", label: "Last Name" },
+  { value: "email", label: "Email" },
+  { value: "department", label: "Department" },
+  { value: "position", label: "Position" },
+];
+
 export function UsersFilter({
   orderBy,
   order,
   onOrderChange,
   onOrderByChange,
 }: UsersFilterProps) {
-  const options: { value: keyof UserRow; label: string }[] = [
-    { value: "firstName", label: "First Name" },
-    { value: "lastName", label: "Last Name" },
-    { value: "email", label: "Email" },
-    { value: "department", label: "Department" },
-    { value: "position", label: "Position" },
-  ];
+  const handleSortFieldChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    onOrderByChange(event.target.value as keyof UserRow);
+  };
+
+  const handleToggleOrder = () => {
+    onOrderChange(order === "asc" ? "desc" : "asc");
+  };
 
   return (
     <Box sx={usersTableSx.usersFilter}>
@@ -38,10 +48,10 @@ export function UsersFilter({
         label="Sort by"
         value={orderBy}
         size="small"
-        onChange={(e) => onOrderByChange(e.target.value as keyof UserRow)}
+        onChange={handleSortFieldChange}
         sx={usersTableSx.usersFilterSelect}
       >
-        {options.map((option) => (
+        {SORT_OPTIONS.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
@@ -49,7 +59,7 @@ export function UsersFilter({
       </TextField>
 
       <IconButton
-        onClick={() => onOrderChange(order === "asc" ? "desc" : "asc")}
+        onClick={handleToggleOrder}
         title={order === "asc" ? "Ascending" : "Descending"}
         sx={usersTableSx.usersFilterOrderBtn}
       >
