@@ -47,6 +47,10 @@ type DeleteProfileLanguageMutationData = {
   deleteProfileLanguage: ProfileMutationPayload;
 };
 
+type UpdateProfileLanguageMutationData = {
+  updateProfileLanguage: ProfileMutationPayload;
+};
+
 export function useProfileWithLanguagesQuery(userId: string, enabled: boolean) {
   return useQuery<ProfileWithLanguagesResponse>(GET_PROFILE_WITH_LANGUAGES, {
     variables: { userId },
@@ -102,6 +106,20 @@ export const DELETE_PROFILE_LANGUAGE = gql`
   }
 `;
 
+export const UPDATE_PROFILE_LANGUAGE = gql`
+  mutation UpdateProfileLanguage($language: UpdateProfileLanguageInput!) {
+    updateProfileLanguage(language: $language) {
+      id
+      first_name
+      last_name
+      languages {
+        name
+        proficiency
+      }
+    }
+  }
+`;
+
 export type AddProfileLanguageVariables = {
   language: {
     userId: string;
@@ -117,6 +135,14 @@ export type DeleteProfileLanguageVariables = {
   };
 };
 
+export type UpdateProfileLanguageVariables = {
+  language: {
+    userId: string;
+    name: string;
+    proficiency: string;
+  };
+};
+
 export function useAddProfileLanguageMutation() {
   return useMutation<
     AddProfileLanguageMutationData,
@@ -129,4 +155,11 @@ export function useDeleteProfileLanguageMutation() {
     DeleteProfileLanguageMutationData,
     DeleteProfileLanguageVariables
   >(DELETE_PROFILE_LANGUAGE);
+}
+
+export function useUpdateProfileLanguageMutation() {
+  return useMutation<
+    UpdateProfileLanguageMutationData,
+    UpdateProfileLanguageVariables
+  >(UPDATE_PROFILE_LANGUAGE);
 }

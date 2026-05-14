@@ -12,19 +12,25 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
 import {
   useAddProfileLanguageMutation,
-  useDeleteProfileLanguageMutation,
   useLanguageCatalogQuery,
+  useUpdateProfileLanguageMutation,
 } from "@/features/users/api/userLanguages";
 import {
   ADD_LANGUAGE_DIALOG_LABELS,
+  CONFIRM_BULK_REMOVE_LANGUAGES_LABELS,
   LANGUAGE_PROFICIENCY_OPTIONS,
-  REMOVE_LANGUAGE_DIALOG_LABELS,
+  UPDATE_LANGUAGE_DIALOG_LABELS,
 } from "@/features/users/constants/userLanguages.constants";
 import { formatProfileSubmitError } from "@/features/users/components/user-profile/UserProfileForm";
 import { userLanguagesSx } from "@/features/users/components/user-profile/userLanguages.styles";
 import type { UserLanguageRow } from "@/features/users/types/userLanguages.types";
+
+const dialogInputLabelSlotProps = {
+  inputLabel: { shrink: true },
+} as const;
 
 type AddUserLanguageDialogProps = {
   open: boolean;
@@ -86,7 +92,10 @@ function AddUserLanguageDialogContent({
 
   return (
     <>
-      <DialogTitle component="div" sx={{ m: 0, p: 0, px: 3, pt: 2 }}>
+      <DialogTitle
+        component="div"
+        sx={userLanguagesSx.addLanguageDialogTitleRoot}
+      >
         <Box sx={userLanguagesSx.dialogTitleRow}>
           <Box component="span" sx={userLanguagesSx.dialogTitleText}>
             {ADD_LANGUAGE_DIALOG_LABELS.title}
@@ -121,7 +130,10 @@ function AddUserLanguageDialogContent({
               onChange={(e) => setLanguageName(e.target.value)}
               fullWidth
               sx={userLanguagesSx.dialogField}
-              slotProps={{ select: { displayEmpty: true } }}
+              slotProps={{
+                ...dialogInputLabelSlotProps,
+                select: { displayEmpty: true },
+              }}
             >
               <MenuItem value="">
                 <em>Select language</em>
@@ -140,6 +152,7 @@ function AddUserLanguageDialogContent({
               onChange={(e) => setProficiency(e.target.value)}
               fullWidth
               sx={userLanguagesSx.dialogField}
+              slotProps={dialogInputLabelSlotProps}
             >
               {LANGUAGE_PROFICIENCY_OPTIONS.map((level) => (
                 <MenuItem key={level} value={level}>
@@ -202,37 +215,135 @@ export function AddUserLanguageDialog({
   );
 }
 
-type RemoveUserLanguageDialogProps = {
+type ConfirmBulkRemoveLanguagesDialogProps = {
+  open: boolean;
+  selectedCount: number;
+  onClose: () => void;
+  onConfirm: () => Promise<void>;
+  submitting: boolean;
+  errorMessage: string | null;
+};
+
+export function ConfirmBulkRemoveLanguagesDialog({
+  open,
+  selectedCount,
+  onClose,
+  onConfirm,
+  submitting,
+  errorMessage,
+}: ConfirmBulkRemoveLanguagesDialogProps) {
+  const handleClose = () => {
+    if (!submitting) {
+      onClose();
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="sm"
+      sx={userLanguagesSx.languageDialog}
+    >
+      {open ? (
+        <>
+          <DialogTitle component="div" sx={userLanguagesSx.dialogTitleRoot}>
+            <Box sx={userLanguagesSx.dialogTitleRow}>
+              <Box component="span" sx={userLanguagesSx.dialogTitleText}>
+                {CONFIRM_BULK_REMOVE_LANGUAGES_LABELS.title}
+              </Box>
+              <IconButton
+                type="button"
+                aria-label="Close dialog"
+                onClick={handleClose}
+                size="small"
+                disabled={submitting}
+                sx={userLanguagesSx.dialogCloseBtn}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </DialogTitle>
+          <DialogContent sx={userLanguagesSx.dialogContent}>
+            <Typography
+              sx={{
+                color: "var(--app-text-muted)",
+                fontSize: 15,
+                lineHeight: 1.5,
+              }}
+            >
+              {selectedCount === 1
+                ? "Remove this language from the profile? This cannot be undone."
+                : `Remove ${selectedCount} languages from the profile? This cannot be undone.`}
+            </Typography>
+            {errorMessage ? (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {errorMessage}
+              </Alert>
+            ) : null}
+          </DialogContent>
+          <DialogActions sx={userLanguagesSx.dialogActions}>
+            <Button
+              variant="outlined"
+              onClick={handleClose}
+              disabled={submitting}
+              sx={userLanguagesSx.dialogCancelBtn}
+            >
+              {CONFIRM_BULK_REMOVE_LANGUAGES_LABELS.cancel}
+            </Button>
+            <Button
+              variant="contained"
+              disableElevation
+              onClick={() => void onConfirm()}
+              disabled={submitting}
+              sx={userLanguagesSx.dialogRemoveConfirmBtn}
+            >
+              {CONFIRM_BULK_REMOVE_LANGUAGES_LABELS.delete}
+            </Button>
+          </DialogActions>
+        </>
+      ) : null}
+    </Dialog>
+  );
+}
+
+type UpdateUserLanguageDialogProps = {
   open: boolean;
   onClose: () => void;
   userId: string;
-  currentLanguages: UserLanguageRow[];
+  language: UserLanguageRow | null;
   onCompleted: () => Promise<unknown> | void;
 };
 
-function RemoveUserLanguageDialogContent({
+function UpdateUserLanguageDialogContent({
   userId,
-  currentLanguages,
+  language,
   onClose,
   onCompleted,
-}: Omit<RemoveUserLanguageDialogProps, "open">) {
-  const [languageName, setLanguageName] = React.useState("");
+}: {
+  userId: string;
+  language: UserLanguageRow;
+  onClose: () => void;
+  onCompleted: () => Promise<unknown> | void;
+}) {
+  const [proficiency, setProficiency] = React.useState(language.proficiency);
   const [submitError, setSubmitError] = React.useState<string | null>(null);
-  const [deleteLanguage, { loading: deleting }] =
-    useDeleteProfileLanguageMutation();
+  const [updateLanguage, { loading: saving }] =
+    useUpdateProfileLanguageMutation();
 
   const handleSubmit = async () => {
     setSubmitError(null);
-    if (!languageName.trim()) {
-      setSubmitError("Select a language to remove.");
+    if (proficiency === language.proficiency) {
       return;
     }
     try {
-      await deleteLanguage({
+      await updateLanguage({
         variables: {
           language: {
             userId,
-            name: languageName.trim(),
+            name: language.name,
+            proficiency,
           },
         },
       });
@@ -245,10 +356,10 @@ function RemoveUserLanguageDialogContent({
 
   return (
     <>
-      <DialogTitle component="div" sx={{ m: 0, p: 0, px: 3, pt: 2 }}>
+      <DialogTitle component="div" sx={userLanguagesSx.dialogTitleRoot}>
         <Box sx={userLanguagesSx.dialogTitleRow}>
           <Box component="span" sx={userLanguagesSx.dialogTitleText}>
-            {REMOVE_LANGUAGE_DIALOG_LABELS.title}
+            {UPDATE_LANGUAGE_DIALOG_LABELS.title}
           </Box>
           <IconButton
             type="button"
@@ -262,61 +373,65 @@ function RemoveUserLanguageDialogContent({
         </Box>
       </DialogTitle>
       <DialogContent sx={userLanguagesSx.dialogContent}>
-        {currentLanguages.length === 0 ? (
-          <Alert severity="info">There are no languages to remove.</Alert>
-        ) : (
-          <TextField
-            select
-            variant="outlined"
-            label={ADD_LANGUAGE_DIALOG_LABELS.languageField}
-            value={languageName}
-            onChange={(e) => setLanguageName(e.target.value)}
-            fullWidth
-            sx={userLanguagesSx.dialogField}
-            slotProps={{ select: { displayEmpty: true } }}
-          >
-            <MenuItem value="">
-              <em>Select language</em>
+        <TextField
+          variant="outlined"
+          label={UPDATE_LANGUAGE_DIALOG_LABELS.languageField}
+          value={language.name}
+          fullWidth
+          sx={userLanguagesSx.dialogField}
+          slotProps={{
+            input: { readOnly: true },
+            inputLabel: { shrink: true },
+          }}
+        />
+        <TextField
+          select
+          variant="outlined"
+          label={UPDATE_LANGUAGE_DIALOG_LABELS.proficiencyField}
+          value={proficiency}
+          onChange={(e) => setProficiency(e.target.value)}
+          fullWidth
+          sx={userLanguagesSx.dialogField}
+          slotProps={dialogInputLabelSlotProps}
+        >
+          {LANGUAGE_PROFICIENCY_OPTIONS.map((level) => (
+            <MenuItem key={level} value={level}>
+              {level}
             </MenuItem>
-            {currentLanguages.map((row) => (
-              <MenuItem key={`${row.name}:${row.proficiency}`} value={row.name}>
-                {row.name} ({row.proficiency})
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
+          ))}
+        </TextField>
         {submitError ? <Alert severity="error">{submitError}</Alert> : null}
       </DialogContent>
       <DialogActions sx={userLanguagesSx.dialogActions}>
         <Button
           variant="outlined"
           onClick={onClose}
-          disabled={deleting}
+          disabled={saving}
           sx={userLanguagesSx.dialogCancelBtn}
         >
-          {REMOVE_LANGUAGE_DIALOG_LABELS.cancel}
+          {UPDATE_LANGUAGE_DIALOG_LABELS.cancel}
         </Button>
         <Button
           variant="contained"
           disableElevation
           onClick={() => void handleSubmit()}
-          disabled={deleting || !languageName || currentLanguages.length === 0}
-          sx={userLanguagesSx.dialogRemoveConfirmBtn}
+          disabled={saving || proficiency === language.proficiency}
+          sx={userLanguagesSx.dialogConfirmBtn}
         >
-          {REMOVE_LANGUAGE_DIALOG_LABELS.confirm}
+          {UPDATE_LANGUAGE_DIALOG_LABELS.confirm}
         </Button>
       </DialogActions>
     </>
   );
 }
 
-export function RemoveUserLanguageDialog({
+export function UpdateUserLanguageDialog({
   open,
   onClose,
   userId,
-  currentLanguages,
+  language,
   onCompleted,
-}: RemoveUserLanguageDialogProps) {
+}: UpdateUserLanguageDialogProps) {
   return (
     <Dialog
       open={open}
@@ -325,11 +440,11 @@ export function RemoveUserLanguageDialog({
       maxWidth="sm"
       sx={userLanguagesSx.languageDialog}
     >
-      {open ? (
-        <RemoveUserLanguageDialogContent
-          key={userId}
+      {open && language ? (
+        <UpdateUserLanguageDialogContent
+          key={language.name}
           userId={userId}
-          currentLanguages={currentLanguages}
+          language={language}
           onClose={onClose}
           onCompleted={onCompleted}
         />

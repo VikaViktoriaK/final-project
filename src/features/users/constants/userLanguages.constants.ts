@@ -2,15 +2,24 @@
 export const ADD_LANGUAGE_DIALOG_LABELS = {
   title: "Add language",
   languageField: "Language",
-  proficiencyField: "Language proficiency",
+  proficiencyField: "Proficiency",
   cancel: "CANCEL",
   confirm: "CONFIRM",
 } as const;
 
-export const REMOVE_LANGUAGE_DIALOG_LABELS = {
-  title: "Remove language",
+/** Bulk-delete confirmation (after selecting rows on the languages page). */
+export const CONFIRM_BULK_REMOVE_LANGUAGES_LABELS = {
+  title: "Delete languages",
   cancel: "CANCEL",
-  confirm: "REMOVE",
+  delete: "DELETE",
+} as const;
+
+export const UPDATE_LANGUAGE_DIALOG_LABELS = {
+  title: "Update language",
+  languageField: "Language",
+  proficiencyField: "Proficiency",
+  cancel: "CANCEL",
+  confirm: "CONFIRM",
 } as const;
 
 /** CEFR-style + Native for new profile language rows. */
