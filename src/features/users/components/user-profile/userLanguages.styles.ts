@@ -139,6 +139,12 @@ export const userLanguagesSx = {
       width: "100%",
     },
   },
+  /** Wider paper for Add language so labels and select values are not clipped. */
+  addLanguageDialog: {
+    "& .MuiDialog-paper": {
+      maxWidth: 560,
+    },
+  },
   dialogTitleRoot: {
     m: 0,
     p: 0,
@@ -183,12 +189,31 @@ export const userLanguagesSx = {
     gap: 2.5,
     minWidth: 280,
   },
+  addLanguageDialogContent: {
+    pt: 2,
+    px: 3,
+    pb: 2,
+    display: "flex",
+    flexDirection: "column",
+    gap: 2.5,
+    minWidth: 320,
+    overflow: "visible",
+  },
   dialogField: {
+    overflow: "visible",
     "& .MuiInputLabel-root": {
       color: "var(--app-text-muted)",
+      maxWidth: "calc(100% - 8px)",
+      overflow: "visible",
+      whiteSpace: "nowrap",
+      textOverflow: "clip",
+    },
+    "& .MuiOutlinedInput-notchedOutline legend": {
+      maxWidth: "100%",
     },
     "& .MuiOutlinedInput-root": {
       color: "var(--app-text)",
+      overflow: "visible",
       "& fieldset": {
         borderColor: "var(--app-control-border)",
       },
@@ -198,6 +223,10 @@ export const userLanguagesSx = {
       "&.Mui-focused fieldset": {
         borderColor: "#df4d4d",
       },
+    },
+    "& .MuiOutlinedInput-input, & .MuiSelect-select": {
+      overflow: "visible",
+      textOverflow: "clip",
     },
     "& .MuiSvgIcon-root": {
       color: "var(--app-text-muted)",
@@ -258,13 +287,17 @@ export const userLanguagesSx = {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: 28,
-    height: 28,
-    px: 0.75,
+    boxSizing: "border-box",
+    width: 32,
+    height: 32,
+    minWidth: 32,
+    maxWidth: 32,
+    flexShrink: 0,
+    p: 0,
     borderRadius: "50%",
-    bgcolor: "rgba(255,255,255,0.22)",
-    color: "#fff",
-    fontSize: 13,
+    bgcolor: "#fff",
+    color: "#df4d4d",
+    fontSize: 12,
     fontWeight: 800,
     lineHeight: 1,
   },

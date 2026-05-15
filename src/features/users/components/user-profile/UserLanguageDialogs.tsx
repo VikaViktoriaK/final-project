@@ -111,7 +111,7 @@ function AddUserLanguageDialogContent({
           </IconButton>
         </Box>
       </DialogTitle>
-      <DialogContent sx={userLanguagesSx.dialogContent}>
+      <DialogContent sx={userLanguagesSx.addLanguageDialogContent}>
         {catalogLoading ? (
           <Alert severity="info">Loading languages…</Alert>
         ) : null}
@@ -199,8 +199,8 @@ export function AddUserLanguageDialog({
       open={open}
       onClose={onClose}
       fullWidth
-      maxWidth="sm"
-      sx={userLanguagesSx.languageDialog}
+      maxWidth={false}
+      sx={[userLanguagesSx.languageDialog, userLanguagesSx.addLanguageDialog]}
     >
       {open ? (
         <AddUserLanguageDialogContent
