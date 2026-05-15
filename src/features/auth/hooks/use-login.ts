@@ -21,6 +21,7 @@ function useLogin() {
       saveAuthTokens(
         result.data.login.access_token,
         result.data.login.refresh_token,
+        result.data.login.user,
       );
       router.push("/users");
     }
