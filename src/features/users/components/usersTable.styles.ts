@@ -1,6 +1,6 @@
 export const usersTableSx = {
   pageLayout: {
-    minHeight: "100vh",
+    minHeight: "100%",
     display: "grid",
     gridTemplateColumns: "1fr",
     gap: 2,
@@ -39,7 +39,7 @@ export const usersTableSx = {
     fontWeight: 600,
   },
   page: {
-    minHeight: "100vh",
+    minHeight: "100%",
     px: { xs: 2, md: 3 },
     py: { xs: 3, md: 4 },
   },

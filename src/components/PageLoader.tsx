@@ -18,7 +18,10 @@ const pageLoaderSx = (minHeight: string | number) => ({
   py: 4,
 });
 
-export function PageLoader({ minHeight = "40vh", size = 40 }: PageLoaderProps) {
+export function PageLoader({
+  minHeight = "12rem",
+  size = 40,
+}: PageLoaderProps) {
   return (
     <Box
       role="status"

@@ -41,7 +41,7 @@ function getInitial(name: string, email?: string): string {
 
 function isProfileActive(pathname: string, userId: string | null): boolean {
   if (!userId) return false;
-  return pathname.endsWith("/profile");
+  return pathname === `/users/${userId}/profile`;
 }
 
 function navItemClassName(active: boolean, disabled: boolean): string {
@@ -70,7 +70,7 @@ export function AppSidebar() {
   const renderNavItem = (item: (typeof SIDEBAR_NAV_ITEMS)[number]) => {
     const navigable = item.navigable ?? false;
     const href = resolveHref(item.href, userId);
-    const active = item.isActive(pathname);
+    const active = item.isActive(pathname, userId);
     const Icon = item.icon;
     const hideOnMobile = item.showInMobileBar === false;
     const className = navItemClassName(active, !navigable);

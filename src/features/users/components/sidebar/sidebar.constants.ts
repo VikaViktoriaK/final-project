@@ -23,12 +23,22 @@ export type SidebarNavItem = {
   label: string;
   icon: SvgIconComponent;
   href: string | ((userId: string | null) => string);
-  isActive: (pathname: string) => boolean;
+  /** Active only for the signed-in user's own section, not when viewing another user. */
+  isActive: (pathname: string, currentUserId: string | null) => boolean;
   /** When false, the item is shown but does not navigate yet. */
   navigable?: boolean;
   /** When false, hidden in the bottom tab bar (still shown in desktop sidebar). */
   showInMobileBar?: boolean;
 };
+
+function isOwnUserSection(
+  pathname: string,
+  currentUserId: string | null,
+  section: "profile" | "skills" | "languages",
+): boolean {
+  if (!currentUserId) return false;
+  return pathname === `/users/${currentUserId}/${section}`;
+}
 
 export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   {
@@ -43,16 +53,18 @@ export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
     id: "skills",
     label: "Skills",
     icon: TrendingUpIcon,
-    href: (userId) => (userId ? `/users/${userId}/profile` : "/users"),
-    isActive: (pathname) => pathname.endsWith("/profile"),
-    navigable: false,
+    href: (userId) => (userId ? `/users/${userId}/skills` : "/users"),
+    isActive: (pathname, currentUserId) =>
+      isOwnUserSection(pathname, currentUserId, "skills"),
+    navigable: true,
   },
   {
     id: "languages",
     label: "Languages",
     icon: TranslateIcon,
     href: (userId) => (userId ? `/users/${userId}/languages` : "/users"),
-    isActive: (pathname) => pathname.endsWith("/languages"),
+    isActive: (pathname, currentUserId) =>
+      isOwnUserSection(pathname, currentUserId, "languages"),
     navigable: false,
   },
   {
