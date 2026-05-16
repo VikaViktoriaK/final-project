@@ -16,7 +16,6 @@ import { UsersSearch } from "@/features/users/components/UsersSearch";
 import { UsersFilter } from "@/features/users/components/UsersFilter";
 import { UserEditDialog } from "@/features/users/components/UserEditDialog";
 import { UserCreateDialog } from "@/features/users/components/UserCreateDialog";
-import { SidebarStub } from "@/features/users/components/SidebarStub";
 import { useUsersQuery } from "@/features/users/api/getUsers";
 import { useDeleteUserMutation } from "@/features/users/api/deleteUser";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
@@ -73,8 +72,7 @@ export function UsersPage() {
   }, [normalize, order, orderBy, query, users]);
 
   return (
-    <Box sx={usersTableSx.pageLayout}>
-      <SidebarStub />
+    <>
       <Box sx={usersTableSx.usersPageContainer}>
         <Breadcrumbs aria-label="breadcrumb" sx={usersTableSx.breadcrumbs}>
           <Typography component="span" sx={usersTableSx.breadcrumbItemActive}>
@@ -175,6 +173,6 @@ export function UsersPage() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   );
 }

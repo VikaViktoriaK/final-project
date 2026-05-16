@@ -10,7 +10,6 @@ import { useParams } from "next/navigation";
 import { PageLoader } from "@/components/PageLoader";
 import { useUserQuery } from "@/features/users/api/getUser";
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
-import { SidebarStub } from "@/features/users/components/SidebarStub";
 import { UserProfileTabs } from "@/features/users/components/user-profile/UserProfileTabs";
 import { UserProfileHeader } from "@/features/users/components/user-profile/UserProfileHeader";
 import {
@@ -153,40 +152,37 @@ export function UserProfilePage() {
   );
 
   return (
-    <Box sx={userProfileSx.pageLayout}>
-      <SidebarStub />
-      <Box sx={userProfileSx.container}>
-        <Breadcrumbs aria-label="breadcrumb" sx={userProfileSx.breadcrumbs}>
-          <Link
-            component={NextLink}
-            href="/users"
-            underline="hover"
-            sx={userProfileSx.breadcrumbLink}
-          >
-            Employees
-          </Link>
-          <Typography component="span" sx={userProfileSx.breadcrumbActive}>
-            {breadcrumbName}
-          </Typography>
-        </Breadcrumbs>
-        <UserProfileTabs />
-        {loading ? <PageLoader /> : null}
-        {!loading && error ? (
-          <Typography color="error.main">Failed to load user data.</Typography>
-        ) : null}
-        {!loading && !error && !user ? (
-          <Typography sx={userProfileSx.email}>User not found.</Typography>
-        ) : null}
-        {!loading && !error && user ? (
-          <UserProfileEditSection
-            key={`${user.id}:${user.avatarUrl ?? ""}`}
-            user={user}
-            memberSinceText={memberSinceText}
-            canEditProfile={canEditProfile}
-            onUserUpdated={refetch}
-          />
-        ) : null}
-      </Box>
+    <Box sx={userProfileSx.container}>
+      <Breadcrumbs aria-label="breadcrumb" sx={userProfileSx.breadcrumbs}>
+        <Link
+          component={NextLink}
+          href="/users"
+          underline="hover"
+          sx={userProfileSx.breadcrumbLink}
+        >
+          Employees
+        </Link>
+        <Typography component="span" sx={userProfileSx.breadcrumbActive}>
+          {breadcrumbName}
+        </Typography>
+      </Breadcrumbs>
+      <UserProfileTabs />
+      {loading ? <PageLoader /> : null}
+      {!loading && error ? (
+        <Typography color="error.main">Failed to load user data.</Typography>
+      ) : null}
+      {!loading && !error && !user ? (
+        <Typography sx={userProfileSx.email}>User not found.</Typography>
+      ) : null}
+      {!loading && !error && user ? (
+        <UserProfileEditSection
+          key={`${user.id}:${user.avatarUrl ?? ""}`}
+          user={user}
+          memberSinceText={memberSinceText}
+          canEditProfile={canEditProfile}
+          onUserUpdated={refetch}
+        />
+      ) : null}
     </Box>
   );
 }
