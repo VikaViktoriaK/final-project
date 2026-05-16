@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import type { SelectChangeEvent } from "@mui/material/Select";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -54,7 +53,7 @@ type SkillFormDialogFieldsProps = {
   skillOptions: { id: string; name: string }[];
   skillSelectDisabled?: boolean;
   mastery: string;
-  onMasteryChange: (event: SelectChangeEvent<string>) => void;
+  onMasteryChange: (value: string) => void;
   masteryCatalog: { id: string; name: string }[];
   loading: boolean;
   emptySkillsMessage?: string | null;
@@ -136,7 +135,7 @@ function SkillFormDialogFields({
               variant="outlined"
               label={masteryLabel}
               value={mastery}
-              onChange={onMasteryChange}
+              onChange={(e) => onMasteryChange(e.target.value)}
               fullWidth
               sx={userLanguagesSx.dialogField}
               slotProps={dialogInputLabelSlotProps}
@@ -186,10 +185,6 @@ function AddUserSkillDialogContent({
     (item) => item.name === skillName,
   );
 
-  const handleMasteryChange = (event: SelectChangeEvent<string>) => {
-    setMastery(event.target.value);
-  };
-
   const handleSubmit = async () => {
     setSubmitError(null);
     if (!skillName.trim() || !selectedCatalogItem) {
@@ -229,7 +224,7 @@ function AddUserSkillDialogContent({
           name: item.name,
         }))}
         mastery={mastery}
-        onMasteryChange={handleMasteryChange}
+        onMasteryChange={setMastery}
         masteryCatalog={masteryCatalog}
         loading={loading}
         emptySkillsMessage={
@@ -317,10 +312,6 @@ function UpdateUserSkillDialogContent({
   const masteryCatalog = React.useMemo(() => getSkillMasteryCatalog(), []);
   const [updateSkill, { loading: saving }] = useUpdateProfileSkillMutation();
 
-  const handleMasteryChange = (event: SelectChangeEvent<string>) => {
-    setMastery(event.target.value);
-  };
-
   const handleSubmit = async () => {
     setSubmitError(null);
     if (mastery === skill.mastery) {
@@ -356,7 +347,7 @@ function UpdateUserSkillDialogContent({
         skillOptions={[{ id: skill.id, name: skill.name }]}
         skillSelectDisabled
         mastery={mastery}
-        onMasteryChange={handleMasteryChange}
+        onMasteryChange={setMastery}
         masteryCatalog={masteryCatalog}
         loading={false}
         submitError={submitError}

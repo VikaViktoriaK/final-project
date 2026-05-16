@@ -80,7 +80,10 @@ export function UserLanguagesPage() {
     return full || "User";
   }, [data?.profile]);
 
-  const languages = data?.profile?.languages ?? [];
+  const languages = React.useMemo(
+    () => data?.profile?.languages ?? [],
+    [data?.profile?.languages],
+  );
   const errorMessage = error?.message ?? null;
 
   const exitRemoveMode = React.useCallback(() => {
