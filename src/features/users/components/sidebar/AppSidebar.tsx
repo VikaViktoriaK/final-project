@@ -141,8 +141,10 @@ export function AppSidebar() {
       ].join(" ")}
       aria-label={displayName}
     >
-      <Avatar sx={sidebarSx.userAvatar}>{initial}</Avatar>
-      <Typography component="span" className="sidebar-nav-item__label">
+      <Avatar src={user?.avatarUrl} alt={displayName} sx={sidebarSx.userAvatar}>
+        {initial}
+      </Avatar>
+      <Typography component="span" noWrap className="sidebar-nav-item__label">
         {displayName}
       </Typography>
     </Box>
