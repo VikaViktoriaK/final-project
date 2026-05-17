@@ -52,7 +52,7 @@ export const sidebarSx = {
       flex: "none",
     },
   },
-  footer: (collapsed: boolean) => ({
+  footer: {
     display: "none",
     [SIDEBAR_DESKTOP_MEDIA]: {
       display: "flex",
@@ -61,10 +61,10 @@ export const sidebarSx = {
       gap: 1.5,
       width: "100%",
       mt: 2,
-      pl: collapsed ? 1.75 : 2.5,
-      pr: collapsed ? 0.5 : 0,
+      pl: 0,
+      pr: 0,
     },
-  }),
+  },
   userAvatar: {
     width: 32,
     height: 32,
@@ -73,17 +73,13 @@ export const sidebarSx = {
     color: "#fff",
     fontSize: 14,
     fontWeight: 700,
-    [SIDEBAR_DESKTOP_MEDIA]: {
-      width: 40,
-      height: 40,
-      fontSize: 16,
-    },
   },
   collapseBtn: (collapsed: boolean) => ({
     display: "none",
     [SIDEBAR_DESKTOP_MEDIA]: {
       display: "inline-flex",
       alignSelf: collapsed ? "center" : "flex-start",
+      ml: collapsed ? 0 : 2,
       color: "var(--app-text-muted)",
       width: 40,
       height: 40,

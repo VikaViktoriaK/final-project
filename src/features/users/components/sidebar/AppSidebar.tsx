@@ -3,6 +3,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -12,7 +13,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { useUserQuery } from "@/features/users/api/getUser";
-import { SIDEBAR_NAV_ITEMS } from "./sidebar.constants";
+import {
+  ADMIN_SIDEBAR_SECTIONS,
+  SIDEBAR_NAV_ITEMS,
+  type SidebarNavItem,
+  type SidebarNavSection,
+} from "./sidebar.constants";
 import { sidebarSx } from "./sidebar.styles";
 import { useSidebarCollapse } from "./SidebarCollapseContext";
 import "./sidebar-nav.css";
@@ -54,10 +60,17 @@ function navItemClassName(active: boolean, disabled: boolean): string {
     .join(" ");
 }
 
+function toNavSections(isAdmin: boolean): SidebarNavSection[] {
+  if (isAdmin) return ADMIN_SIDEBAR_SECTIONS;
+  return [{ items: SIDEBAR_NAV_ITEMS }];
+}
+
 export function AppSidebar() {
   const pathname = usePathname() ?? "";
   const { collapsed, toggle } = useSidebarCollapse();
-  const { userId } = useAuthSnapshot();
+  const { userId, role } = useAuthSnapshot();
+  const isAdmin = role === "Admin";
+  const navSections = React.useMemo(() => toNavSections(isAdmin), [isAdmin]);
   const { user } = useUserQuery(userId ?? "");
 
   const displayName = user
@@ -67,7 +80,7 @@ export function AppSidebar() {
   const profileHref = userId ? `/users/${userId}/profile` : "/users";
   const profileActive = isProfileActive(pathname, userId);
 
-  const renderNavItem = (item: (typeof SIDEBAR_NAV_ITEMS)[number]) => {
+  const renderNavItem = (item: SidebarNavItem) => {
     const navigable = item.navigable ?? false;
     const href = resolveHref(item.href, userId);
     const active = item.isActive(pathname, userId);
@@ -145,11 +158,18 @@ export function AppSidebar() {
       sx={sidebarSx.root(collapsed)}
     >
       <Box className="sidebar-nav-list" sx={sidebarSx.navList}>
-        {SIDEBAR_NAV_ITEMS.map(renderNavItem)}
+        {navSections.map((section, sectionIndex) => (
+          <React.Fragment key={sectionIndex}>
+            {sectionIndex > 0 ? (
+              <Divider className="sidebar-nav-divider" aria-hidden />
+            ) : null}
+            {section.items.map(renderNavItem)}
+          </React.Fragment>
+        ))}
         <Box className="sidebar-nav-item--mobile-only">{profileLink}</Box>
       </Box>
 
-      <Box className="sidebar-nav-footer" sx={sidebarSx.footer(collapsed)}>
+      <Box className="sidebar-nav-footer" sx={sidebarSx.footer}>
         {collapsed ? (
           <Tooltip title={displayName} placement="right">
             {profileLink}

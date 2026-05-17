@@ -63,6 +63,16 @@
     width: 100%;
   }
 
+  .sidebar-nav-divider {
+    margin: 4px 16px;
+    border-color: rgba(255, 255, 255, 0.12);
+    flex-shrink: 0;
+  }
+
+  .sidebar-nav--collapsed .sidebar-nav-divider {
+    margin: 4px 10px;
+  }
+
   .sidebar-nav-item:hover:not(.sidebar-nav-item--disabled):not(
       .sidebar-nav-item--active
     ) {
@@ -88,23 +98,10 @@
     display: none;
   }
 
-  .sidebar-nav-footer .sidebar-nav-item {
-    height: auto;
-    min-height: 0;
-    padding: 4px 0;
-    border-radius: 8px;
-    background: transparent;
-  }
-
-  .sidebar-nav-footer .sidebar-nav-item--active,
-  .sidebar-nav-footer .sidebar-nav-item--active:hover {
-    background: transparent;
-    color: var(--app-text-muted);
-  }
-
-  .sidebar-nav-footer .sidebar-nav-item:hover:not(.sidebar-nav-item--disabled) {
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.06);
+  .sidebar-nav-item--profile .MuiAvatar-root {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }
 
@@ -167,6 +164,10 @@
   }
 
   .sidebar-nav-footer {
+    display: none;
+  }
+
+  .sidebar-nav-divider {
     display: none;
   }
 }

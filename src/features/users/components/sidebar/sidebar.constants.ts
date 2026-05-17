@@ -1,8 +1,11 @@
 import type { SvgIconComponent } from "@mui/icons-material";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import CorporateFareOutlinedIcon from "@mui/icons-material/CorporateFareOutlined";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import TranslateIcon from "@mui/icons-material/Translate";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 
 export const SIDEBAR_STORAGE_KEY = "hrm_sidebar_collapsed";
 
@@ -40,33 +43,44 @@ function isOwnUserSection(
   return pathname === `/users/${currentUserId}/${section}`;
 }
 
+export type SidebarNavSection = {
+  items: SidebarNavItem[];
+};
+
+const employeesNavItem: SidebarNavItem = {
+  id: "employees",
+  label: "Employees",
+  icon: PeopleOutlinedIcon,
+  href: "/users",
+  isActive: (pathname) => pathname === "/users",
+  navigable: true,
+};
+
+const skillsNavItem: SidebarNavItem = {
+  id: "skills",
+  label: "Skills",
+  icon: TrendingUpIcon,
+  href: (userId) => (userId ? `/users/${userId}/skills` : "/users"),
+  isActive: (pathname, currentUserId) =>
+    isOwnUserSection(pathname, currentUserId, "skills"),
+  navigable: true,
+};
+
+const languagesNavItem: SidebarNavItem = {
+  id: "languages",
+  label: "Languages",
+  icon: TranslateIcon,
+  href: (userId) => (userId ? `/users/${userId}/languages` : "/users"),
+  isActive: (pathname, currentUserId) =>
+    isOwnUserSection(pathname, currentUserId, "languages"),
+  navigable: false,
+};
+
+/** Default sidebar for non-admin users */
 export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
-  {
-    id: "employees",
-    label: "Employees",
-    icon: PeopleOutlinedIcon,
-    href: "/users",
-    isActive: (pathname) => pathname === "/users",
-    navigable: true,
-  },
-  {
-    id: "skills",
-    label: "Skills",
-    icon: TrendingUpIcon,
-    href: (userId) => (userId ? `/users/${userId}/skills` : "/users"),
-    isActive: (pathname, currentUserId) =>
-      isOwnUserSection(pathname, currentUserId, "skills"),
-    navigable: true,
-  },
-  {
-    id: "languages",
-    label: "Languages",
-    icon: TranslateIcon,
-    href: (userId) => (userId ? `/users/${userId}/languages` : "/users"),
-    isActive: (pathname, currentUserId) =>
-      isOwnUserSection(pathname, currentUserId, "languages"),
-    navigable: false,
-  },
+  employeesNavItem,
+  skillsNavItem,
+  languagesNavItem,
   {
     id: "cvs",
     label: "CVs",
@@ -75,5 +89,56 @@ export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
     isActive: (pathname) => pathname.startsWith("/cvs"),
     navigable: false,
     showInMobileBar: false,
+  },
+];
+
+/** Admin sidebar: catalog (top) + reference data (bottom), separated by a divider */
+export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
+  {
+    items: [
+      employeesNavItem,
+      {
+        id: "projects",
+        label: "Projects",
+        icon: FolderOutlinedIcon,
+        href: "/projects",
+        isActive: (pathname) => pathname.startsWith("/projects"),
+        navigable: false,
+        showInMobileBar: false,
+      },
+      {
+        id: "cvs",
+        label: "CVs",
+        icon: ArticleOutlinedIcon,
+        href: "/cvs",
+        isActive: (pathname) => pathname.startsWith("/cvs"),
+        navigable: false,
+        showInMobileBar: false,
+      },
+    ],
+  },
+  {
+    items: [
+      {
+        id: "departments",
+        label: "Departments",
+        icon: CorporateFareOutlinedIcon,
+        href: "/departments",
+        isActive: (pathname) => pathname.startsWith("/departments"),
+        navigable: false,
+        showInMobileBar: false,
+      },
+      {
+        id: "positions",
+        label: "Positions",
+        icon: WorkOutlineOutlinedIcon,
+        href: "/positions",
+        isActive: (pathname) => pathname.startsWith("/positions"),
+        navigable: false,
+        showInMobileBar: false,
+      },
+      skillsNavItem,
+      languagesNavItem,
+    ],
   },
 ];
