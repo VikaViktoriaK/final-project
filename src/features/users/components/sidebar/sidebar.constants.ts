@@ -125,7 +125,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
         icon: CorporateFareOutlinedIcon,
         href: "/departments",
         isActive: (pathname) => pathname.startsWith("/departments"),
-        navigable: false,
+        navigable: true,
         showInMobileBar: false,
       },
       {
