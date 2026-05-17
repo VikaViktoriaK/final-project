@@ -20,6 +20,7 @@ import {
   useUpdateDepartmentMutation,
 } from "../api/departments";
 import { DepartmentFormDialog } from "../components/DepartmentFormDialog";
+import { DepartmentsFilter } from "../components/DepartmentsFilter";
 import { DepartmentsTable } from "../components/DepartmentsTable";
 import {
   DEPARTMENTS_CREATE_LABEL,
@@ -113,6 +114,7 @@ export function DepartmentsPage() {
             <UsersSearch value={query} onChange={setQuery} />
           </Box>
           <Box sx={usersTableSx.topBarActions}>
+            <DepartmentsFilter order={order} onOrderChange={setOrder} />
             {isAdmin ? (
               <Button
                 variant="text"

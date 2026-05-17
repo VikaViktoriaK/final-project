@@ -45,11 +45,15 @@ export function DepartmentsTable({
         </colgroup>
         <TableHead>
           <TableRow>
-            <TableCell sx={departmentsTableSx.nameHeadCell}>
+            <TableCell
+              sx={departmentsTableSx.nameHeadCell}
+              aria-sort={order === "asc" ? "ascending" : "descending"}
+            >
               <Box
                 component="button"
                 type="button"
                 onClick={onToggleNameSort}
+                aria-label={`Sort by name, ${order === "asc" ? "ascending" : "descending"}`}
                 sx={{
                   ...usersTableSx.headDepartmentLabel,
                   border: "none",
