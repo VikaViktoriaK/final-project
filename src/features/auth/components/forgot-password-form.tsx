@@ -18,6 +18,7 @@ import {
 } from "../schemas/forgot-password.schema";
 import useForgotPassword from "../hooks/use-forgot-password";
 import { authFormStyles } from "../styles/auth-form.styles";
+
 function ForgotPasswordForm() {
   const { loading, error, forgotPasswordUser, isSuccess } = useForgotPassword();
   const {
@@ -28,6 +29,9 @@ function ForgotPasswordForm() {
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   });
+
+  const isPending = isSubmitting || loading;
+  const submitLabel = isSuccess ? "Sent" : "Forgot password";
 
   return (
     <Stack
@@ -59,15 +63,9 @@ function ForgotPasswordForm() {
         type="submit"
         variant="contained"
         color="primary"
-        disabled={isSubmitting || loading || isSuccess}
+        disabled={isPending || isSuccess}
       >
-        {loading ? (
-          <CircularProgress size={20} />
-        ) : isSuccess ? (
-          "Sent"
-        ) : (
-          "Forgot password"
-        )}
+        {isPending ? <CircularProgress size={20} /> : submitLabel}
       </Button>
       <Link component={NextLink} href="/login" sx={authFormStyles.textAction}>
         Cancel

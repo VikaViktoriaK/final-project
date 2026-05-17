@@ -20,6 +20,7 @@ import { signupSchema, type SignupFormValues } from "../schemas/signup.schema";
 import useRegistration from "../hooks/use-registration";
 import { authFormStyles } from "../styles/auth-form.styles";
 import { useState } from "react";
+
 function RegistrationForm() {
   const { loading, error, registerUser } = useRegistration();
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +38,24 @@ function RegistrationForm() {
     },
   });
 
+  const isPending = isSubmitting || loading;
+  const passwordInputType = showPassword ? "text" : "password";
+  const confirmPasswordInputType = showConfirmPassword ? "text" : "password";
+  const passwordVisibilityLabel = showPassword
+    ? "Hide password"
+    : "Show password";
+  const confirmPasswordVisibilityLabel = showConfirmPassword
+    ? "Hide password"
+    : "Show password";
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((current) => !current);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((current) => !current);
+  };
+
   return (
     <Stack
       sx={authFormStyles.form}
@@ -45,10 +64,18 @@ function RegistrationForm() {
       noValidate
     >
       <Stack direction="row" sx={authFormStyles.tabs}>
-        <Button component={NextLink} href="/login" sx={authFormStyles.tab}>
+        <Button
+          type="button"
+          component={NextLink}
+          href="/login"
+          sx={authFormStyles.tab}
+        >
           Sign in
         </Button>
-        <Button sx={[authFormStyles.tab, authFormStyles.activeTab]}>
+        <Button
+          type="button"
+          sx={[authFormStyles.tab, authFormStyles.activeTab]}
+        >
           Sign up
         </Button>
       </Stack>
@@ -72,7 +99,7 @@ function RegistrationForm() {
       />
       <TextField
         sx={authFormStyles.textField}
-        type={showPassword ? "text" : "password"}
+        type={passwordInputType}
         placeholder="Password"
         {...register("password")}
         error={!!errors.password}
@@ -84,9 +111,10 @@ function RegistrationForm() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  type="button"
+                  aria-label={passwordVisibilityLabel}
                   edge="end"
-                  onClick={() => setShowPassword((current) => !current)}
+                  onClick={togglePasswordVisibility}
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -97,7 +125,7 @@ function RegistrationForm() {
       />
       <TextField
         sx={authFormStyles.textField}
-        type={showConfirmPassword ? "text" : "password"}
+        type={confirmPasswordInputType}
         placeholder="Confirm Password"
         {...register("confirmPassword")}
         error={!!errors.confirmPassword}
@@ -109,11 +137,10 @@ function RegistrationForm() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  aria-label={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
+                  type="button"
+                  aria-label={confirmPasswordVisibilityLabel}
                   edge="end"
-                  onClick={() => setShowConfirmPassword((current) => !current)}
+                  onClick={toggleConfirmPasswordVisibility}
                 >
                   {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -127,9 +154,9 @@ function RegistrationForm() {
         type="submit"
         variant="contained"
         color="primary"
-        disabled={isSubmitting || loading}
+        disabled={isPending}
       >
-        {loading ? <CircularProgress size={20} /> : "Sign up"}
+        {isPending ? <CircularProgress size={20} /> : "Sign up"}
       </Button>
       <Link component={NextLink} href="/login" sx={authFormStyles.textAction}>
         I have an account

@@ -7,6 +7,7 @@ import type {
 } from "../types/auth.types";
 import { type SignupFormValues } from "../schemas/signup.schema";
 import { useRouter } from "next/navigation";
+
 function useRegistration() {
   const router = useRouter();
   const [signup, { loading, error }] = useMutation<
@@ -15,13 +16,19 @@ function useRegistration() {
   >(SIGNUP_MUTATION);
 
   const registerUser = async (data: SignupFormValues) => {
-    const result = await signup({
-      variables: { auth: { email: data.email, password: data.password } },
-    });
-    if (result.data?.signup) {
-      router.push("/login");
-    }
+    try {
+      const result = await signup({
+        variables: { auth: { email: data.email, password: data.password } },
+      });
+      const signupResult = result.data?.signup;
+
+      if (signupResult) {
+        router.push("/login");
+      }
+    } catch {}
   };
+
   return { loading, error, registerUser };
 }
+
 export default useRegistration;

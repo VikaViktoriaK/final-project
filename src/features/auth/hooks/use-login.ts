@@ -16,16 +16,23 @@ function useLogin() {
   });
 
   const loginUser = async (data: LoginFormValues) => {
-    const result = await login({ variables: { auth: data } });
-    if (result.data?.login) {
-      saveAuthTokens(
-        result.data.login.access_token,
-        result.data.login.refresh_token,
-        result.data.login.user,
-      );
-      router.push("/users");
+    try {
+      const result = await login({ variables: { auth: data } });
+      const authResult = result.data?.login;
+
+      if (authResult) {
+        saveAuthTokens(
+          authResult.access_token,
+          authResult.refresh_token,
+          authResult.user,
+        );
+        router.push("/users");
+      }
+    } catch {
+      console.error("Error logging in", error);
     }
   };
+
   return { loading, error, loginUser };
 }
 
