@@ -134,7 +134,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
         icon: WorkOutlineOutlinedIcon,
         href: "/positions",
         isActive: (pathname) => pathname.startsWith("/positions"),
-        navigable: false,
+        navigable: true,
         showInMobileBar: false,
       },
       skillsNavItem,
