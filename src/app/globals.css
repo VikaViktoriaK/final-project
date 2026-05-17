@@ -1,0 +1,33 @@
+:root {
+  --app-bg: #1f1f1f;
+  --app-surface: #303030;
+  --app-divider: rgba(255, 255, 255, 0.08);
+  --app-text: rgba(255, 255, 255, 0.92);
+  --app-text-muted: rgba(255, 255, 255, 0.68);
+  --app-control-bg: rgba(255, 255, 255, 0.08);
+  --app-control-border: rgba(255, 255, 255, 0.12);
+  --color-primary: #c63031;
+  --color-primary-hover: #b52b2c;
+  --color-primary-light: #fdecea;
+
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #333;
+  --color-text-muted: #999;
+
+  --color-bg-primary: #fff;
+  --color-bg-secondary: #fafafa;
+
+  --color-border: #f0f0f0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
