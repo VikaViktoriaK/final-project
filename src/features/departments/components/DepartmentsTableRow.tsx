@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { DepartmentRow } from "../types";
+import { departmentsTableSx } from "./departmentsTable.styles";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
 
 type DepartmentsTableRowProps = {
@@ -34,10 +35,10 @@ export function DepartmentsTableRow({
 
   return (
     <TableRow sx={usersTableSx.row}>
-      <TableCell sx={usersTableSx.firstNameCell}>
+      <TableCell sx={departmentsTableSx.nameCell}>
         <Typography variant="body2">{department.name}</Typography>
       </TableCell>
-      <TableCell sx={usersTableSx.actionsCell}>
+      <TableCell sx={departmentsTableSx.actionsCell}>
         {canManage ? (
           <>
             <IconButton

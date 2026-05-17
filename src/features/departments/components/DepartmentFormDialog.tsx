@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -18,6 +19,15 @@ import {
 } from "../constants/departments.constants";
 import type { DepartmentRow } from "../types";
 
+const dialogInputLabelSlotProps = {
+  inputLabel: { shrink: true },
+} as const;
+
+const departmentDialogPaperSx = [
+  userLanguagesSx.languageDialog,
+  userLanguagesSx.addLanguageDialog,
+] as const;
+
 type DepartmentFormDialogProps = {
   open: boolean;
   mode: "create" | "edit";
@@ -26,6 +36,61 @@ type DepartmentFormDialogProps = {
   onClose: () => void;
   onSubmit: (name: string) => Promise<void>;
 };
+
+type DepartmentFormDialogFieldsProps = {
+  title: string;
+  nameLabel: string;
+  name: string;
+  onNameChange: (value: string) => void;
+  submitError: string | null;
+  onClose: () => void;
+};
+
+function DepartmentFormDialogFields({
+  title,
+  nameLabel,
+  name,
+  onNameChange,
+  submitError,
+  onClose,
+}: DepartmentFormDialogFieldsProps) {
+  return (
+    <>
+      <DialogTitle
+        component="div"
+        sx={userLanguagesSx.addLanguageDialogTitleRoot}
+      >
+        <Box sx={userLanguagesSx.dialogTitleRow}>
+          <Box component="span" sx={userLanguagesSx.dialogTitleText}>
+            {title}
+          </Box>
+          <IconButton
+            type="button"
+            aria-label="Close dialog"
+            onClick={onClose}
+            size="small"
+            sx={userLanguagesSx.dialogCloseBtn}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent sx={userLanguagesSx.addLanguageDialogContent}>
+        <TextField
+          variant="outlined"
+          label={nameLabel}
+          value={name}
+          onChange={(e) => onNameChange(e.target.value)}
+          fullWidth
+          autoFocus
+          sx={userLanguagesSx.dialogField}
+          slotProps={dialogInputLabelSlotProps}
+        />
+        {submitError ? <Alert severity="error">{submitError}</Alert> : null}
+      </DialogContent>
+    </>
+  );
+}
 
 function DepartmentFormDialogContent({
   mode,
@@ -36,55 +101,44 @@ function DepartmentFormDialogContent({
 }: Omit<DepartmentFormDialogProps, "open">) {
   const labels =
     mode === "create" ? DEPARTMENT_CREATE_DIALOG : DEPARTMENT_EDIT_DIALOG;
-  const [name, setName] = React.useState(() =>
-    mode === "edit" && department ? department.name : "",
-  );
-  const [error, setError] = React.useState<string | null>(null);
+  const initialName = mode === "edit" && department ? department.name : "";
+  const [name, setName] = React.useState(() => initialName);
+  const [submitError, setSubmitError] = React.useState<string | null>(null);
 
   const handleSubmit = async () => {
     const trimmed = name.trim();
     if (!trimmed) {
-      setError("Enter a department name.");
+      setSubmitError("Enter a department name.");
       return;
     }
-    setError(null);
+    if (mode === "edit" && department && trimmed === department.name) {
+      onClose();
+      return;
+    }
+    setSubmitError(null);
     try {
       await onSubmit(trimmed);
       onClose();
     } catch (err) {
-      setError(formatProfileSubmitError(err));
+      setSubmitError(formatProfileSubmitError(err));
     }
   };
 
+  const confirmDisabled =
+    saving ||
+    !name.trim() ||
+    (mode === "edit" && department ? name.trim() === department.name : false);
+
   return (
     <>
-      <DialogTitle sx={dialogTitleSx}>
-        <Box component="span">{labels.title}</Box>
-        <IconButton
-          type="button"
-          aria-label="Close dialog"
-          onClick={onClose}
-          size="small"
-          sx={dialogCloseBtnSx}
-        >
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent sx={{ pt: 1 }}>
-        <TextField
-          label={labels.nameLabel}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-          autoFocus
-          variant="outlined"
-          sx={userLanguagesSx.dialogField}
-          slotProps={{ inputLabel: { shrink: true } }}
-        />
-        {error ? (
-          <Box sx={{ mt: 2, color: "error.main", fontSize: 14 }}>{error}</Box>
-        ) : null}
-      </DialogContent>
+      <DepartmentFormDialogFields
+        title={labels.title}
+        nameLabel={labels.nameLabel}
+        name={name}
+        onNameChange={setName}
+        submitError={submitError}
+        onClose={onClose}
+      />
       <DialogActions sx={userLanguagesSx.dialogActions}>
         <Button
           variant="outlined"
@@ -97,7 +151,7 @@ function DepartmentFormDialogContent({
         <Button
           variant="contained"
           disableElevation
-          disabled={saving}
+          disabled={confirmDisabled}
           onClick={() => void handleSubmit()}
           sx={userLanguagesSx.dialogConfirmBtn}
         >
@@ -123,8 +177,8 @@ export function DepartmentFormDialog({
       open={open}
       onClose={onClose}
       fullWidth
-      maxWidth="sm"
-      sx={userLanguagesSx.languageDialog}
+      maxWidth={false}
+      sx={departmentDialogPaperSx}
     >
       {open ? (
         <DepartmentFormDialogContent
@@ -139,14 +193,3 @@ export function DepartmentFormDialog({
     </Dialog>
   );
 }
-
-const dialogTitleSx = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  pr: 1,
-} as const;
-
-const dialogCloseBtnSx = {
-  color: "var(--app-text-muted)",
-} as const;

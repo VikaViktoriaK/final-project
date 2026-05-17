@@ -31,7 +31,9 @@ export const UPDATE_DEPARTMENT = gql`
 
 export const DELETE_DEPARTMENT = gql`
   mutation DeleteDepartment($department: DeleteDepartmentInput!) {
-    deleteDepartment(department: $department)
+    deleteDepartment(department: $department) {
+      affected
+    }
   }
 `;
 
@@ -44,11 +46,11 @@ type CreateDepartmentVariables = {
 };
 
 type UpdateDepartmentVariables = {
-  department: { id: string; name: string };
+  department: { departmentId: string; name: string };
 };
 
 type DeleteDepartmentVariables = {
-  department: { id: string };
+  department: { departmentId: string };
 };
 
 export function useDepartmentsQuery() {

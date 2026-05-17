@@ -208,21 +208,25 @@ export const userLanguagesSx = {
       whiteSpace: "nowrap",
       textOverflow: "clip",
     },
+    "& .MuiInputLabel-root.Mui-focused, & .MuiFormLabel-root.Mui-focused": {
+      color: "#df4d4d",
+    },
     "& .MuiOutlinedInput-notchedOutline legend": {
       maxWidth: "100%",
     },
     "& .MuiOutlinedInput-root": {
       color: "var(--app-text)",
       overflow: "visible",
-      "& fieldset": {
+      "& fieldset, & .MuiOutlinedInput-notchedOutline": {
         borderColor: "var(--app-control-border)",
       },
-      "&:hover fieldset": {
+      "&:hover fieldset, &:hover .MuiOutlinedInput-notchedOutline": {
         borderColor: "rgba(255,255,255,0.4)",
       },
-      "&.Mui-focused fieldset": {
-        borderColor: "#df4d4d",
-      },
+      "&.Mui-focused fieldset, &.Mui-focused .MuiOutlinedInput-notchedOutline":
+        {
+          borderColor: "#df4d4d",
+        },
     },
     "& .MuiOutlinedInput-input, & .MuiSelect-select": {
       overflow: "visible",
@@ -230,6 +234,9 @@ export const userLanguagesSx = {
     },
     "& .MuiSvgIcon-root": {
       color: "var(--app-text-muted)",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiSvgIcon-root": {
+      color: "#df4d4d",
     },
   },
   dialogActions: {

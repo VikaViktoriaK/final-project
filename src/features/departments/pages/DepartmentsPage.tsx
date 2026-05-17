@@ -93,7 +93,7 @@ export function DepartmentsPage() {
     } else if (editingDepartment) {
       await updateDepartment({
         variables: {
-          department: { id: editingDepartment.id, name },
+          department: { departmentId: editingDepartment.id, name },
         },
       });
     }
@@ -180,7 +180,9 @@ export function DepartmentsPage() {
             onClick={async () => {
               if (!deletingDepartment) return;
               await deleteDepartment({
-                variables: { department: { id: deletingDepartment.id } },
+                variables: {
+                  department: { departmentId: deletingDepartment.id },
+                },
               });
               setDeleteOpen(false);
               setDeletingDepartment(null);

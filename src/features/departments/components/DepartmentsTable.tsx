@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import type { DepartmentRow } from "../types";
 import { DepartmentsTableRow } from "./DepartmentsTableRow";
+import { departmentsTableSx } from "./departmentsTable.styles";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
 
 type DepartmentsTableProps = {
@@ -38,9 +39,13 @@ export function DepartmentsTable({
       sx={usersTableSx.tableContainer}
     >
       <Table sx={usersTableSx.table} aria-label="departments table">
+        <colgroup>
+          <col />
+          <col style={{ width: 48 }} />
+        </colgroup>
         <TableHead>
           <TableRow>
-            <TableCell sx={usersTableSx.headFirstNameCell}>
+            <TableCell sx={departmentsTableSx.nameHeadCell}>
               <Box
                 component="button"
                 type="button"
@@ -64,7 +69,7 @@ export function DepartmentsTable({
                 />
               </Box>
             </TableCell>
-            <TableCell sx={usersTableSx.headCell} />
+            <TableCell sx={departmentsTableSx.actionsHeadCell} />
           </TableRow>
         </TableHead>
         <TableBody>
