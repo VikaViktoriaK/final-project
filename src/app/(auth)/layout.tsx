@@ -2,6 +2,7 @@
 
 import { Box } from "@mui/material";
 import type { ReactNode } from "react";
+import AuthGateScreen from "@/features/auth/components/auth-gate-screen";
 import useGuestOnly from "@/features/auth/hooks/use-guest-only";
 import { authFormStyles } from "@/features/auth/styles/auth-form.styles";
 
@@ -13,11 +14,11 @@ function AuthLayout({ children }: AuthLayoutProps) {
   const { isGuest, isChecking } = useGuestOnly();
 
   if (isChecking) {
-    return null;
+    return <AuthGateScreen message="Checking your session…" />;
   }
 
   if (!isGuest) {
-    return null;
+    return <AuthGateScreen message="You are already signed in. Redirecting…" />;
   }
 
   return (

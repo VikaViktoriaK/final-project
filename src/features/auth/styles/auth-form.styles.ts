@@ -2,17 +2,36 @@ import type { SxProps, Theme } from "@mui/material/styles";
 
 export const authFormStyles = {
   pageContainer: {
-    minHeight: "100vh",
+    minHeight: "100dvh",
+    height: "100dvh",
     width: "100%",
     bgcolor: "var(--app-surface)",
     display: "flex",
     alignItems: "stretch",
     justifyContent: "center",
+    overflow: "hidden",
+  },
+
+  gateContent: {
+    flex: 1,
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 2,
+  },
+
+  gateMessage: {
+    fontSize: 14,
+    color: "var(--app-text-muted)",
+    textAlign: "center",
   },
 
   formContainer: {
     width: "100%",
-    minHeight: "100vh",
+    flex: 1,
+    minHeight: 0,
     maxWidth: {
       xs: "100%",
       md: 760,
@@ -30,6 +49,8 @@ export const authFormStyles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    overflowY: "auto",
+    overflowX: "hidden",
   },
 
   tabs: {

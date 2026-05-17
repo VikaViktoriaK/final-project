@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { type LoginFormValues, loginSchema } from "../schemas/login.schema";
 import useLogin from "../hooks/use-login";
 import { useState } from "react";
+
 function LoginForm() {
   const { loading, error, loginUser } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +36,16 @@ function LoginForm() {
     },
   });
 
+  const isPending = isSubmitting || loading;
+  const passwordInputType = showPassword ? "text" : "password";
+  const passwordVisibilityLabel = showPassword
+    ? "Hide password"
+    : "Show password";
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((current) => !current);
+  };
+
   return (
     <Stack
       sx={authFormStyles.form}
@@ -43,10 +54,14 @@ function LoginForm() {
       noValidate
     >
       <Stack direction="row" sx={authFormStyles.tabs}>
-        <Button sx={[authFormStyles.tab, authFormStyles.activeTab]}>
+        <Button
+          type="button"
+          sx={[authFormStyles.tab, authFormStyles.activeTab]}
+        >
           Sign in
         </Button>
         <Button
+          type="button"
           component={NextLink}
           href="/registration"
           sx={authFormStyles.tab}
@@ -74,7 +89,7 @@ function LoginForm() {
       />
       <TextField
         sx={authFormStyles.textField}
-        type={showPassword ? "text" : "password"}
+        type={passwordInputType}
         placeholder="Password"
         {...register("password")}
         error={!!errors.password}
@@ -86,9 +101,10 @@ function LoginForm() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  type="button"
+                  aria-label={passwordVisibilityLabel}
                   edge="end"
-                  onClick={() => setShowPassword((current) => !current)}
+                  onClick={togglePasswordVisibility}
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -102,9 +118,9 @@ function LoginForm() {
         type="submit"
         variant="contained"
         color="primary"
-        disabled={isSubmitting || loading}
+        disabled={isPending}
       >
-        {loading ? <CircularProgress size={20} /> : "Sign in"}
+        {isPending ? <CircularProgress size={20} /> : "Sign in"}
       </Button>
       <Link
         component={NextLink}
