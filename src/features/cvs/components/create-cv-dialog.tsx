@@ -8,83 +8,82 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   Stack,
   TextField,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createCvSchema,
-  type CreateCvFormValues,
-} from "../schemas/create-cv.schema";
-import useCreateCv from "../hooks/use-create-cv";
-import type { CreateCvDialogProps } from "../types/cv.types";
+import CloseIcon from "@mui/icons-material/Close";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { CreateCvFormValues } from "../schemas";
+import { cvsStyles } from "../styles/cvs.styles";
 
-function CreateCvDialog({ open, onClose }: CreateCvDialogProps) {
-  const { createCv, loading, error } = useCreateCv();
+type CreateCvDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  register: UseFormRegister<CreateCvFormValues>;
+  errors: FieldErrors<CreateCvFormValues>;
+  isPending: boolean;
+  errorMessage?: string;
+  onSubmit: () => void;
+};
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<CreateCvFormValues>({
-    resolver: zodResolver(createCvSchema),
-    defaultValues: {
-      name: "",
-      education: "",
-      description: "",
-    },
-  });
-
-  const handleClose = () => {
-    reset();
-    onClose();
-  };
-
-  const onSubmit = async (data: CreateCvFormValues) => {
-    const createdCv = await createCv(data);
-
-    if (createdCv) {
-      reset();
-      onClose();
-    }
-  };
-
+function CreateCvDialog({
+  open,
+  onClose,
+  register,
+  errors,
+  isPending,
+  errorMessage,
+  onSubmit,
+}: CreateCvDialogProps) {
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>Create CV</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      sx={cvsStyles.dialog}
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle sx={cvsStyles.dialogTitle}>
+        Create CV
+        <IconButton
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          size="small"
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
 
       <DialogContent>
         <Stack
           component="form"
           id="create-cv-form"
-          spacing={2}
+          spacing={2.5}
           noValidate
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{ pt: 1 }}
+          onSubmit={onSubmit}
+          sx={cvsStyles.dialogContent}
         >
           <TextField
             label="Name"
-            placeholder="Name"
+            sx={cvsStyles.formField}
             {...register("name")}
             error={!!errors.name}
             helperText={errors.name?.message}
             fullWidth
           />
-
           <TextField
             label="Education"
-            placeholder="Education"
+            sx={cvsStyles.formField}
             {...register("education")}
             error={!!errors.education}
             helperText={errors.education?.message}
             fullWidth
           />
-
           <TextField
             label="Description"
-            placeholder="Description"
+            sx={cvsStyles.formField}
             {...register("description")}
             error={!!errors.description}
             helperText={errors.description?.message}
@@ -92,23 +91,30 @@ function CreateCvDialog({ open, onClose }: CreateCvDialogProps) {
             multiline
             minRows={4}
           />
-
-          {error && <Alert severity="error">{error.message}</Alert>}
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         </Stack>
       </DialogContent>
 
-      <DialogActions>
-        <Button onClick={handleClose} disabled={isSubmitting || loading}>
+      <DialogActions sx={cvsStyles.dialogActions}>
+        <Button
+          type="button"
+          onClick={onClose}
+          sx={cvsStyles.cancelButton}
+          disabled={isPending}
+        >
           Cancel
         </Button>
-
         <Button
           type="submit"
           form="create-cv-form"
-          variant="contained"
-          disabled={isSubmitting || loading}
+          sx={cvsStyles.secondaryButton}
+          disabled={isPending}
         >
-          {loading ? <CircularProgress size={20} /> : "Create"}
+          {isPending ? (
+            <CircularProgress size={18} color="inherit" />
+          ) : (
+            "Create"
+          )}
         </Button>
       </DialogActions>
     </Dialog>
