@@ -1,16 +1,17 @@
 import { useQuery } from "@apollo/client/react";
-import { CVS_QUERY } from "../graphql/cvs.query";
-import type { CvsQueryData } from "../types/cv.types";
+import { CV_QUERY } from "../graphql/cv.query";
+import type { Cv } from "../types";
 
 function useCv(cvId: string | undefined) {
-  const { data, loading, error } = useQuery<CvsQueryData>(CVS_QUERY, {
-    skip: !cvId,
-  });
+  const { data, loading, error } = useQuery<{ cv: Cv }, { cvId: string }>(
+    CV_QUERY,
+    {
+      variables: { cvId: cvId ?? "" },
+      skip: !cvId,
+    },
+  );
 
-  const cv =
-    cvId && data?.cvs ? (data.cvs.find((c) => c.id === cvId) ?? null) : null;
-
-  return { cv, loading, error };
+  return { cv: data?.cv ?? null, loading, error };
 }
 
 export default useCv;
