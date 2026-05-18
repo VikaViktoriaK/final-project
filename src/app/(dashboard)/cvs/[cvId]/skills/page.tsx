@@ -1,5 +1,7 @@
-function SkillsPage() {
-  return <div>SkillsPage</div>;
+import CvSkillsPage from "@/features/cvs/components/cv-skills-page";
+
+function Page() {
+  return <CvSkillsPage />;
 }
 
-export default SkillsPage;
+export default Page;
