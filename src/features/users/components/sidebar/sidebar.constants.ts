@@ -56,14 +56,30 @@ const employeesNavItem: SidebarNavItem = {
   navigable: true,
 };
 
-const skillsNavItem: SidebarNavItem = {
-  id: "skills",
+function isSkillsCatalogPath(pathname: string): boolean {
+  return pathname === "/skills" || pathname.startsWith("/skills/");
+}
+
+/** Signed-in user's profile skills */
+const userSkillsNavItem: SidebarNavItem = {
+  id: "user-skills",
   label: "Skills",
   icon: TrendingUpIcon,
   href: (userId) => (userId ? `/users/${userId}/skills` : "/users"),
   isActive: (pathname, currentUserId) =>
     isOwnUserSection(pathname, currentUserId, "skills"),
   navigable: true,
+};
+
+/** Admin skills catalog */
+const skillsCatalogNavItem: SidebarNavItem = {
+  id: "skills",
+  label: "Skills",
+  icon: TrendingUpIcon,
+  href: "/skills",
+  isActive: (pathname) => isSkillsCatalogPath(pathname),
+  navigable: true,
+  showInMobileBar: false,
 };
 
 const languagesNavItem: SidebarNavItem = {
@@ -79,7 +95,7 @@ const languagesNavItem: SidebarNavItem = {
 /** Default sidebar for non-admin users */
 export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   employeesNavItem,
-  skillsNavItem,
+  userSkillsNavItem,
   languagesNavItem,
   {
     id: "cvs",
@@ -137,7 +153,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
         navigable: true,
         showInMobileBar: false,
       },
-      skillsNavItem,
+      skillsCatalogNavItem,
       languagesNavItem,
     ],
   },
