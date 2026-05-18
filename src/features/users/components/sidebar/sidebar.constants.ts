@@ -82,21 +82,37 @@ const skillsCatalogNavItem: SidebarNavItem = {
   showInMobileBar: false,
 };
 
-const languagesNavItem: SidebarNavItem = {
-  id: "languages",
+function isLanguagesCatalogPath(pathname: string): boolean {
+  return pathname === "/languages" || pathname.startsWith("/languages/");
+}
+
+/** Signed-in user's profile languages */
+const userLanguagesNavItem: SidebarNavItem = {
+  id: "user-languages",
   label: "Languages",
   icon: TranslateIcon,
   href: (userId) => (userId ? `/users/${userId}/languages` : "/users"),
   isActive: (pathname, currentUserId) =>
     isOwnUserSection(pathname, currentUserId, "languages"),
-  navigable: false,
+  navigable: true,
+};
+
+/** Admin languages catalog */
+const languagesCatalogNavItem: SidebarNavItem = {
+  id: "languages",
+  label: "Languages",
+  icon: TranslateIcon,
+  href: "/languages",
+  isActive: (pathname) => isLanguagesCatalogPath(pathname),
+  navigable: true,
+  showInMobileBar: false,
 };
 
 /** Default sidebar for non-admin users */
 export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   employeesNavItem,
   userSkillsNavItem,
-  languagesNavItem,
+  userLanguagesNavItem,
   {
     id: "cvs",
     label: "CVs",
@@ -154,7 +170,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
         showInMobileBar: false,
       },
       skillsCatalogNavItem,
-      languagesNavItem,
+      languagesCatalogNavItem,
     ],
   },
 ];
