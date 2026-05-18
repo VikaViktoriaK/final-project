@@ -1,16 +1,11 @@
 import { gql } from "@apollo/client";
+import { CV_CORE_FIELDS } from "./cv.fragments";
 
 export const CVS_QUERY = gql`
   query Cvs {
     cvs {
-      id
-      name
-      education
-      description
-      user {
-        id
-        email
-      }
+      ...CvCoreFields
     }
   }
+  ${CV_CORE_FIELDS}
 `;
