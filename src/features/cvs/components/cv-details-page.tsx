@@ -1,121 +1,79 @@
 "use client";
 
 import {
+  Alert,
+  Box,
   Button,
-  Link as MuiLink,
-  Paper,
+  CircularProgress,
   Stack,
-  Typography,
+  TextField,
 } from "@mui/material";
-import NextLink from "next/link";
-import useCv from "../hooks/use-cv";
-import type { CvDetailsPageProps } from "../types/cv.types";
+import useCvDetailsPage from "../hooks/use-cv-details-page";
+import { cvsStyles } from "../styles/cvs.styles";
 
-function CvDetailsPage({ cvId }: CvDetailsPageProps) {
-  const { cv, loading, error } = useCv(cvId);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  if (!cv) {
-    return (
-      <Stack spacing={2}>
-        <Button
-          component={NextLink}
-          href="/cvs"
-          variant="outlined"
-          sx={{ alignSelf: "flex-start" }}
-        >
-          Back to CVs
-        </Button>
-        <Typography color="var(--app-text)">CV not found.</Typography>
-      </Stack>
-    );
-  }
-
-  const employee = cv.user?.email ?? "Unassigned";
+function CvDetailsPage() {
+  const page = useCvDetailsPage();
 
   return (
-    <Stack spacing={3}>
-      <Button
-        component={NextLink}
-        href="/cvs"
-        variant="outlined"
-        sx={{ alignSelf: "flex-start" }}
+    <>
+      <Box
+        component="form"
+        noValidate
+        onSubmit={page.onSubmit}
+        sx={cvsStyles.detailsForm}
       >
-        Back to CVs
-      </Button>
-
-      <Paper
-        elevation={0}
-        sx={{
-          p: 3,
-          bgcolor: "action.hover",
-          color: "var(--app-text)",
-        }}
-      >
-        <Stack spacing={2}>
-          <Stack direction="row" spacing={2} sx={{ flexWrap: "wrap" }}>
-            <MuiLink
-              component={NextLink}
-              href={`/cvs/${cv.id}/skills`}
-              underline="hover"
-              variant="body2"
+        <Stack spacing={2.5}>
+          <TextField
+            label="Name"
+            sx={cvsStyles.formField}
+            {...page.register("name")}
+            error={!!page.errors.name}
+            helperText={page.errors.name?.message}
+            disabled={!page.canEdit}
+            fullWidth
+          />
+          <TextField
+            label="Education"
+            sx={cvsStyles.formField}
+            {...page.register("education")}
+            error={!!page.errors.education}
+            helperText={page.errors.education?.message}
+            disabled={!page.canEdit}
+            fullWidth
+          />
+          <TextField
+            label="Description"
+            sx={cvsStyles.formField}
+            {...page.register("description")}
+            error={!!page.errors.description}
+            helperText={page.errors.description?.message}
+            disabled={!page.canEdit}
+            fullWidth
+            multiline
+            minRows={6}
+          />
+          {!page.canEdit && (
+            <Alert severity="info">
+              You can view this CV but cannot edit it.
+            </Alert>
+          )}
+          {page.canEdit && (
+            <Button
+              type="submit"
+              sx={cvsStyles.updateButton}
+              disabled={page.isPending}
             >
-              Skills
-            </MuiLink>
-            <MuiLink
-              component={NextLink}
-              href={`/cvs/${cv.id}/projects`}
-              underline="hover"
-              variant="body2"
-            >
-              Projects
-            </MuiLink>
-            <MuiLink
-              component={NextLink}
-              href={`/cvs/${cv.id}/preview`}
-              underline="hover"
-              variant="body2"
-            >
-              Preview
-            </MuiLink>
-          </Stack>
-
-          <Typography variant="h4" component="h1">
-            {cv.name}
-          </Typography>
-
-          <Stack spacing={0.5}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Education
-            </Typography>
-            <Typography>{cv.education?.trim() ? cv.education : "—"}</Typography>
-          </Stack>
-
-          <Stack spacing={0.5}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Employee
-            </Typography>
-            <Typography>{employee}</Typography>
-          </Stack>
-
-          <Stack spacing={0.5}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Description
-            </Typography>
-            <Typography sx={{ whiteSpace: "pre-wrap" }}>
-              {cv.description}
-            </Typography>
-          </Stack>
+              {page.isPending ? (
+                <CircularProgress size={18} color="inherit" />
+              ) : (
+                "Update"
+              )}
+            </Button>
+          )}
         </Stack>
-      </Paper>
-    </Stack>
+      </Box>
+      {page.FeedbackSnackbar}
+    </>
   );
 }
 
