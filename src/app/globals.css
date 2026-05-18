@@ -1,14 +1,26 @@
 :root {
   --app-bg: #1f1f1f;
   --app-surface: #303030;
+  --app-sidebar-bg: #1a1a1a;
+  --app-dialog-surface: #2a2a2a;
   --app-divider: rgba(255, 255, 255, 0.08);
   --app-text: rgba(255, 255, 255, 0.92);
   --app-text-muted: rgba(255, 255, 255, 0.68);
+  --app-on-primary: #ffffff;
   --app-control-bg: rgba(255, 255, 255, 0.08);
   --app-control-border: rgba(255, 255, 255, 0.12);
+  --app-overlay-06: rgba(255, 255, 255, 0.06);
+  --app-overlay-12: rgba(255, 255, 255, 0.12);
+  --app-overlay-20: rgba(255, 255, 255, 0.2);
+  --app-overlay-25: rgba(255, 255, 255, 0.25);
+  --app-overlay-35: rgba(255, 255, 255, 0.35);
   --color-primary: #c63031;
   --color-primary-hover: #b52b2c;
+  --color-primary-subtle: rgba(198, 48, 49, 0.08);
   --color-primary-light: #fdecea;
+  --color-mastery-advanced: #e6b800;
+  --color-mastery-proficient: #4caf50;
+  --color-mastery-expert: #5b8def;
 
   --color-text-primary: #1a1a1a;
   --color-text-secondary: #333;
