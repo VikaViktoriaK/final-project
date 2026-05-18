@@ -16,6 +16,7 @@ function useRequireAuth() {
       router.replace("/login");
     }
   }, [token, router]);
+
   return { isChecking, isAuthorized };
 }
 

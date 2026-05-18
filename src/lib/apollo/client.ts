@@ -4,6 +4,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { ErrorLink } from "@apollo/client/link/error";
 import { Observable } from "@apollo/client/utilities";
 import {
   clearAuthTokens,
@@ -29,29 +30,34 @@ const authLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-const authRetryLink = new ApolloLink((operation, forward) => {
+const authErrorLink = new ErrorLink(({ error, operation, forward }) => {
+  if (!isAuthFailure(error)) {
+    return;
+  }
+
+  if (operation.getContext().authRetry) {
+    clearAuthTokens();
+    return;
+  }
+
   return new Observable((observer) => {
-    const sub = forward(operation).subscribe({
-      next: (value) => observer.next(value),
-      error: (error: unknown) => {
-        if (operation.getContext().authRetry || !isAuthFailure(error)) {
-          observer.error(error);
-          return;
-        }
-        void tryRefreshSession().then((ok) => {
-          if (!ok) {
-            clearAuthTokens();
-            observer.error(error);
-            return;
-          }
-          const context = operation.getContext();
-          operation.setContext({ ...context, authRetry: true });
-          forward(operation).subscribe(observer);
-        });
-      },
-      complete: () => observer.complete(),
+    let retrySubscription: { unsubscribe: () => void } | undefined;
+
+    void tryRefreshSession().then((isRefreshed) => {
+      if (!isRefreshed) {
+        clearAuthTokens();
+        observer.error(error);
+        return;
+      }
+
+      const context = operation.getContext();
+      operation.setContext({ ...context, authRetry: true });
+      retrySubscription = forward(operation).subscribe(observer);
     });
-    return () => sub.unsubscribe();
+
+    return () => {
+      retrySubscription?.unsubscribe();
+    };
   });
 });
 
@@ -60,7 +66,7 @@ const httpLink = new HttpLink({
 });
 
 const client = new ApolloClient({
-  link: authRetryLink.concat(authLink).concat(httpLink),
+  link: authErrorLink.concat(authLink).concat(httpLink),
   cache: new InMemoryCache(),
 });
 
