@@ -1,12 +1,10 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { UserSkillCard } from "@/features/users/components/user-profile/UserSkillCard";
-import { userLanguagesSx } from "@/features/users/components/user-profile/userLanguages.styles";
+import { formDialogSx } from "@/shared/styles/formDialog.styles";
 import { userSkillsSx } from "@/features/users/components/user-profile/userSkills.styles";
 import {
   CONFIRM_BULK_REMOVE_SKILLS_LABELS,
@@ -105,7 +103,7 @@ export function UserSkillsCategories({
                 type="button"
                 variant="outlined"
                 onClick={onExitRemove}
-                sx={userLanguagesSx.dialogCancelBtn}
+                sx={formDialogSx.dialogCancelBtn}
               >
                 {CONFIRM_BULK_REMOVE_SKILLS_LABELS.cancel}
               </Button>

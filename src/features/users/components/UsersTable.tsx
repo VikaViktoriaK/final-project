@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -12,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import type { UserRow } from "../types";
 import { UsersTableRow } from "./UsersTableRow";
-import { usersTableSx } from "./usersTable.styles";
+import { catalogTableSx } from "@/shared/styles";
 
 type UsersTableProps = {
   users: UserRow[];
@@ -31,45 +29,45 @@ export function UsersTable({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={usersTableSx.tableContainer}
+      sx={catalogTableSx.tableContainer}
     >
-      <Table sx={usersTableSx.table} aria-label="users table">
+      <Table sx={catalogTableSx.table} aria-label="users table">
         <TableHead>
           <TableRow>
-            <TableCell sx={usersTableSx.headAvatarCell} />
-            <TableCell sx={usersTableSx.headFirstNameCell}>
+            <TableCell sx={catalogTableSx.headAvatarCell} />
+            <TableCell sx={catalogTableSx.headFirstNameCell}>
               First Name
             </TableCell>
             <TableCell
               sx={{
-                ...usersTableSx.headLastNameCell,
-                ...usersTableSx.headLastNameCellMobileHidden,
+                ...catalogTableSx.headLastNameCell,
+                ...catalogTableSx.headLastNameCellMobileHidden,
               }}
             >
               Last Name
             </TableCell>
             <TableCell
               sx={{
-                ...usersTableSx.headEmailCell,
-                ...usersTableSx.headEmailCellMobileHidden,
+                ...catalogTableSx.headEmailCell,
+                ...catalogTableSx.headEmailCellMobileHidden,
               }}
             >
               Email
             </TableCell>
-            <TableCell sx={usersTableSx.headDepartmentCell}>
-              <Box sx={usersTableSx.headDepartmentLabel}>
+            <TableCell sx={catalogTableSx.headDepartmentCell}>
+              <Box sx={catalogTableSx.headDepartmentLabel}>
                 <span>Department</span>
                 <ArrowUpwardIcon />
               </Box>
             </TableCell>
-            <TableCell sx={usersTableSx.headPositionCell}>Position</TableCell>
-            <TableCell sx={usersTableSx.headCell} />
+            <TableCell sx={catalogTableSx.headPositionCell}>Position</TableCell>
+            <TableCell sx={catalogTableSx.headCell} />
           </TableRow>
         </TableHead>
         <TableBody>
           {users.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} sx={usersTableSx.emptyState}>
+              <TableCell colSpan={7} sx={catalogTableSx.emptyState}>
                 Users not found
               </TableCell>
             </TableRow>

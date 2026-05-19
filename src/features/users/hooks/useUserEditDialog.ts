@@ -10,7 +10,7 @@ import {
   toUserEditFormState,
   type UserEditFormState,
 } from "@/features/users/types/userEdit.types";
-import { extractGraphqlErrorMessage } from "@/features/users/utils/graphqlErrors";
+import { extractGraphqlErrorMessage } from "@/shared/utils/formatMutationError";
 
 type UseUserEditDialogParams = {
   user: UserRow;

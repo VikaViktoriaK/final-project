@@ -1,25 +1,29 @@
-import { catalogPageSx } from "./styles/catalogPage.styles";
-import { dataTableSx } from "./styles/dataTable.styles";
-import { deleteDialogSx } from "./styles/deleteDialog.styles";
+import { catalogTableSx as sharedCatalogTableSx } from "@/shared/styles/catalogTable.styles";
 import { editDialogSx } from "./styles/editDialog.styles";
-import { filterSx } from "./styles/filter.styles";
-import { rowMenuSx } from "./styles/rowMenu.styles";
-import { searchFieldSx } from "./styles/searchField.styles";
 
-export { catalogPageSx } from "./styles/catalogPage.styles";
-export { dataTableSx } from "./styles/dataTable.styles";
-export { deleteDialogSx } from "./styles/deleteDialog.styles";
+export {
+  catalogPageSx,
+  catalogTableSx,
+  dataTableSx,
+  deleteDialogSx,
+  rowMenuSx,
+  searchFieldSx,
+} from "@/shared/styles";
+
+export { catalogFilterSx as filterSx } from "@/shared/styles/filter.styles";
 export { editDialogSx } from "./styles/editDialog.styles";
-export { filterSx } from "./styles/filter.styles";
-export { rowMenuSx } from "./styles/rowMenu.styles";
-export { searchFieldSx } from "./styles/searchField.styles";
 
-export const usersTableSx = {
-  ...catalogPageSx,
-  ...searchFieldSx,
-  ...dataTableSx,
-  ...filterSx,
-  ...rowMenuSx,
-  ...deleteDialogSx,
+const catalogWithEditSx = {
+  ...sharedCatalogTableSx,
   ...editDialogSx,
+} as const;
+
+/** @deprecated Prefer catalogTableSx from @/shared/styles */
+export const usersTableSx = {
+  ...catalogWithEditSx,
+  usersPageContainer: sharedCatalogTableSx.catalogPageContainer,
+  addUserBtn: sharedCatalogTableSx.createButton,
+  usersFilter: sharedCatalogTableSx.catalogFilter,
+  usersFilterSelect: sharedCatalogTableSx.catalogFilterSelect,
+  usersFilterOrderBtn: sharedCatalogTableSx.catalogFilterOrderBtn,
 } as const;

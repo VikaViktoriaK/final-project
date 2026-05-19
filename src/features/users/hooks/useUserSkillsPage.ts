@@ -7,7 +7,7 @@ import {
   useProfileWithSkillsQuery,
   useSkillCategoriesQuery,
 } from "@/features/users/api/userSkills";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 import {
   groupSkillsByCategory,
   skillRowKey,
@@ -84,7 +84,7 @@ export function useUserSkillsPage() {
       await refetchSkills();
       bulk.exitRemoveMode();
     } catch (err) {
-      bulk.setError(formatProfileSubmitError(err));
+      bulk.setError(formatMutationError(err));
     } finally {
       bulk.setSubmitting(false);
     }

@@ -1,12 +1,10 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type LanguagesFilterProps = {
   order: "asc" | "desc";
@@ -18,7 +16,7 @@ export function LanguagesFilter({
   onOrderChange,
 }: LanguagesFilterProps) {
   return (
-    <Box sx={usersTableSx.usersFilter}>
+    <Box sx={catalogTableSx.catalogFilter}>
       <TextField
         select
         label="Sort by"
@@ -27,7 +25,7 @@ export function LanguagesFilter({
         slotProps={{
           select: { readOnly: true },
         }}
-        sx={usersTableSx.usersFilterSelect}
+        sx={catalogTableSx.catalogFilterSelect}
       >
         <MenuItem value="name">Name</MenuItem>
       </TextField>
@@ -36,7 +34,7 @@ export function LanguagesFilter({
         onClick={() => onOrderChange(order === "asc" ? "desc" : "asc")}
         title={order === "asc" ? "Ascending" : "Descending"}
         aria-label={order === "asc" ? "Sort ascending" : "Sort descending"}
-        sx={usersTableSx.usersFilterOrderBtn}
+        sx={catalogTableSx.catalogFilterOrderBtn}
       >
         {order === "asc" ? (
           <ArrowUpwardIcon fontSize="small" />

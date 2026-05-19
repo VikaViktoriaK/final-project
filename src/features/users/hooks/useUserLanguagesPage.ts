@@ -6,8 +6,8 @@ import {
   useDeleteProfileLanguageMutation,
   useProfileWithLanguagesQuery,
 } from "@/features/users/api/userLanguages";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
-import { languageRowKey } from "@/features/users/components/user-profile/userLanguages.utils";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
+import { languageRowKey } from "@/features/users/utils/userLanguages.utils";
 import type { UserLanguageRow } from "@/features/users/types/userLanguages.types";
 import { useBulkSelection } from "@/lib/hooks/useBulkSelection";
 
@@ -78,7 +78,7 @@ export function useUserLanguagesPage() {
       await refetch();
       bulk.exitRemoveMode();
     } catch (err) {
-      bulk.setError(formatProfileSubmitError(err));
+      bulk.setError(formatMutationError(err));
     } finally {
       bulk.setSubmitting(false);
     }

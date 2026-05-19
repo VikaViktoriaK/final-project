@@ -14,7 +14,7 @@ import {
   UpdateUserLanguageDialog,
 } from "@/features/users/components/user-profile/UserLanguageDialogs";
 import { userProfileSx } from "@/features/users/components/user-profile/userProfile.styles";
-import { userLanguagesSx } from "@/features/users/components/user-profile/userLanguages.styles";
+import { userProfileLanguagesSx } from "@/features/users/components/user-profile/userProfileLanguages.styles";
 import { useUserLanguagesPage } from "@/features/users/hooks/useUserLanguagesPage";
 
 export function UserLanguagesPage() {
@@ -63,7 +63,9 @@ export function UserLanguagesPage() {
       <UserProfileTabs />
       {loading ? <PageLoader /> : null}
       {!loading && errorMessage ? (
-        <Typography sx={userLanguagesSx.errorText}>{errorMessage}</Typography>
+        <Typography sx={userProfileLanguagesSx.errorText}>
+          {errorMessage}
+        </Typography>
       ) : null}
       {!loading && !errorMessage && !user ? (
         <Typography sx={userProfileSx.email}>User not found.</Typography>

@@ -1,9 +1,7 @@
 import { masteryToProgressColor } from "@/features/users/constants/userSkills.mastery";
 import type {
-  NormalizedSkillCatalogItem,
   ProfileSkillRow,
   SkillCategoryCatalogItem,
-  SkillCatalogItem,
   UserSkill,
   UserSkillCategory,
 } from "@/features/users/types/userSkills.types";
@@ -33,15 +31,7 @@ export function resolveSkillCategoryName(
   );
 }
 
-export function normalizeCatalogItem(
-  item: SkillCatalogItem,
-): NormalizedSkillCatalogItem {
-  return {
-    id: item.id,
-    name: item.name,
-    categoryId: item.category?.id?.trim() || "other",
-  };
-}
+export { normalizeCatalogItem } from "@/features/users/utils/skillCatalog.utils";
 
 export function enrichProfileSkill(
   row: ProfileSkillRow,

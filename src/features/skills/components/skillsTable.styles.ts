@@ -1,4 +1,4 @@
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 const headSortable = {
   color: "var(--app-text-muted)",
@@ -22,7 +22,7 @@ export const skillsTableSx = {
   categoryCell: {
     color: "var(--app-text-muted)",
   },
-  actionsHeadCell: usersTableSx.headCell,
-  actionsCell: usersTableSx.actionsCell,
-  sortButton: usersTableSx.headDepartmentLabel,
+  actionsHeadCell: catalogTableSx.headCell,
+  actionsCell: catalogTableSx.actionsCell,
+  sortButton: catalogTableSx.headDepartmentLabel,
 } as const;

@@ -3,7 +3,7 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { LanguageFormDialog } from "../components/LanguageFormDialog";
 import { LanguagesFilter } from "../components/LanguagesFilter";
 import { LanguagesTable } from "../components/LanguagesTable";
@@ -45,7 +45,7 @@ export function LanguagesPage() {
           isAdmin ? (
             <Button
               variant="text"
-              sx={catalogPageSx.addUserBtn}
+              sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
               {LANGUAGES_CREATE_LABEL}

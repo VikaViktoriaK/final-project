@@ -7,7 +7,7 @@ import { UserCreateDialog } from "@/features/users/components/UserCreateDialog";
 import { UserEditDialog } from "@/features/users/components/UserEditDialog";
 import { UsersFilter } from "@/features/users/components/UsersFilter";
 import { UsersTable } from "@/features/users/components/UsersTable";
-import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import {
   USER_DELETE_DIALOG,
   USERS_CREATE_LABEL,
@@ -60,7 +60,7 @@ export function UsersPage() {
           isAdmin ? (
             <Button
               variant="text"
-              sx={catalogPageSx.addUserBtn}
+              sx={catalogPageSx.createButton}
               onClick={openCreate}
             >
               {USERS_CREATE_LABEL}

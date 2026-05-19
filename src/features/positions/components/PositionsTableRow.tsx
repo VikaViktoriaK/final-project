@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -10,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { PositionRow } from "../types";
 import { positionsTableSx } from "./positionsTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type PositionsTableRowProps = {
   position: PositionRow;
@@ -34,7 +32,7 @@ export function PositionsTableRow({
   const handleMenuClose = () => setAnchorEl(null);
 
   return (
-    <TableRow sx={usersTableSx.row}>
+    <TableRow sx={catalogTableSx.row}>
       <TableCell sx={positionsTableSx.nameCell}>
         <Typography variant="body2">{position.name}</Typography>
       </TableCell>
@@ -43,7 +41,7 @@ export function PositionsTableRow({
           <>
             <IconButton
               size="small"
-              sx={usersTableSx.actionsBtn}
+              sx={catalogTableSx.actionsBtn}
               onClick={handleMenuOpen}
               aria-label={`Actions for ${position.name}`}
             >
@@ -53,7 +51,7 @@ export function PositionsTableRow({
               anchorEl={anchorEl}
               open={menuOpen}
               onClose={handleMenuClose}
-              sx={usersTableSx.rowMenu}
+              sx={catalogTableSx.rowMenu}
             >
               <MenuItem
                 onClick={() => {
@@ -68,7 +66,7 @@ export function PositionsTableRow({
                   handleMenuClose();
                   onDelete(position);
                 }}
-                sx={usersTableSx.rowMenuDeleteItem}
+                sx={catalogTableSx.rowMenuDeleteItem}
               >
                 Delete
               </MenuItem>

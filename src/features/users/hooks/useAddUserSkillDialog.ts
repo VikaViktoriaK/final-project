@@ -9,7 +9,7 @@ import {
   getSkillMasteryCatalog,
 } from "@/features/users/constants/userSkills.mastery";
 import type { ProfileSkillRow } from "@/features/users/types/userSkills.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseAddUserSkillDialogParams = {
   userId: string;
@@ -61,7 +61,7 @@ export function useAddUserSkillDialog({
       await onCompleted();
       onClose();
     } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
+      setSubmitError(formatMutationError(err));
     }
   }, [
     addSkill,

@@ -1,5 +1,3 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -12,7 +10,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import type { LanguageRow } from "../types";
 import { LanguagesTableRow } from "./LanguagesTableRow";
 import { languagesTableSx } from "./languagesTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type LanguagesTableProps = {
   languages: LanguageRow[];
@@ -35,9 +33,9 @@ export function LanguagesTable({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={usersTableSx.tableContainer}
+      sx={catalogTableSx.tableContainer}
     >
-      <Table sx={usersTableSx.table} aria-label="languages catalog table">
+      <Table sx={catalogTableSx.table} aria-label="languages catalog table">
         <colgroup>
           <col />
           <col />
@@ -84,7 +82,7 @@ export function LanguagesTable({
         <TableBody>
           {languages.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} sx={usersTableSx.emptyState}>
+              <TableCell colSpan={4} sx={catalogTableSx.emptyState}>
                 Languages not found
               </TableCell>
             </TableRow>

@@ -3,9 +3,9 @@ import {
   useAddProfileLanguageMutation,
   useLanguageCatalogQuery,
 } from "@/features/users/api/userLanguages";
-import { languageNotOnProfile } from "@/features/users/components/user-profile/userLanguages.utils";
+import { languageNotOnProfile } from "@/features/users/utils/userLanguages.utils";
 import type { UserLanguageRow } from "@/features/users/types/userLanguages.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseAddUserLanguageDialogParams = {
   userId: string;
@@ -52,7 +52,7 @@ export function useAddUserLanguageDialog({
       await onCompleted();
       onClose();
     } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
+      setSubmitError(formatMutationError(err));
     }
   }, [addLanguage, languageName, onClose, onCompleted, proficiency, userId]);
 

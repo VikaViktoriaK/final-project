@@ -1,4 +1,4 @@
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 export const departmentsTableSx = {
   nameHeadCell: {
@@ -8,6 +8,6 @@ export const departmentsTableSx = {
     whiteSpace: "nowrap",
   },
   nameCell: {},
-  actionsHeadCell: usersTableSx.headCell,
-  actionsCell: usersTableSx.actionsCell,
+  actionsHeadCell: catalogTableSx.headCell,
+  actionsCell: catalogTableSx.actionsCell,
 } as const;

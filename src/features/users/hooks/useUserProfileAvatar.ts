@@ -6,7 +6,7 @@ import {
 } from "@/features/users/constants/userProfile.constants";
 import type { UserRow } from "@/features/users/types";
 import type { AvatarUploadState } from "@/features/users/types/userProfile.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseUserProfileAvatarParams = {
   user: UserRow;
@@ -56,7 +56,7 @@ export function useUserProfileAvatar({
         await onUserUpdated();
       }
     } catch (error) {
-      setAvatarActionError(formatProfileSubmitError(error));
+      setAvatarActionError(formatMutationError(error));
     }
   }, [avatarUpload, deleteAvatar, onUserUpdated, user.avatarUrl, user.id]);
 

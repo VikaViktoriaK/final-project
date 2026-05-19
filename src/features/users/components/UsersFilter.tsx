@@ -1,5 +1,3 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,7 +7,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { USER_SORT_OPTIONS } from "@/features/users/constants/users.constants";
 import type { UserSortField } from "@/features/users/types/usersList.types";
 import type { SortOrder } from "@/lib/search";
-import { usersTableSx } from "./usersTable.styles";
+import { catalogTableSx } from "@/shared/styles";
 
 type UsersFilterProps = {
   orderBy: UserSortField;
@@ -25,7 +23,7 @@ export function UsersFilter({
   onOrderByChange,
 }: UsersFilterProps) {
   return (
-    <Box sx={usersTableSx.usersFilter}>
+    <Box sx={catalogTableSx.catalogFilter}>
       <TextField
         select
         label="Sort by"
@@ -34,7 +32,7 @@ export function UsersFilter({
         onChange={(event) =>
           onOrderByChange(event.target.value as UserSortField)
         }
-        sx={usersTableSx.usersFilterSelect}
+        sx={catalogTableSx.catalogFilterSelect}
       >
         {USER_SORT_OPTIONS.map((option) => (
           <MenuItem key={option.value} value={option.value}>
@@ -47,7 +45,7 @@ export function UsersFilter({
         onClick={() => onOrderChange(order === "asc" ? "desc" : "asc")}
         title={order === "asc" ? "Ascending" : "Descending"}
         aria-label={order === "asc" ? "Sort ascending" : "Sort descending"}
-        sx={usersTableSx.usersFilterOrderBtn}
+        sx={catalogTableSx.catalogFilterOrderBtn}
       >
         {order === "asc" ? (
           <ArrowUpwardIcon fontSize="small" />

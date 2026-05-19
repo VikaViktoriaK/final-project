@@ -1,5 +1,3 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -12,7 +10,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import type { PositionRow } from "../types";
 import { PositionsTableRow } from "./PositionsTableRow";
 import { positionsTableSx } from "./positionsTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type PositionsTableProps = {
   positions: PositionRow[];
@@ -35,9 +33,9 @@ export function PositionsTable({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={usersTableSx.tableContainer}
+      sx={catalogTableSx.tableContainer}
     >
-      <Table sx={usersTableSx.table} aria-label="positions table">
+      <Table sx={catalogTableSx.table} aria-label="positions table">
         <colgroup>
           <col />
           <col style={{ width: 48 }} />
@@ -54,7 +52,7 @@ export function PositionsTable({
                 onClick={onToggleNameSort}
                 aria-label={`Sort by name, ${order === "asc" ? "ascending" : "descending"}`}
                 sx={{
-                  ...usersTableSx.headDepartmentLabel,
+                  ...catalogTableSx.headDepartmentLabel,
                   border: "none",
                   background: "none",
                   padding: 0,
@@ -78,7 +76,7 @@ export function PositionsTable({
         <TableBody>
           {positions.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={2} sx={usersTableSx.emptyState}>
+              <TableCell colSpan={2} sx={catalogTableSx.emptyState}>
                 Positions not found
               </TableCell>
             </TableRow>

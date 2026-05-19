@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -10,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { LanguageRow } from "../types";
 import { languagesTableSx } from "./languagesTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type LanguagesTableRowProps = {
   language: LanguageRow;
@@ -29,7 +27,7 @@ export function LanguagesTableRow({
   const menuOpen = Boolean(anchorEl);
 
   return (
-    <TableRow sx={usersTableSx.row}>
+    <TableRow sx={catalogTableSx.row}>
       <TableCell sx={languagesTableSx.nameCell}>
         <Typography variant="body2">{language.name}</Typography>
       </TableCell>
@@ -44,7 +42,7 @@ export function LanguagesTableRow({
           <>
             <IconButton
               size="small"
-              sx={usersTableSx.actionsBtn}
+              sx={catalogTableSx.actionsBtn}
               onClick={(e) => setAnchorEl(e.currentTarget)}
               aria-label={`Actions for ${language.name}`}
             >
@@ -54,7 +52,7 @@ export function LanguagesTableRow({
               anchorEl={anchorEl}
               open={menuOpen}
               onClose={() => setAnchorEl(null)}
-              sx={usersTableSx.rowMenu}
+              sx={catalogTableSx.rowMenu}
             >
               <MenuItem
                 onClick={() => {
@@ -69,7 +67,7 @@ export function LanguagesTableRow({
                   setAnchorEl(null);
                   onDelete(language);
                 }}
-                sx={usersTableSx.rowMenuDeleteItem}
+                sx={catalogTableSx.rowMenuDeleteItem}
               >
                 Delete
               </MenuItem>

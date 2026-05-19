@@ -3,7 +3,7 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { DepartmentFormDialog } from "../components/DepartmentFormDialog";
 import { DepartmentsFilter } from "../components/DepartmentsFilter";
 import { DepartmentsTable } from "../components/DepartmentsTable";
@@ -45,7 +45,7 @@ export function DepartmentsPage() {
           isAdmin ? (
             <Button
               variant="text"
-              sx={catalogPageSx.addUserBtn}
+              sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
               {DEPARTMENTS_CREATE_LABEL}

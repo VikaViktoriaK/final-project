@@ -2,7 +2,7 @@ import * as React from "react";
 import { useUpdateProfileSkillMutation } from "@/features/users/api/userSkills";
 import { getSkillMasteryCatalog } from "@/features/users/constants/userSkills.mastery";
 import type { UserSkill } from "@/features/users/types/userSkills.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseUpdateUserSkillDialogParams = {
   userId: string;
@@ -43,7 +43,7 @@ export function useUpdateUserSkillDialog({
       await onCompleted();
       onClose();
     } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
+      setSubmitError(formatMutationError(err));
     }
   }, [
     mastery,

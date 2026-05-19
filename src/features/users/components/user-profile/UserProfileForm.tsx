@@ -1,5 +1,3 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,7 +9,10 @@ import type { UserRow } from "@/features/users/types";
 import type { AvatarUploadState } from "@/features/users/types/userProfile.types";
 import { userProfileSx } from "./userProfile.styles";
 
-export { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+export {
+  formatMutationError,
+  formatProfileSubmitError,
+} from "@/shared/utils/formatMutationError";
 
 type UserProfileFormProps = {
   user: UserRow;

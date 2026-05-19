@@ -3,7 +3,7 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { SkillFormDialog } from "../components/SkillFormDialog";
 import { SkillsFilter } from "../components/SkillsFilter";
 import { SkillsTable } from "../components/SkillsTable";
@@ -54,7 +54,7 @@ export function SkillsPage() {
           isAdmin ? (
             <Button
               variant="text"
-              sx={catalogPageSx.addUserBtn}
+              sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
               {SKILLS_CREATE_LABEL}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useUpdateProfileLanguageMutation } from "@/features/users/api/userLanguages";
 import type { UserLanguageRow } from "@/features/users/types/userLanguages.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseUpdateUserLanguageDialogParams = {
   userId: string;
@@ -39,7 +39,7 @@ export function useUpdateUserLanguageDialog({
       await onCompleted();
       onClose();
     } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
+      setSubmitError(formatMutationError(err));
     }
   }, [
     language.name,

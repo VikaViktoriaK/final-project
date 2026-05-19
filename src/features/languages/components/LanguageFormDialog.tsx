@@ -1,14 +1,12 @@
-"use client";
-
 import Alert from "@mui/material/Alert";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import TextField from "@mui/material/TextField";
 import { CatalogFormDialogActions } from "@/components/catalog-form/CatalogFormDialogActions";
 import { CatalogFormDialogTitle } from "@/components/catalog-form/CatalogFormDialogTitle";
-import { PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS } from "@/features/users/constants/profileDialog.constants";
-import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/features/users/constants/catalogDialog.constants";
-import { userLanguagesSx } from "@/features/users/components/user-profile/userLanguages.styles";
+import { FORM_INPUT_LABEL_SLOT_PROPS } from "@/shared/constants/formDialog.constants";
+import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/shared/constants/catalogDialog.constants";
+import { formDialogSx } from "@/shared/styles/formDialog.styles";
 import { useLanguageFormDialog } from "@/features/languages/hooks/useLanguageFormDialog";
 import type { LanguageFormValues } from "@/features/languages/types/languageForm.types";
 import type { LanguageRow } from "../types";
@@ -45,7 +43,7 @@ function LanguageFormDialogContent({
   return (
     <>
       <CatalogFormDialogTitle title={labels.title} onClose={onClose} />
-      <DialogContent sx={userLanguagesSx.addLanguageDialogContent}>
+      <DialogContent sx={formDialogSx.addLanguageDialogContent}>
         <TextField
           variant="outlined"
           label={labels.nameLabel}
@@ -53,8 +51,8 @@ function LanguageFormDialogContent({
           onChange={(e) => setName(e.target.value)}
           fullWidth
           autoFocus
-          sx={userLanguagesSx.dialogField}
-          slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
+          sx={formDialogSx.dialogField}
+          slotProps={FORM_INPUT_LABEL_SLOT_PROPS}
         />
         <TextField
           variant="outlined"
@@ -62,8 +60,8 @@ function LanguageFormDialogContent({
           value={nativeName}
           onChange={(e) => setNativeName(e.target.value)}
           fullWidth
-          sx={userLanguagesSx.dialogField}
-          slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
+          sx={formDialogSx.dialogField}
+          slotProps={FORM_INPUT_LABEL_SLOT_PROPS}
         />
         <TextField
           variant="outlined"
@@ -71,9 +69,9 @@ function LanguageFormDialogContent({
           value={iso2}
           onChange={(e) => setIso2(e.target.value.toUpperCase())}
           fullWidth
-          sx={userLanguagesSx.dialogField}
+          sx={formDialogSx.dialogField}
           slotProps={{
-            ...PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS,
+            ...FORM_INPUT_LABEL_SLOT_PROPS,
             htmlInput: { maxLength: 2 },
           }}
         />

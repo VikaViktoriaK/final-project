@@ -15,7 +15,7 @@ import {
   type AvatarUploadState,
   type ProfileFormState,
 } from "@/features/users/types/userProfile.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseUserProfileFormParams = {
   user: UserRow;
@@ -121,7 +121,7 @@ export function useUserProfileForm({
 
       await onUpdated();
     } catch (error) {
-      setSubmitError(formatProfileSubmitError(error));
+      setSubmitError(formatMutationError(error));
     }
   }, [
     avatarUpload,

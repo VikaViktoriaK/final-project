@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -10,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { DepartmentRow } from "../types";
 import { departmentsTableSx } from "./departmentsTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type DepartmentsTableRowProps = {
   department: DepartmentRow;
@@ -34,7 +32,7 @@ export function DepartmentsTableRow({
   const handleMenuClose = () => setAnchorEl(null);
 
   return (
-    <TableRow sx={usersTableSx.row}>
+    <TableRow sx={catalogTableSx.row}>
       <TableCell sx={departmentsTableSx.nameCell}>
         <Typography variant="body2">{department.name}</Typography>
       </TableCell>
@@ -43,7 +41,7 @@ export function DepartmentsTableRow({
           <>
             <IconButton
               size="small"
-              sx={usersTableSx.actionsBtn}
+              sx={catalogTableSx.actionsBtn}
               onClick={handleMenuOpen}
               aria-label={`Actions for ${department.name}`}
             >
@@ -53,7 +51,7 @@ export function DepartmentsTableRow({
               anchorEl={anchorEl}
               open={menuOpen}
               onClose={handleMenuClose}
-              sx={usersTableSx.rowMenu}
+              sx={catalogTableSx.rowMenu}
             >
               <MenuItem
                 onClick={() => {
@@ -68,7 +66,7 @@ export function DepartmentsTableRow({
                   handleMenuClose();
                   onDelete(department);
                 }}
-                sx={usersTableSx.rowMenuDeleteItem}
+                sx={catalogTableSx.rowMenuDeleteItem}
               >
                 Delete
               </MenuItem>

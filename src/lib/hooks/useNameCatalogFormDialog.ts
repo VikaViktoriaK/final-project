@@ -1,5 +1,5 @@
 import * as React from "react";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type CatalogFormLabels = {
   title: string;
@@ -49,7 +49,7 @@ export function useNameCatalogFormDialog({
       await onSubmit(trimmedName);
       onClose();
     } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
+      setSubmitError(formatMutationError(err));
     }
   }, [onClose, onSubmit, trimmedName, unchanged]);
 

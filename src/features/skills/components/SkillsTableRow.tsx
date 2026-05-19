@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -10,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { SkillRow } from "../types";
 import { skillsTableSx } from "./skillsTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type SkillsTableRowProps = {
   skill: SkillRow;
@@ -29,7 +27,7 @@ export function SkillsTableRow({
   const menuOpen = Boolean(anchorEl);
 
   return (
-    <TableRow sx={usersTableSx.row}>
+    <TableRow sx={catalogTableSx.row}>
       <TableCell sx={skillsTableSx.nameCell}>
         <Typography variant="body2">{skill.name}</Typography>
       </TableCell>
@@ -41,7 +39,7 @@ export function SkillsTableRow({
           <>
             <IconButton
               size="small"
-              sx={usersTableSx.actionsBtn}
+              sx={catalogTableSx.actionsBtn}
               onClick={(e) => setAnchorEl(e.currentTarget)}
               aria-label={`Actions for ${skill.name}`}
             >
@@ -51,7 +49,7 @@ export function SkillsTableRow({
               anchorEl={anchorEl}
               open={menuOpen}
               onClose={() => setAnchorEl(null)}
-              sx={usersTableSx.rowMenu}
+              sx={catalogTableSx.rowMenu}
             >
               <MenuItem
                 onClick={() => {
@@ -66,7 +64,7 @@ export function SkillsTableRow({
                   setAnchorEl(null);
                   onDelete(skill);
                 }}
-                sx={usersTableSx.rowMenuDeleteItem}
+                sx={catalogTableSx.rowMenuDeleteItem}
               >
                 Delete
               </MenuItem>

@@ -5,7 +5,7 @@ import {
 } from "@/features/skills/constants/skills.constants";
 import type { SkillCategoryOption, SkillRow } from "@/features/skills/types";
 import type { SkillFormMode } from "@/features/skills/types/skillForm.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseSkillFormDialogParams = {
   mode: SkillFormMode;
@@ -61,7 +61,7 @@ export function useSkillFormDialog({
       await onSubmit({ name: trimmedName, categoryId });
       onClose();
     } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
+      setSubmitError(formatMutationError(err));
     }
   }, [categoryId, onClose, onSubmit, trimmedName, unchanged]);
 

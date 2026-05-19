@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -11,9 +9,9 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { usersTableSx } from "./usersTable.styles";
 import type { UserRow } from "@/features/users/types";
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
+import { catalogTableSx } from "@/shared/styles";
 
 function initials(firstName: string, lastName: string) {
   const a = (firstName?.[0] ?? "").toUpperCase();
@@ -58,52 +56,52 @@ export function UsersTableRow({
   };
 
   return (
-    <TableRow sx={usersTableSx.row}>
-      <TableCell sx={usersTableSx.avatarCell}>
-        <Avatar src={user.avatarUrl} sx={usersTableSx.avatar}>
+    <TableRow sx={catalogTableSx.row}>
+      <TableCell sx={catalogTableSx.avatarCell}>
+        <Avatar src={user.avatarUrl} sx={catalogTableSx.avatar}>
           {initials(user.firstName, user.lastName)}
         </Avatar>
       </TableCell>
-      <TableCell sx={usersTableSx.firstNameCell}>
-        <Box sx={usersTableSx.nameCell}>
+      <TableCell sx={catalogTableSx.firstNameCell}>
+        <Box sx={catalogTableSx.nameCell}>
           <Typography variant="body2">{user.firstName}</Typography>
         </Box>
       </TableCell>
       <TableCell
         sx={{
-          ...usersTableSx.lastNameCell,
-          ...usersTableSx.lastNameCellMobileHidden,
+          ...catalogTableSx.lastNameCell,
+          ...catalogTableSx.lastNameCellMobileHidden,
         }}
       >
         <Typography variant="body2">{user.lastName}</Typography>
       </TableCell>
       <TableCell
         sx={{
-          ...usersTableSx.emailCell,
-          ...usersTableSx.emailCellMobileHidden,
+          ...catalogTableSx.emailCell,
+          ...catalogTableSx.emailCellMobileHidden,
         }}
       >
-        <Typography variant="body2" sx={usersTableSx.email}>
+        <Typography variant="body2" sx={catalogTableSx.email}>
           {user.email}
         </Typography>
       </TableCell>
-      <TableCell sx={usersTableSx.departmentCell}>
+      <TableCell sx={catalogTableSx.departmentCell}>
         <Typography variant="body2">{user.department}</Typography>
       </TableCell>
-      <TableCell sx={usersTableSx.positionCell}>
+      <TableCell sx={catalogTableSx.positionCell}>
         <Typography variant="body2">{user.position}</Typography>
       </TableCell>
-      <TableCell sx={usersTableSx.actionsCell}>
+      <TableCell sx={catalogTableSx.actionsCell}>
         <IconButton
           size="small"
-          sx={usersTableSx.actionsBtnChevron}
+          sx={catalogTableSx.actionsBtnChevron}
           onClick={handleView}
         >
           <ChevronRightIcon fontSize="small" />
         </IconButton>
         <IconButton
           size="small"
-          sx={usersTableSx.actionsBtn}
+          sx={catalogTableSx.actionsBtn}
           onClick={handleMenuOpen}
         >
           <MoreVertIcon fontSize="small" />
@@ -112,14 +110,14 @@ export function UsersTableRow({
           anchorEl={anchorEl}
           open={menuOpen}
           onClose={handleMenuClose}
-          sx={usersTableSx.rowMenu}
+          sx={catalogTableSx.rowMenu}
         >
           <MenuItem onClick={handleView}>View profile</MenuItem>
           {canEdit ? <MenuItem onClick={handleEdit}>Edit</MenuItem> : null}
           {isAdmin ? (
             <MenuItem
               onClick={handleDelete}
-              sx={usersTableSx.rowMenuDeleteItem}
+              sx={catalogTableSx.rowMenuDeleteItem}
             >
               Delete
             </MenuItem>

@@ -1,5 +1,3 @@
-"use client";
-
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,8 +6,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
-import { PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS } from "@/features/users/constants/profileDialog.constants";
-import { userLanguagesSx } from "./userLanguages.styles";
+import { FORM_INPUT_LABEL_SLOT_PROPS } from "@/shared/constants/formDialog.constants";
+import { formDialogSx } from "@/features/users/components/user-profile/userLanguages.styles";
 
 export type SkillFormDialogFieldsProps = {
   title: string;
@@ -46,12 +44,9 @@ export function SkillFormDialogFields({
 }: SkillFormDialogFieldsProps) {
   return (
     <>
-      <DialogTitle
-        component="div"
-        sx={userLanguagesSx.addLanguageDialogTitleRoot}
-      >
-        <Box sx={userLanguagesSx.dialogTitleRow}>
-          <Box component="span" sx={userLanguagesSx.dialogTitleText}>
+      <DialogTitle component="div" sx={formDialogSx.addLanguageDialogTitleRoot}>
+        <Box sx={formDialogSx.dialogTitleRow}>
+          <Box component="span" sx={formDialogSx.dialogTitleText}>
             {title}
           </Box>
           <IconButton
@@ -59,13 +54,13 @@ export function SkillFormDialogFields({
             aria-label="Close dialog"
             onClick={onClose}
             size="small"
-            sx={userLanguagesSx.dialogCloseBtn}
+            sx={formDialogSx.dialogCloseBtn}
           >
             <CloseIcon />
           </IconButton>
         </Box>
       </DialogTitle>
-      <DialogContent sx={userLanguagesSx.addLanguageDialogContent}>
+      <DialogContent sx={formDialogSx.addLanguageDialogContent}>
         {loading ? <Alert severity="info">Loading…</Alert> : null}
         {!loading && emptySkillsMessage ? (
           <Alert severity="warning">{emptySkillsMessage}</Alert>
@@ -80,9 +75,9 @@ export function SkillFormDialogFields({
               onChange={(e) => onSkillNameChange(e.target.value)}
               fullWidth
               disabled={skillSelectDisabled}
-              sx={userLanguagesSx.dialogField}
+              sx={formDialogSx.dialogField}
               slotProps={{
-                ...PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS,
+                ...FORM_INPUT_LABEL_SLOT_PROPS,
                 select: { displayEmpty: !skillSelectDisabled },
               }}
             >
@@ -104,8 +99,8 @@ export function SkillFormDialogFields({
               value={mastery}
               onChange={(e) => onMasteryChange(e.target.value)}
               fullWidth
-              sx={userLanguagesSx.dialogField}
-              slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
+              sx={formDialogSx.dialogField}
+              slotProps={FORM_INPUT_LABEL_SLOT_PROPS}
             >
               {masteryCatalog.map((item) => (
                 <MenuItem key={item.id} value={item.name}>

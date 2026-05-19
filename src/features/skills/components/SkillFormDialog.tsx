@@ -1,5 +1,3 @@
-"use client";
-
 import Alert from "@mui/material/Alert";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -7,9 +5,9 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import { CatalogFormDialogActions } from "@/components/catalog-form/CatalogFormDialogActions";
 import { CatalogFormDialogTitle } from "@/components/catalog-form/CatalogFormDialogTitle";
-import { PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS } from "@/features/users/constants/profileDialog.constants";
-import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/features/users/constants/catalogDialog.constants";
-import { userLanguagesSx } from "@/features/users/components/user-profile/userLanguages.styles";
+import { FORM_INPUT_LABEL_SLOT_PROPS } from "@/shared/constants/formDialog.constants";
+import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/shared/constants/catalogDialog.constants";
+import { formDialogSx } from "@/shared/styles/formDialog.styles";
 import { useSkillFormDialog } from "@/features/skills/hooks/useSkillFormDialog";
 import type { SkillFormValues } from "@/features/skills/types/skillForm.types";
 import type { SkillCategoryOption, SkillRow } from "../types";
@@ -52,7 +50,7 @@ function SkillFormDialogContent({
   return (
     <>
       <CatalogFormDialogTitle title={labels.title} onClose={onClose} />
-      <DialogContent sx={userLanguagesSx.addLanguageDialogContent}>
+      <DialogContent sx={formDialogSx.addLanguageDialogContent}>
         <TextField
           variant="outlined"
           label={labels.nameLabel}
@@ -60,8 +58,8 @@ function SkillFormDialogContent({
           onChange={(e) => setName(e.target.value)}
           fullWidth
           autoFocus
-          sx={userLanguagesSx.dialogField}
-          slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
+          sx={formDialogSx.dialogField}
+          slotProps={FORM_INPUT_LABEL_SLOT_PROPS}
         />
         <TextField
           select
@@ -71,8 +69,8 @@ function SkillFormDialogContent({
           onChange={(e) => setCategoryId(e.target.value)}
           fullWidth
           disabled={categories.length === 0}
-          sx={userLanguagesSx.dialogField}
-          slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
+          sx={formDialogSx.dialogField}
+          slotProps={FORM_INPUT_LABEL_SLOT_PROPS}
         >
           {categories.length === 0 ? (
             <MenuItem value="" disabled>

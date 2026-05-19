@@ -1,14 +1,12 @@
-"use client";
-
 import Alert from "@mui/material/Alert";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import TextField from "@mui/material/TextField";
 import { CatalogFormDialogActions } from "@/components/catalog-form/CatalogFormDialogActions";
 import { CatalogFormDialogTitle } from "@/components/catalog-form/CatalogFormDialogTitle";
-import { PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS } from "@/features/users/constants/profileDialog.constants";
-import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/features/users/constants/catalogDialog.constants";
-import { userLanguagesSx } from "@/features/users/components/user-profile/userLanguages.styles";
+import { FORM_INPUT_LABEL_SLOT_PROPS } from "@/shared/constants/formDialog.constants";
+import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/shared/constants/catalogDialog.constants";
+import { formDialogSx } from "@/shared/styles/formDialog.styles";
 import { useNameCatalogFormDialog } from "@/lib/hooks/useNameCatalogFormDialog";
 import {
   DEPARTMENT_CREATE_DIALOG,
@@ -45,7 +43,7 @@ function DepartmentFormDialogContent({
   return (
     <>
       <CatalogFormDialogTitle title={labels.title} onClose={onClose} />
-      <DialogContent sx={userLanguagesSx.addLanguageDialogContent}>
+      <DialogContent sx={formDialogSx.addLanguageDialogContent}>
         <TextField
           variant="outlined"
           label={labels.nameLabel}
@@ -53,8 +51,8 @@ function DepartmentFormDialogContent({
           onChange={(e) => setName(e.target.value)}
           fullWidth
           autoFocus
-          sx={userLanguagesSx.dialogField}
-          slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
+          sx={formDialogSx.dialogField}
+          slotProps={FORM_INPUT_LABEL_SLOT_PROPS}
         />
         {submitError ? <Alert severity="error">{submitError}</Alert> : null}
       </DialogContent>

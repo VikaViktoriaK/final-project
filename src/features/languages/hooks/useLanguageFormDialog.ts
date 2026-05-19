@@ -8,7 +8,7 @@ import type {
   LanguageFormMode,
   LanguageFormValues,
 } from "@/features/languages/types/languageForm.types";
-import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
+import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type UseLanguageFormDialogParams = {
   mode: LanguageFormMode;
@@ -81,7 +81,7 @@ export function useLanguageFormDialog({
       });
       onClose();
     } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
+      setSubmitError(formatMutationError(err));
     }
   }, [iso2, name, nativeName, onClose, onSubmit, unchanged]);
 

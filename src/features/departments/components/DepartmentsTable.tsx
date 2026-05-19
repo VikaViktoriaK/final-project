@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -13,7 +11,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import type { DepartmentRow } from "../types";
 import { DepartmentsTableRow } from "./DepartmentsTableRow";
 import { departmentsTableSx } from "./departmentsTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type DepartmentsTableProps = {
   departments: DepartmentRow[];
@@ -36,9 +34,9 @@ export function DepartmentsTable({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={usersTableSx.tableContainer}
+      sx={catalogTableSx.tableContainer}
     >
-      <Table sx={usersTableSx.table} aria-label="departments table">
+      <Table sx={catalogTableSx.table} aria-label="departments table">
         <colgroup>
           <col />
           <col style={{ width: 48 }} />
@@ -55,7 +53,7 @@ export function DepartmentsTable({
                 onClick={onToggleNameSort}
                 aria-label={`Sort by name, ${order === "asc" ? "ascending" : "descending"}`}
                 sx={{
-                  ...usersTableSx.headDepartmentLabel,
+                  ...catalogTableSx.headDepartmentLabel,
                   border: "none",
                   background: "none",
                   padding: 0,
@@ -79,7 +77,7 @@ export function DepartmentsTable({
         <TableBody>
           {departments.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={2} sx={usersTableSx.emptyState}>
+              <TableCell colSpan={2} sx={catalogTableSx.emptyState}>
                 Departments not found
               </TableCell>
             </TableRow>

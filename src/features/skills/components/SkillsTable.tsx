@@ -1,5 +1,3 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -12,7 +10,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import type { SkillRow, SkillsSortField } from "../types";
 import { SkillsTableRow } from "./SkillsTableRow";
 import { skillsTableSx } from "./skillsTable.styles";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type SkillsTableProps = {
   skills: SkillRow[];
@@ -93,9 +91,9 @@ export function SkillsTable({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={usersTableSx.tableContainer}
+      sx={catalogTableSx.tableContainer}
     >
-      <Table sx={usersTableSx.table} aria-label="skills catalog table">
+      <Table sx={catalogTableSx.table} aria-label="skills catalog table">
         <colgroup>
           <col style={{ width: "50%" }} />
           <col />
@@ -125,7 +123,7 @@ export function SkillsTable({
         <TableBody>
           {skills.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={3} sx={usersTableSx.emptyState}>
+              <TableCell colSpan={3} sx={catalogTableSx.emptyState}>
                 Skills not found
               </TableCell>
             </TableRow>

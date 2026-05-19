@@ -1,5 +1,3 @@
-"use client";
-
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-import { userLanguagesSx } from "./userLanguages.styles";
+import { formDialogSx } from "@/features/users/components/user-profile/userLanguages.styles";
 
 export type ProfileBulkRemoveDialogProps = {
   open: boolean;
@@ -47,13 +45,13 @@ export function ProfileBulkRemoveDialog({
       onClose={handleClose}
       fullWidth
       maxWidth="sm"
-      sx={userLanguagesSx.languageDialog}
+      sx={formDialogSx.languageDialog}
     >
       {open ? (
         <>
-          <DialogTitle component="div" sx={userLanguagesSx.dialogTitleRoot}>
-            <Box sx={userLanguagesSx.dialogTitleRow}>
-              <Box component="span" sx={userLanguagesSx.dialogTitleText}>
+          <DialogTitle component="div" sx={formDialogSx.dialogTitleRoot}>
+            <Box sx={formDialogSx.dialogTitleRow}>
+              <Box component="span" sx={formDialogSx.dialogTitleText}>
                 {title}
               </Box>
               <IconButton
@@ -62,13 +60,13 @@ export function ProfileBulkRemoveDialog({
                 onClick={handleClose}
                 size="small"
                 disabled={submitting}
-                sx={userLanguagesSx.dialogCloseBtn}
+                sx={formDialogSx.dialogCloseBtn}
               >
                 <CloseIcon />
               </IconButton>
             </Box>
           </DialogTitle>
-          <DialogContent sx={userLanguagesSx.dialogContent}>
+          <DialogContent sx={formDialogSx.dialogContent}>
             <Typography
               sx={{
                 color: "var(--app-text-muted)",
@@ -84,12 +82,12 @@ export function ProfileBulkRemoveDialog({
               </Alert>
             ) : null}
           </DialogContent>
-          <DialogActions sx={userLanguagesSx.dialogActions}>
+          <DialogActions sx={formDialogSx.dialogActions}>
             <Button
               variant="outlined"
               onClick={handleClose}
               disabled={submitting}
-              sx={userLanguagesSx.dialogCancelBtn}
+              sx={formDialogSx.dialogCancelBtn}
             >
               {cancelLabel}
             </Button>
@@ -98,7 +96,7 @@ export function ProfileBulkRemoveDialog({
               disableElevation
               onClick={() => void onConfirm()}
               disabled={submitting}
-              sx={userLanguagesSx.dialogRemoveConfirmBtn}
+              sx={formDialogSx.dialogRemoveConfirmBtn}
             >
               {deleteLabel}
             </Button>

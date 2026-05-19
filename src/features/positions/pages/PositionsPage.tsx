@@ -3,7 +3,7 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { PositionFormDialog } from "../components/PositionFormDialog";
 import { PositionsFilter } from "../components/PositionsFilter";
 import { PositionsTable } from "../components/PositionsTable";
@@ -45,7 +45,7 @@ export function PositionsPage() {
           isAdmin ? (
             <Button
               variant="text"
-              sx={catalogPageSx.addUserBtn}
+              sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
               {POSITIONS_CREATE_LABEL}

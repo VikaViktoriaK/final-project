@@ -1,7 +1,7 @@
 import * as React from "react";
 import { gql } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { normalizeCatalogItem } from "@/features/users/components/user-profile/userSkills.utils";
+import { normalizeCatalogItem } from "@/features/users/utils/skillCatalog.utils";
 import type {
   NormalizedSkillCatalogItem,
   ProfileSkillRow,
