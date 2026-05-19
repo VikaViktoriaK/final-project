@@ -19,12 +19,17 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Controller,
+  useWatch,
   type Control,
   type FieldErrors,
   type UseFormRegister,
 } from "react-hook-form";
 import type { ProjectFormValues } from "../schemas";
 import type { Project } from "../types";
+import {
+  getProjectMaxDate,
+  PROJECT_MIN_DATE,
+} from "../utils/project-form-dates";
 import { cvsStyles } from "../styles/cvs.styles";
 
 type ProjectFormDialogProps = {
@@ -40,6 +45,7 @@ type ProjectFormDialogProps = {
   register: UseFormRegister<ProjectFormValues>;
   errors: FieldErrors<ProjectFormValues>;
   isSubmitting: boolean;
+  canSubmit: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
@@ -57,18 +63,24 @@ function ProjectFormDialog({
   register,
   errors,
   isSubmitting,
+  canSubmit,
   onClose,
   onSubmit,
 }: ProjectFormDialogProps) {
   const dialogTitle = mode === "add" ? "Add project" : "Update project";
   const submitLabel = mode === "add" ? "Add" : "Update";
   const isPending = isSubmitting || loading;
+  const submitEnabled = canSubmit && !isPending;
+  const startDate = useWatch({ control, name: "startDate" });
+  const maxDate = getProjectMaxDate();
+  const endDateMin =
+    startDate && startDate >= PROJECT_MIN_DATE ? startDate : PROJECT_MIN_DATE;
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      sx={cvsStyles.dialog}
+      sx={[cvsStyles.dialog, cvsStyles.dialogForm]}
       fullWidth
       maxWidth="md"
     >
@@ -104,7 +116,15 @@ function ProjectFormDialog({
                   error={!!errors.projectId}
                 >
                   <InputLabel>Project</InputLabel>
-                  <Select label="Project" {...field}>
+                  <Select
+                    label="Project"
+                    {...field}
+                    MenuProps={{
+                      slotProps: {
+                        paper: { sx: cvsStyles.selectMenuPaper },
+                      },
+                    }}
+                  >
                     {projects.map((project) => (
                       <MenuItem key={project.id} value={project.id}>
                         {project.name}
@@ -131,7 +151,13 @@ function ProjectFormDialog({
               type="date"
               sx={cvsStyles.formField}
               fullWidth
-              slotProps={{ inputLabel: { shrink: true } }}
+              slotProps={{
+                inputLabel: { shrink: true },
+                htmlInput: {
+                  min: PROJECT_MIN_DATE,
+                  max: maxDate,
+                },
+              }}
               error={!!errors.startDate}
               helperText={errors.startDate?.message}
               {...register("startDate")}
@@ -141,7 +167,18 @@ function ProjectFormDialog({
               type="date"
               sx={cvsStyles.formField}
               fullWidth
-              slotProps={{ inputLabel: { shrink: true } }}
+              slotProps={{
+                inputLabel: { shrink: true },
+                htmlInput: {
+                  min: endDateMin,
+                  max: maxDate,
+                },
+              }}
+              error={!!errors.endDate}
+              helperText={
+                errors.endDate?.message ??
+                "Leave empty if the project is ongoing"
+              }
               {...register("endDate")}
             />
           </Stack>
@@ -165,9 +202,9 @@ function ProjectFormDialog({
             label="Responsibilities"
             sx={cvsStyles.formField}
             fullWidth
-            multiline
-            minRows={4}
             placeholder="One responsibility per line"
+            error={!!errors.responsibilities}
+            helperText={errors.responsibilities?.message}
             {...register("responsibilities")}
           />
         </Stack>
@@ -179,8 +216,12 @@ function ProjectFormDialog({
         <Button
           type="submit"
           form="project-form"
-          sx={cvsStyles.primaryButton}
-          disabled={isPending}
+          sx={
+            submitEnabled
+              ? cvsStyles.primaryButton
+              : cvsStyles.primaryButtonMuted
+          }
+          disabled={!submitEnabled}
         >
           {isPending ? (
             <CircularProgress size={18} color="inherit" />

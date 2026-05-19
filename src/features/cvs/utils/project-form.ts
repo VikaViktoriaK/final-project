@@ -18,9 +18,10 @@ function getProjectFormDefaults(
 ): ProjectFormValues {
   if (mode === "update" && initial) {
     return {
-      projectId: initial.project.id,
+      projectId: initial.project?.id ?? "",
       startDate: toInputDate(initial.start_date),
       endDate: toInputDate(initial.end_date),
+      role: initial.roles[0] ?? "Developer",
       responsibilities: initial.responsibilities.join("\n"),
     };
   }
@@ -29,22 +30,29 @@ function getProjectFormDefaults(
     projectId: "",
     startDate: "",
     endDate: "",
+    role: "Developer",
     responsibilities: "",
   };
+}
+
+function parseResponsibilityLines(value: string): string[] {
+  return value
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 }
 
 function toProjectMutationInput(
   values: ProjectFormValues,
 ): ProjectMutationInput {
+  const responsibilities = parseResponsibilityLines(values.responsibilities);
+
   return {
     projectId: values.projectId,
     start_date: values.startDate,
-    end_date: values.endDate || undefined,
-    roles: [],
-    responsibilities: values.responsibilities
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean),
+    end_date: values.endDate?.trim() || undefined,
+    roles: [values.role.trim()],
+    responsibilities,
   };
 }
 
