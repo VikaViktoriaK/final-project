@@ -3,6 +3,7 @@
 import { Alert, Box, CircularProgress, Tab, Tabs } from "@mui/material";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
+import AppArrow from "@/components/app-arrow";
 import { CV_TABS } from "../constants/cv-tabs";
 import { CvProvider, useCvContext } from "../context/cv-context";
 import useCvShellNavigation from "../hooks/use-cv-shell-navigation";
@@ -36,13 +37,17 @@ function CvShellContent({ cvId, children }: CvShellProps) {
         <Box component={NextLink} href="/cvs" sx={cvsStyles.breadcrumbLink}>
           CVs
         </Box>
-        <Box component="span">&gt;</Box>
+        <AppArrow direction="right" size={10} sx={cvsStyles.breadcrumbArrow} />
         <Box component="span" sx={cvsStyles.breadcrumbActive}>
           {cv.name}
         </Box>
         {showSectionInBreadcrumb && (
           <>
-            <Box component="span">&gt;</Box>
+            <AppArrow
+              direction="right"
+              size={10}
+              sx={cvsStyles.breadcrumbArrow}
+            />
             <Box component="span" sx={cvsStyles.breadcrumbActive}>
               {activeTabLabel}
             </Box>
@@ -50,7 +55,7 @@ function CvShellContent({ cvId, children }: CvShellProps) {
         )}
       </Box>
 
-      <Tabs value={activeSegment} sx={cvsStyles.tabs}>
+      <Tabs value={activeSegment} textColor="inherit" sx={cvsStyles.tabs}>
         {CV_TABS.map((tab) => (
           <Tab
             key={tab.segment}
@@ -62,7 +67,7 @@ function CvShellContent({ cvId, children }: CvShellProps) {
         ))}
       </Tabs>
 
-      {children}
+      <Box sx={cvsStyles.tabContent}>{children}</Box>
     </Box>
   );
 }
