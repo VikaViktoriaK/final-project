@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import useCvDetailsPage from "../hooks/use-cv-details-page";
+import { CV_FIELD_LIMITS } from "../schemas";
 import { cvsStyles } from "../styles/cvs.styles";
 
 function CvDetailsPage() {
@@ -25,11 +26,15 @@ function CvDetailsPage() {
         <Stack spacing={2.5}>
           <TextField
             label="Name"
+            autoFocus={page.canEdit}
             sx={cvsStyles.formField}
             {...page.register("name")}
             error={!!page.errors.name}
             helperText={page.errors.name?.message}
             disabled={!page.canEdit}
+            slotProps={{
+              htmlInput: { maxLength: CV_FIELD_LIMITS.name.maxLength },
+            }}
             fullWidth
           />
           <TextField
@@ -39,6 +44,9 @@ function CvDetailsPage() {
             error={!!page.errors.education}
             helperText={page.errors.education?.message}
             disabled={!page.canEdit}
+            slotProps={{
+              htmlInput: { maxLength: CV_FIELD_LIMITS.education.maxLength },
+            }}
             fullWidth
           />
           <TextField
@@ -48,6 +56,9 @@ function CvDetailsPage() {
             error={!!page.errors.description}
             helperText={page.errors.description?.message}
             disabled={!page.canEdit}
+            slotProps={{
+              htmlInput: { maxLength: CV_FIELD_LIMITS.description.maxLength },
+            }}
             fullWidth
             multiline
             minRows={6}
@@ -60,8 +71,13 @@ function CvDetailsPage() {
           {page.canEdit && (
             <Button
               type="submit"
-              sx={cvsStyles.updateButton}
-              disabled={page.isPending}
+              sx={[
+                cvsStyles.updateButton,
+                page.hasChanges
+                  ? cvsStyles.updateButtonActive
+                  : cvsStyles.updateButtonMuted,
+              ]}
+              disabled={!page.canUpdate}
             >
               {page.isPending ? (
                 <CircularProgress size={18} color="inherit" />

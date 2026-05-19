@@ -1,11 +1,11 @@
 import { gql } from "@apollo/client";
-import { CV_FULL_FIELDS } from "./cv.fragments";
+import { CV_CORE_FIELDS } from "./cv.fragments";
 
 export const UPDATE_CV_MUTATION = gql`
   mutation UpdateCv($cv: UpdateCvInput!) {
     updateCv(cv: $cv) {
-      ...CvFullFields
+      ...CvCoreFields
     }
   }
-  ${CV_FULL_FIELDS}
+  ${CV_CORE_FIELDS}
 `;

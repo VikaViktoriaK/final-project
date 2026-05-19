@@ -52,7 +52,7 @@ export type CvProject = {
   environment: string[];
   roles: string[];
   responsibilities: string[];
-  project: Project;
+  project: Project | null;
 };
 
 export type Cv = {

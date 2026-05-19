@@ -8,12 +8,13 @@ const MASTERY_PERCENT: Record<MasteryLevel, number> = {
   Expert: 100,
 };
 
+/** Bar fill colors aligned with fill % (novice → expert). */
 const MASTERY_BAR_COLOR: Record<MasteryLevel, string> = {
-  Novice: "var(--color-primary)",
-  Advanced: "var(--color-mastery-advanced)",
-  Competent: "var(--color-primary)",
-  Proficient: "var(--color-mastery-proficient)",
-  Expert: "var(--color-mastery-expert)",
+  Novice: "var(--color-mastery-novice)",
+  Advanced: "var(--color-skill-bar)",
+  Competent: "var(--color-mastery-proficient)",
+  Proficient: "var(--color-mastery-advanced)",
+  Expert: "var(--color-primary)",
 };
 
 const MASTERY_LEVELS = [

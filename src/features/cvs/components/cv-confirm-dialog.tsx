@@ -61,7 +61,7 @@ function CvConfirmDialog({
         <Button
           type="button"
           onClick={onConfirm}
-          sx={cvsStyles.primaryButton}
+          sx={loading ? cvsStyles.primaryButtonMuted : cvsStyles.primaryButton}
           disabled={loading}
         >
           {loading ? (

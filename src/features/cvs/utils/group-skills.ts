@@ -11,14 +11,24 @@ function groupSkillsByCategory(
 ): GroupedSkills[] {
   const categoryMap = new Map<string, string>();
   for (const category of categories) {
-    categoryMap.set(category.id, category.parent?.name ?? category.name);
-    for (const child of category.children) {
-      categoryMap.set(child.id, category.name);
+    if (!category?.id) {
+      continue;
+    }
+    const categoryLabel = category.parent?.name ?? category.name ?? "Other";
+    categoryMap.set(category.id, categoryLabel);
+    for (const child of category.children ?? []) {
+      if (!child?.id) {
+        continue;
+      }
+      categoryMap.set(child.id, category.name ?? categoryLabel);
     }
   }
 
   const groups = new Map<string, SkillMastery[]>();
   for (const skill of skills) {
+    if (!skill?.name) {
+      continue;
+    }
     const label = skill.categoryId
       ? (categoryMap.get(skill.categoryId) ?? "Other")
       : "Other";

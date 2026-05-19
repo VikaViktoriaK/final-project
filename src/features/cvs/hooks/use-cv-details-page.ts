@@ -15,20 +15,23 @@ function useCvDetailsPage() {
 
   const form = useForm<UpdateCvFormValues>({
     resolver: zodResolver(updateCvSchema),
+    mode: "onChange",
     defaultValues: { cvId, name: "", education: "", description: "" },
   });
 
   const { reset, handleSubmit, register, formState } = form;
-  const { errors, isSubmitting } = formState;
+  const { errors, isSubmitting, isDirty, isValid } = formState;
   const isPending = isSubmitting || updating;
+  const hasChanges = isDirty && isValid;
+  const canUpdate = hasChanges && !isPending;
 
   useEffect(() => {
     if (cv) {
       reset({
         cvId: cv.id,
-        name: cv.name,
+        name: cv.name ?? "",
         education: cv.education ?? "",
-        description: cv.description,
+        description: cv.description ?? "",
       });
     }
   }, [cv, reset]);
@@ -41,6 +44,7 @@ function useCvDetailsPage() {
     });
 
     if (result.ok) {
+      reset(values);
       showSuccess("CV updated successfully");
       return;
     }
@@ -53,6 +57,8 @@ function useCvDetailsPage() {
     register,
     errors,
     isPending,
+    canUpdate,
+    hasChanges,
     onSubmit,
     FeedbackSnackbar,
   };
