@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material/styles";
+import { labelTypography } from "@/theme/app-theme";
 
 const pillButtonBase: SxProps<Theme> = {
   display: "inline-flex",
@@ -10,9 +11,8 @@ const pillButtonBase: SxProps<Theme> = {
   flexShrink: 1,
   borderRadius: "40px",
   textTransform: "uppercase",
-  fontSize: 12,
-  fontWeight: 700,
-  letterSpacing: "0.04em",
+  textAlign: "center",
+  ...labelTypography,
   boxShadow: "none",
 };
 
@@ -170,24 +170,56 @@ export const cvsStyles = {
     lineHeight: 1,
   },
 
-  /** Text CTA used on projects tab (+ Add project). */
+  /** Pill CTA on projects tab (+ ADD PROJECT). */
   createButton: {
+    width: 220,
+    height: 40,
+    minWidth: 220,
+    maxWidth: 220,
+    minHeight: 40,
+    maxHeight: 40,
+    flexShrink: 0,
+    p: 0,
+    borderRadius: "40px",
+    bgcolor: "var(--color-primary-pill-bg)",
     color: "var(--color-primary)",
-    fontWeight: 700,
-    fontSize: 12,
-    letterSpacing: "0.08em",
     textTransform: "uppercase",
-    whiteSpace: "nowrap",
+    textAlign: "center",
+    ...labelTypography,
+    boxShadow: "none",
     "@media (hover: hover)": {
       "&:hover": {
-        bgcolor: "var(--color-primary-subtle)",
+        bgcolor: "var(--color-primary-pill-bg)",
+        boxShadow: "none",
       },
     },
+    "&.Mui-disabled": {
+      bgcolor: "var(--color-primary-pill-bg)",
+      color: "var(--color-primary)",
+      opacity: 0.5,
+    },
+  },
+
+  /** Centered Figma-width column with even side gutters on wide viewports. */
+  cvContentFrame: {
+    width: "100%",
+    maxWidth: 1190,
+    mx: "auto",
+    px: { xs: 0, sm: 2, md: 3 },
+    boxSizing: "border-box",
+  },
+
+  /** @deprecated Use `cvContentFrame` — kept for existing imports. */
+  cvContentWidth: {
+    width: "100%",
+    maxWidth: 1190,
+    mx: "auto",
+    px: { xs: 0, sm: 2, md: 3 },
+    boxSizing: "border-box",
   },
 
   tableContainer: {
     width: "100%",
-    maxWidth: 1190,
     containerType: "inline-size",
     containerName: "cvs-table",
   },
@@ -546,7 +578,7 @@ export const cvsStyles = {
     width: "100%",
     height: { xs: 40, sm: 48 },
     minHeight: { xs: 40, sm: 48 },
-    fontSize: { xs: 11, sm: 12 },
+    fontSize: 14,
     px: { xs: 2, sm: 3 },
     bgcolor: "var(--color-primary)",
     color: "var(--app-on-primary)",
@@ -564,8 +596,7 @@ export const cvsStyles = {
     color: "var(--app-on-primary)",
     px: 3,
     textTransform: "uppercase",
-    fontSize: 12,
-    fontWeight: 700,
+    ...labelTypography,
     boxShadow: "none",
   },
 
@@ -574,7 +605,7 @@ export const cvsStyles = {
     width: "100%",
     height: { xs: 40, sm: 48 },
     minHeight: { xs: 40, sm: 48 },
-    fontSize: { xs: 11, sm: 12 },
+    fontSize: 14,
     px: { xs: 2, sm: 3 },
     bgcolor: "var(--app-overlay-25)",
     color: "var(--app-text-muted)",
@@ -807,19 +838,30 @@ export const cvsStyles = {
   },
 
   tabs: {
+    width: "100%",
     borderBottom: "1px solid var(--app-divider)",
     mb: 0,
-    minHeight: 40,
+    minHeight: 56,
+    height: 56,
+    "& .MuiTabs-flexContainer": {
+      height: 56,
+      gap: 1,
+    },
+    "& .MuiTabs-scroller": {
+      height: 56,
+    },
     "& .MuiTab-root": {
       color: "var(--app-text)",
-      fontSize: 12,
-      fontWeight: 700,
-      letterSpacing: "0.08em",
+      fontSize: 14,
+      lineHeight: "24px",
+      fontWeight: 500,
+      letterSpacing: "0.15px",
       textTransform: "uppercase",
-      minHeight: 40,
+      minHeight: 56,
+      height: 56,
       minWidth: "auto",
-      px: 2,
-      py: 1,
+      px: 2.5,
+      py: 0,
       opacity: 1,
       textDecoration: "none",
       "@media (hover: hover)": {
@@ -842,6 +884,7 @@ export const cvsStyles = {
   },
 
   tabContent: {
+    width: "100%",
     pt: 3,
   },
 
@@ -1118,7 +1161,7 @@ export const cvsStyles = {
     bgcolor: "var(--app-on-primary)",
     color: "var(--color-primary)",
     fontSize: 11,
-    fontWeight: 700,
+    fontWeight: 500,
     lineHeight: 1,
     letterSpacing: 0,
   },
@@ -1207,37 +1250,111 @@ export const cvsStyles = {
   // ---------------------------------------------------------------------------
 
   projectsToolbar: {
-    mb: 3,
-    gap: 2,
-    flexWrap: "wrap",
-    alignItems: "center",
+    display: "flex",
+    flexDirection: { xs: "column", sm: "row" },
+    alignItems: { xs: "stretch", sm: "center" },
     justifyContent: "space-between",
+    gap: 2,
+    width: "100%",
+    pt: 1,
+    mb: 2,
+  },
+
+  projectsToolbarSearch: {
+    flex: { xs: "1 1 auto", sm: "0 1 auto" },
+    minWidth: 0,
+    width: { xs: "100%", sm: "auto" },
+  },
+
+  projectsToolbarActions: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: { xs: "flex-end", sm: "flex-end" },
+    flexShrink: 0,
+  },
+
+  /** Shared column layout for projects header + rows (even 24px gaps). */
+  projectsGrid: {
+    display: "grid",
+    width: "100%",
+    alignItems: "center",
+    columnGap: 3,
+    gridTemplateColumns:
+      "minmax(0, 2fr) minmax(0, 1.5fr) minmax(112px, 1fr) minmax(112px, 1fr) 40px",
+  },
+
+  projectsTableScroll: {
+    width: "100%",
+    minWidth: 0,
+    overflowX: "auto",
+    WebkitOverflowScrolling: "touch",
+    scrollbarWidth: "thin",
+    scrollbarColor: "var(--app-overlay-35) transparent",
+    "&::-webkit-scrollbar": {
+      height: 6,
+    },
+    "&::-webkit-scrollbar-thumb": {
+      bgcolor: "var(--app-overlay-35)",
+      borderRadius: 3,
+    },
+  },
+
+  projectsTableInner: {
+    width: "100%",
+    minWidth: 720,
   },
 
   projectsHeaderRow: {
-    mb: 2,
-    color: "var(--app-text-muted)",
-    fontSize: 12,
-  },
-
-  projectHeaderName: {
-    flex: 2,
-  },
-
-  projectHeaderDomain: {
-    flex: 1.5,
-    color: "var(--app-text-muted)",
+    display: "grid",
+    width: "100%",
+    alignItems: "center",
+    columnGap: 3,
+    gridTemplateColumns:
+      "minmax(0, 2fr) minmax(0, 1.5fr) minmax(112px, 1fr) minmax(112px, 1fr) 40px",
+    height: 56,
+    minHeight: 56,
+    py: 0,
+    boxSizing: "border-box",
+    borderBottom: "1px solid var(--app-divider)",
+    color: "var(--app-text)",
     fontSize: 14,
+    lineHeight: "24px",
+    fontWeight: 500,
+    letterSpacing: "0.15px",
+    textTransform: "uppercase",
+    "& .MuiTableSortLabel-root": {
+      whiteSpace: "nowrap",
+    },
   },
 
-  projectHeaderDate: {
-    flex: 1,
-    color: "var(--app-text-muted)",
-    fontSize: 14,
+  projectsList: {
+    width: "100%",
   },
 
-  projectHeaderActions: {
+  projectGridCell: {
+    minWidth: 0,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+
+  projectGridActions: {
+    display: "flex",
+    justifyContent: "flex-end",
     width: 40,
+    flexShrink: 0,
+  },
+
+  projectsEmptyResults: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: { xs: 200, md: 320 },
+    color: "var(--app-text-muted)",
+    fontSize: 14,
+    fontWeight: 400,
+    letterSpacing: "0.15px",
+    textTransform: "none",
   },
 
   projectCard: {
@@ -1245,18 +1362,23 @@ export const cvsStyles = {
     py: 2.5,
   },
 
-  projectRow: {
-    alignItems: "flex-start",
+  projectTitle: {
+    fontWeight: 500,
+    color: "var(--app-text)",
   },
 
-  projectTitle: {
-    flex: 2,
-    fontWeight: 500,
+  projectMeta: {
+    color: "var(--app-text-muted)",
+    fontSize: 14,
+    lineHeight: "24px",
   },
 
   projectChips: {
-    mt: 1.5,
+    display: "flex",
+    flexDirection: "row",
     flexWrap: "wrap",
+    gap: 1,
+    mt: 1.5,
   },
 
   projectChip: {
@@ -1333,7 +1455,7 @@ export const cvsStyles = {
 
   previewBlockTitle: {
     fontSize: 14,
-    fontWeight: 700,
+    fontWeight: 500,
     color: "#1f1f1f",
     mb: 1,
   },
@@ -1374,8 +1496,8 @@ export const cvsStyles = {
     "& thead th": {
       textAlign: "left",
       fontSize: { xs: 10, sm: 11 },
-      fontWeight: 700,
-      letterSpacing: "0.04em",
+      fontWeight: 500,
+      letterSpacing: "0.4px",
       textTransform: "uppercase",
       color: "#666666",
       pb: 1,
@@ -1397,7 +1519,7 @@ export const cvsStyles = {
 
   previewSkillCategory: {
     color: "var(--color-primary)",
-    fontWeight: 600,
+    fontWeight: 500,
   },
 
   previewProjectsSection: {
@@ -1423,10 +1545,10 @@ export const cvsStyles = {
 
   previewProjectName: {
     fontSize: 14,
-    fontWeight: 700,
+    fontWeight: 500,
     color: "var(--color-primary)",
     textTransform: "uppercase",
-    letterSpacing: "0.06em",
+    letterSpacing: "0.4px",
     mb: 1.5,
   },
 
@@ -1443,7 +1565,7 @@ export const cvsStyles = {
 
   previewMetaLabel: {
     fontSize: 13,
-    fontWeight: 700,
+    fontWeight: 500,
     color: "#1f1f1f",
     display: "block",
     mb: 0.25,
