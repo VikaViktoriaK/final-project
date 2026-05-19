@@ -32,7 +32,7 @@ function CvShellContent({ cvId, children }: CvShellProps) {
   }
 
   return (
-    <Box>
+    <Box sx={cvsStyles.cvContentFrame}>
       <Box sx={cvsStyles.breadcrumb}>
         <Box component={NextLink} href="/cvs" sx={cvsStyles.breadcrumbLink}>
           CVs

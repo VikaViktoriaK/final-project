@@ -1,13 +1,65 @@
 "use client";
 
-import { Box, Button, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  Stack,
+  TableSortLabel,
+  Typography,
+} from "@mui/material";
+import { TableSortArrowIcon } from "@/components/app-arrow";
 import CvSearchField from "./cv-search-field";
 import CvProjectCard from "./cv-project-card";
 import ProjectFormDialog from "./project-form-dialog";
 import CvConfirmDialog from "./cv-confirm-dialog";
 import CvConfirmHighlight from "./cv-confirm-highlight";
 import useCvProjectsPage from "../hooks/use-cv-projects-page";
+import type { ProjectSortField } from "../utils/sort-projects";
 import { cvsStyles } from "../styles/cvs.styles";
+
+type ProjectsHeaderProps = {
+  sortField: ProjectSortField;
+  sortDirection: "asc" | "desc";
+  onSort: (field: ProjectSortField) => void;
+};
+
+function ProjectsHeader({
+  sortField,
+  sortDirection,
+  onSort,
+}: ProjectsHeaderProps) {
+  const renderSortLabel = (label: string, field: ProjectSortField) => (
+    <TableSortLabel
+      active={sortField === field}
+      direction={sortField === field ? sortDirection : "asc"}
+      onClick={() => onSort(field)}
+      IconComponent={TableSortArrowIcon}
+      sx={cvsStyles.tableSortLabel}
+    >
+      {label}
+    </TableSortLabel>
+  );
+
+  return (
+    <Box sx={cvsStyles.projectsHeaderRow}>
+      <Box sx={cvsStyles.projectGridCell}>
+        {renderSortLabel("Name", "name")}
+      </Box>
+      <Box sx={cvsStyles.projectGridCell}>
+        {renderSortLabel("Domain", "domain")}
+      </Box>
+      <Box sx={cvsStyles.projectGridCell}>
+        {renderSortLabel("Start Date", "startDate")}
+      </Box>
+      <Box sx={cvsStyles.projectGridCell}>
+        {renderSortLabel("End Date", "endDate")}
+      </Box>
+      <Box sx={cvsStyles.projectGridActions} aria-hidden />
+    </Box>
+  );
+}
 
 function CvProjectsPage() {
   const page = useCvProjectsPage();
@@ -17,62 +69,69 @@ function CvProjectsPage() {
     <>
       <Box>
         <Stack direction="row" sx={cvsStyles.projectsToolbar}>
-          <CvSearchField
-            value={page.search}
-            onChange={page.handleSearchChange}
-            compact
-          />
+          <Box sx={cvsStyles.projectsToolbarSearch}>
+            <CvSearchField
+              value={page.search}
+              onChange={page.handleSearchChange}
+              compact
+            />
+          </Box>
           {page.canEdit && (
-            <Button
-              type="button"
-              onClick={page.openAddForm}
-              sx={cvsStyles.createButton}
-            >
-              + Add project
-            </Button>
+            <Box sx={cvsStyles.projectsToolbarActions}>
+              <Button
+                type="button"
+                onClick={page.openAddForm}
+                sx={cvsStyles.createButton}
+              >
+                + Add project
+              </Button>
+            </Box>
           )}
         </Stack>
 
-        {!page.isEmpty && (
-          <Stack direction="row" sx={cvsStyles.projectsHeaderRow}>
-            <Box sx={cvsStyles.projectHeaderName}>Name</Box>
-            <Box sx={cvsStyles.projectHeaderDomain}>Domain</Box>
-            <Box sx={cvsStyles.projectHeaderDate}>Start Date</Box>
-            <Box sx={cvsStyles.projectHeaderDate}>End Date</Box>
-            <Box sx={cvsStyles.projectHeaderActions} />
-          </Stack>
-        )}
+        <Box sx={cvsStyles.projectsTableScroll}>
+          <Box sx={cvsStyles.projectsTableInner}>
+            <ProjectsHeader
+              sortField={page.sortField}
+              sortDirection={page.sortDirection}
+              onSort={page.handleSort}
+            />
 
-        {page.isEmpty && (
-          <Typography sx={cvsStyles.emptyState}>
-            No projects added yet.
-          </Typography>
-        )}
-
-        {page.isSearchEmpty && (
-          <Typography sx={cvsStyles.emptyState}>
-            No projects match your search.
-          </Typography>
-        )}
-
-        {page.projects.map((project) => (
-          <CvProjectCard
-            key={project.id}
-            project={project}
-            canEdit={page.canEdit}
-            onOpenMenu={page.projectMenu.open}
-          />
-        ))}
+            <Box sx={cvsStyles.projectsList}>
+              {page.showNoResults ? (
+                <Typography sx={cvsStyles.projectsEmptyResults}>
+                  No results found
+                </Typography>
+              ) : (
+                page.projects.map((project) => (
+                  <CvProjectCard
+                    key={project.id}
+                    project={project}
+                    canEdit={page.canEdit}
+                    onOpenMenu={page.projectMenu.open}
+                  />
+                ))
+              )}
+            </Box>
+          </Box>
+        </Box>
 
         <Menu
           anchorEl={page.projectMenu.anchorEl}
           open={page.projectMenu.isOpen}
           onClose={page.projectMenu.close}
+          slotProps={{ paper: { sx: cvsStyles.contextMenuPaper } }}
         >
-          <MenuItem onClick={page.openUpdateForm}>Update</MenuItem>
           <MenuItem
+            onClick={page.openUpdateForm}
+            sx={cvsStyles.contextMenuItem}
+          >
+            Update
+          </MenuItem>
+          <MenuItem
+            divider
             onClick={page.openRemoveConfirm}
-            sx={cvsStyles.menuItemDanger}
+            sx={[cvsStyles.contextMenuItem, cvsStyles.menuItemDanger]}
           >
             Remove
           </MenuItem>
@@ -92,6 +151,7 @@ function CvProjectsPage() {
           register={form.register}
           errors={form.errors}
           isSubmitting={form.isSubmitting}
+          canSubmit={form.canSubmit}
           onClose={form.onClose}
           onSubmit={form.onSubmit}
         />

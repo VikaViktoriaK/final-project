@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Chip, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Chip, IconButton, Typography } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { MouseEvent } from "react";
 import formatCvDate from "../utils/format-date";
@@ -20,35 +20,39 @@ function CvProjectCard({ project, canEdit, onOpenMenu }: CvProjectCardProps) {
 
   return (
     <Box sx={cvsStyles.projectCard}>
-      <Stack direction="row" spacing={2} sx={cvsStyles.projectRow}>
-        <Typography sx={cvsStyles.projectTitle}>{project.name}</Typography>
-        <Typography sx={cvsStyles.projectHeaderDomain}>
+      <Box sx={cvsStyles.projectsGrid}>
+        <Typography sx={[cvsStyles.projectGridCell, cvsStyles.projectTitle]}>
+          {project.name}
+        </Typography>
+        <Typography sx={[cvsStyles.projectGridCell, cvsStyles.projectMeta]}>
           {project.domain}
         </Typography>
-        <Typography sx={cvsStyles.projectHeaderDate}>
+        <Typography sx={[cvsStyles.projectGridCell, cvsStyles.projectMeta]}>
           {formatCvDate(project.start_date)}
         </Typography>
-        <Typography sx={cvsStyles.projectHeaderDate}>
+        <Typography sx={[cvsStyles.projectGridCell, cvsStyles.projectMeta]}>
           {formatCvDate(project.end_date)}
         </Typography>
-        {canEdit && (
-          <IconButton
-            type="button"
-            size="small"
-            aria-label="Project actions"
-            onClick={handleOpenMenu}
-            sx={cvsStyles.menuIconButton}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        )}
-      </Stack>
+        <Box sx={cvsStyles.projectGridActions}>
+          {canEdit ? (
+            <IconButton
+              type="button"
+              size="small"
+              aria-label="Project actions"
+              onClick={handleOpenMenu}
+              sx={cvsStyles.menuIconButton}
+            >
+              <MoreVertIcon />
+            </IconButton>
+          ) : null}
+        </Box>
+      </Box>
       <Typography
         sx={[cvsStyles.cvDescription, cvsStyles.cvDescriptionIndented]}
       >
         {project.description}
       </Typography>
-      <Stack direction="row" spacing={1} sx={cvsStyles.projectChips}>
+      <Box sx={cvsStyles.projectChips}>
         {project.responsibilities.map((item) => (
           <Chip
             key={item}
@@ -57,7 +61,7 @@ function CvProjectCard({ project, canEdit, onOpenMenu }: CvProjectCardProps) {
             sx={cvsStyles.projectChip}
           />
         ))}
-      </Stack>
+      </Box>
     </Box>
   );
 }

@@ -11,6 +11,8 @@ import useSearch from "./shared/use-search";
 import { useCvProjectMutations } from "./use-cv-mutations";
 import { projectFormSchema, type ProjectFormValues } from "../schemas";
 import filterProjects from "../utils/filter-projects";
+import { sortProjects, type ProjectSortField } from "../utils/sort-projects";
+import type { SortDirection } from "../utils/cv-list";
 import {
   getProjectFormDefaults,
   toProjectMutationInput,
@@ -36,9 +38,12 @@ function useCvProjectsPage() {
   const removeDialog = useDialog<CvProject>();
 
   const [editingProject, setEditingProject] = useState<CvProject | null>(null);
+  const [sortField, setSortField] = useState<ProjectSortField>("domain");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
+    mode: "onChange",
     defaultValues: getProjectFormDefaults("add"),
   });
 
@@ -46,13 +51,44 @@ function useCvProjectsPage() {
   const projectId = useWatch({ control, name: "projectId" });
 
   const allProjects = useMemo(() => cv?.projects ?? [], [cv?.projects]);
-  const projects = useMemo(
+  const filteredProjects = useMemo(
     () => filterProjects(allProjects, search),
     [allProjects, search],
   );
 
-  const isSearchEmpty = Boolean(search.trim()) && projects.length === 0;
+  const projects = useMemo(
+    () => sortProjects(filteredProjects, sortField, sortDirection),
+    [filteredProjects, sortField, sortDirection],
+  );
+
+  const isSearchEmpty = Boolean(search.trim()) && filteredProjects.length === 0;
   const isEmpty = allProjects.length === 0;
+  const showNoResults = isEmpty || isSearchEmpty;
+
+  const handleSort = (field: ProjectSortField) => {
+    if (sortField === field) {
+      setSortDirection((current) => (current === "asc" ? "desc" : "asc"));
+      return;
+    }
+    setSortField(field);
+    setSortDirection("asc");
+  };
+
+  const assignedProjectIds = useMemo(
+    () =>
+      new Set(
+        (cv?.projects ?? [])
+          .map((item) => item.project?.id)
+          .filter((id): id is string => Boolean(id)),
+      ),
+    [cv?.projects],
+  );
+
+  const projectsForAdd = useMemo(
+    () =>
+      catalogProjects.filter((project) => !assignedProjectIds.has(project.id)),
+    [catalogProjects, assignedProjectIds],
+  );
 
   const selectedCatalogProject = catalogProjects.find(
     (project) => project.id === projectId,
@@ -123,7 +159,12 @@ function useCvProjectsPage() {
     if (!removeDialog.payload) {
       return;
     }
-    const result = await removeCvProject(removeDialog.payload.project.id);
+    const projectId = removeDialog.payload.project?.id;
+    if (!projectId) {
+      showError("Project reference is missing");
+      return;
+    }
+    const result = await removeCvProject(projectId);
     if (result.ok) {
       showSuccess("Project removed");
       removeDialog.close();
@@ -135,7 +176,8 @@ function useCvProjectsPage() {
   const formDialogView = {
     open: formDialog.isOpen,
     mode: formDialog.payload ?? "add",
-    projects: catalogProjects,
+    projects:
+      formDialog.payload === "update" ? catalogProjects : projectsForAdd,
     loading: mutating,
     isUpdateMode,
     domainValue,
@@ -145,6 +187,7 @@ function useCvProjectsPage() {
     register,
     errors: formState.errors,
     isSubmitting: formState.isSubmitting,
+    canSubmit: formState.isValid,
     onClose: closeForm,
     onSubmit: submitProjectForm,
   };
@@ -157,6 +200,10 @@ function useCvProjectsPage() {
     mutating,
     isEmpty,
     isSearchEmpty,
+    showNoResults,
+    sortField,
+    sortDirection,
+    handleSort,
     editProjectKey,
     handleSearchChange,
     projectMenu,
