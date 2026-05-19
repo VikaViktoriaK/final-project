@@ -1,46 +1,26 @@
-import * as React from "react";
+"use client";
+
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
 import {
-  USER_PROFILE_AVATAR_ACCEPT_MIMES,
-  USER_PROFILE_AVATAR_MAX_BYTES,
-  USER_PROFILE_AVATAR_SIZE_ERROR,
-  USER_PROFILE_AVATAR_TYPE_ERROR,
   USER_PROFILE_FALLBACK_MEMBER_SINCE,
   USER_PROFILE_UPLOAD_HINT,
 } from "@/features/users/constants/userProfile.constants";
-import type { UserRow } from "@/features/users/types";
+import { useAvatarUpload } from "@/features/users/hooks/useAvatarUpload";
+import type { UserProfileHeaderProps } from "@/features/users/types/userProfileHeader.types";
+import type { AvatarUploadState } from "@/features/users/types/userProfile.types";
+import { AVATAR_FILE_ACCEPT } from "@/features/users/utils/avatarFile";
+import {
+  getAvatarInitial,
+  getUserFullName,
+} from "@/features/users/utils/userProfile.utils";
 import { userProfileSx } from "./userProfile.styles";
 
-const AVATAR_FILE_ACCEPT = USER_PROFILE_AVATAR_ACCEPT_MIMES.join(",");
-
-function isAvatarImageFile(file: File): boolean {
-  const allowed = new Set<string>(USER_PROFILE_AVATAR_ACCEPT_MIMES);
-  if (allowed.has(file.type)) return true;
-  return /\.(png|jpe?g|gif)$/i.test(file.name);
-}
-
-type AvatarPayload = {
-  previewUrl: string;
-  base64: string;
-  size: number;
-  type: string;
-};
-
-type UserProfileHeaderProps = {
-  user: UserRow;
-  memberSinceText: string;
-  canEditProfile: boolean;
-  avatarPreviewUrl?: string;
-  onAvatarSelected: (avatar: AvatarPayload) => void;
-  onRemoveAvatar?: () => void | Promise<void>;
-  canRemoveAvatar?: boolean;
-  /** Shown on the remove button (e.g. discard vs remove from server). */
-  removeAvatarButtonLabel?: string;
-  isRemovingAvatar?: boolean;
+type UserProfileHeaderContainerProps = UserProfileHeaderProps & {
+  onAvatarSelected: (avatar: AvatarUploadState) => void;
 };
 
 export function UserProfileHeader({
@@ -53,99 +33,25 @@ export function UserProfileHeader({
   canRemoveAvatar = false,
   removeAvatarButtonLabel = "Remove photo",
   isRemovingAvatar = false,
-}: UserProfileHeaderProps) {
-  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
-  const [uploadSizeError, setUploadSizeError] = React.useState<string | null>(
-    null,
-  );
-  const [isDragging, setIsDragging] = React.useState(false);
-  const dragDepthRef = React.useRef(0);
+}: UserProfileHeaderContainerProps) {
+  const {
+    fileInputRef,
+    uploadError,
+    isDragging,
+    openFileDialog,
+    handleFileChange,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+  } = useAvatarUpload({
+    canEdit: canEditProfile,
+    onSelected: onAvatarSelected,
+  });
 
-  const fullName = `${user.firstName} ${user.lastName}`.trim() || "User";
-  const avatarInitial = (
-    user.firstName?.[0] ??
-    user.email?.[0] ??
-    "U"
-  ).toUpperCase();
+  const fullName = getUserFullName(user);
+  const avatarInitial = getAvatarInitial(user);
   const avatarSrc = avatarPreviewUrl ?? user.avatarUrl;
-
-  const processFile = React.useCallback(
-    (file: File) => {
-      if (!isAvatarImageFile(file)) {
-        setUploadSizeError(USER_PROFILE_AVATAR_TYPE_ERROR);
-        return;
-      }
-      if (file.size > USER_PROFILE_AVATAR_MAX_BYTES) {
-        setUploadSizeError(USER_PROFILE_AVATAR_SIZE_ERROR);
-        return;
-      }
-      setUploadSizeError(null);
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          onAvatarSelected({
-            previewUrl: reader.result,
-            base64: reader.result,
-            size: file.size,
-            type: file.type || "image/jpeg",
-          });
-        }
-      };
-      reader.readAsDataURL(file);
-    },
-    [onAvatarSelected],
-  );
-
-  const openFileDialog = () => {
-    if (!canEditProfile) return;
-    setUploadSizeError(null);
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-    if (!file) return;
-    processFile(file);
-  };
-
-  const handleDragEnter = (event: React.DragEvent) => {
-    if (!canEditProfile) return;
-    event.preventDefault();
-    event.stopPropagation();
-    dragDepthRef.current += 1;
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (event: React.DragEvent) => {
-    if (!canEditProfile) return;
-    event.preventDefault();
-    event.stopPropagation();
-    dragDepthRef.current -= 1;
-    if (dragDepthRef.current <= 0) {
-      dragDepthRef.current = 0;
-      setIsDragging(false);
-    }
-  };
-
-  const handleDragOver = (event: React.DragEvent) => {
-    if (!canEditProfile) return;
-    event.preventDefault();
-    event.stopPropagation();
-    if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
-  };
-
-  const handleDrop = (event: React.DragEvent) => {
-    if (!canEditProfile) return;
-    event.preventDefault();
-    event.stopPropagation();
-    dragDepthRef.current = 0;
-    setIsDragging(false);
-    setUploadSizeError(null);
-    const file = event.dataTransfer.files?.[0];
-    if (!file) return;
-    processFile(file);
-  };
 
   const handleRemoveClick = () => {
     if (!onRemoveAvatar || !canRemoveAvatar || isRemovingAvatar) return;
@@ -202,9 +108,9 @@ export function UserProfileHeader({
             <Typography sx={userProfileSx.uploadHint}>
               {USER_PROFILE_UPLOAD_HINT}
             </Typography>
-            {uploadSizeError ? (
+            {uploadError ? (
               <Typography sx={userProfileSx.formError} role="alert">
-                {uploadSizeError}
+                {uploadError}
               </Typography>
             ) : null}
             {canRemoveAvatar && onRemoveAvatar ? (

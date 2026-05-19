@@ -9,13 +9,10 @@ import {
   useLanguagesQuery,
   useUpdateLanguageMutation,
 } from "../api/languages";
+import type { LanguageFormValues } from "../types/languageForm.types";
 import type { LanguageRow } from "../types";
 
-export type LanguageFormValues = {
-  name: string;
-  nativeName: string;
-  iso2: string;
-};
+export type { LanguageFormValues };
 
 export function useLanguagesPage() {
   const { role } = useAuthSnapshot();

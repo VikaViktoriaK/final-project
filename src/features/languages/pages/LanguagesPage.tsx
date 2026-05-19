@@ -1,13 +1,9 @@
 "use client";
 
-import Box from "@mui/material/Box";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { PageLoader } from "@/components/PageLoader";
-import { UsersSearch } from "@/features/users/components/UsersSearch";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
 import { LanguageFormDialog } from "../components/LanguageFormDialog";
 import { LanguagesFilter } from "../components/LanguagesFilter";
 import { LanguagesTable } from "../components/LanguagesTable";
@@ -35,48 +31,39 @@ export function LanguagesPage() {
 
   return (
     <>
-      <Box sx={usersTableSx.usersPageContainer}>
-        <Breadcrumbs aria-label="breadcrumb" sx={usersTableSx.breadcrumbs}>
-          <Typography component="span" sx={usersTableSx.breadcrumbItemActive}>
-            {LANGUAGES_PAGE_TITLE}
-          </Typography>
-        </Breadcrumbs>
-        <Box sx={usersTableSx.topBar}>
-          <Box sx={usersTableSx.topBarSearch}>
-            <UsersSearch value={search.query} onChange={search.setQuery} />
-          </Box>
-          <Box sx={usersTableSx.topBarActions}>
-            <LanguagesFilter
-              order={search.order}
-              onOrderChange={search.setOrder}
-            />
-            {isAdmin ? (
-              <Button
-                variant="text"
-                sx={usersTableSx.addUserBtn}
-                onClick={form.openCreate}
-              >
-                {LANGUAGES_CREATE_LABEL}
-              </Button>
-            ) : null}
-          </Box>
-        </Box>
-        {error ? (
-          <Typography color="error.main">{error.message}</Typography>
-        ) : null}
-        {loading ? (
-          <PageLoader />
-        ) : (
-          <LanguagesTable
-            languages={processedLanguages}
+      <CatalogPageShell
+        title={LANGUAGES_PAGE_TITLE}
+        searchQuery={search.query}
+        onSearchChange={search.setQuery}
+        filter={
+          <LanguagesFilter
             order={search.order}
-            onToggleNameSort={search.toggleOrder}
-            onEdit={form.openEdit}
-            onDelete={deleteDialog.requestDelete}
-            canManage={isAdmin}
+            onOrderChange={search.setOrder}
           />
-        )}
-      </Box>
+        }
+        action={
+          isAdmin ? (
+            <Button
+              variant="text"
+              sx={catalogPageSx.addUserBtn}
+              onClick={form.openCreate}
+            >
+              {LANGUAGES_CREATE_LABEL}
+            </Button>
+          ) : null
+        }
+        errorMessage={error?.message}
+        loading={loading}
+      >
+        <LanguagesTable
+          languages={processedLanguages}
+          order={search.order}
+          onToggleNameSort={search.toggleOrder}
+          onEdit={form.openEdit}
+          onDelete={deleteDialog.requestDelete}
+          canManage={isAdmin}
+        />
+      </CatalogPageShell>
 
       <LanguageFormDialog
         open={form.open}

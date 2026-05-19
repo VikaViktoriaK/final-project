@@ -7,3 +7,11 @@ export function isNativeProficiency(proficiency: string): boolean {
 export function languageRowKey(row: UserLanguageRow): string {
   return `${row.name}:${row.proficiency}`;
 }
+
+export function languageNotOnProfile(
+  catalogName: string,
+  current: UserLanguageRow[],
+): boolean {
+  const n = catalogName.trim().toLowerCase();
+  return !current.some((row) => row.name.trim().toLowerCase() === n);
+}

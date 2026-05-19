@@ -1,17 +1,13 @@
 "use client";
 
-import Box from "@mui/material/Box";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { PageLoader } from "@/components/PageLoader";
 import { UserCreateDialog } from "@/features/users/components/UserCreateDialog";
 import { UserEditDialog } from "@/features/users/components/UserEditDialog";
 import { UsersFilter } from "@/features/users/components/UsersFilter";
-import { UsersSearch } from "@/features/users/components/UsersSearch";
 import { UsersTable } from "@/features/users/components/UsersTable";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
 import {
   USER_DELETE_DIALOG,
   USERS_CREATE_LABEL,
@@ -30,6 +26,7 @@ export function UsersPage() {
     setOrder,
     orderBy,
     setOrderBy,
+    deleteDialog,
     processedUsers,
     editingUser,
     editOpen,
@@ -40,7 +37,6 @@ export function UsersPage() {
     closeCreate,
     viewUser,
     requestDeleteUser,
-    deleteDialog,
     deleting,
     handleDeleteConfirm,
     handleSaved,
@@ -48,48 +44,39 @@ export function UsersPage() {
 
   return (
     <>
-      <Box sx={usersTableSx.usersPageContainer}>
-        <Breadcrumbs aria-label="breadcrumb" sx={usersTableSx.breadcrumbs}>
-          <Typography component="span" sx={usersTableSx.breadcrumbItemActive}>
-            {USERS_PAGE_TITLE}
-          </Typography>
-        </Breadcrumbs>
-        <Box sx={usersTableSx.topBar}>
-          <Box sx={usersTableSx.topBarSearch}>
-            <UsersSearch value={query} onChange={setQuery} />
-          </Box>
-          <Box sx={usersTableSx.topBarActions}>
-            <UsersFilter
-              order={order}
-              orderBy={orderBy}
-              onOrderChange={setOrder}
-              onOrderByChange={setOrderBy}
-            />
-            {isAdmin ? (
-              <Button
-                variant="text"
-                sx={usersTableSx.addUserBtn}
-                onClick={openCreate}
-              >
-                {USERS_CREATE_LABEL}
-              </Button>
-            ) : null}
-          </Box>
-        </Box>
-        {error ? (
-          <Typography color="error.main">{error.message}</Typography>
-        ) : null}
-        {loading ? (
-          <PageLoader />
-        ) : (
-          <UsersTable
-            users={processedUsers}
-            onEditUser={openEdit}
-            onViewUser={viewUser}
-            onDeleteUser={requestDeleteUser}
+      <CatalogPageShell
+        title={USERS_PAGE_TITLE}
+        searchQuery={query}
+        onSearchChange={setQuery}
+        filter={
+          <UsersFilter
+            order={order}
+            orderBy={orderBy}
+            onOrderChange={setOrder}
+            onOrderByChange={setOrderBy}
           />
-        )}
-      </Box>
+        }
+        action={
+          isAdmin ? (
+            <Button
+              variant="text"
+              sx={catalogPageSx.addUserBtn}
+              onClick={openCreate}
+            >
+              {USERS_CREATE_LABEL}
+            </Button>
+          ) : null
+        }
+        errorMessage={error?.message}
+        loading={loading}
+      >
+        <UsersTable
+          users={processedUsers}
+          onEditUser={openEdit}
+          onViewUser={viewUser}
+          onDeleteUser={requestDeleteUser}
+        />
+      </CatalogPageShell>
 
       <UserEditDialog
         key={`${editingUser?.id ?? "user-edit-dialog"}-${editOpen ? "open" : "closed"}`}

@@ -7,7 +7,7 @@ import {
   useProfileWithSkillsQuery,
   useSkillCategoriesQuery,
 } from "@/features/users/api/userSkills";
-import { formatProfileSubmitError } from "@/features/users/components/user-profile/UserProfileForm";
+import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
 import {
   groupSkillsByCategory,
   skillRowKey,

@@ -6,7 +6,7 @@ import {
   useDeleteProfileLanguageMutation,
   useProfileWithLanguagesQuery,
 } from "@/features/users/api/userLanguages";
-import { formatProfileSubmitError } from "@/features/users/components/user-profile/UserProfileForm";
+import { formatProfileSubmitError } from "@/features/users/utils/graphqlErrors";
 import { languageRowKey } from "@/features/users/components/user-profile/userLanguages.utils";
 import type { UserLanguageRow } from "@/features/users/types/userLanguages.types";
 import { useBulkSelection } from "@/lib/hooks/useBulkSelection";

@@ -1,33 +1,18 @@
 "use client";
 
-import * as React from "react";
 import Alert from "@mui/material/Alert";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import CloseIcon from "@mui/icons-material/Close";
-import { formatProfileSubmitError } from "@/features/users/components/user-profile/UserProfileForm";
+import { CatalogFormDialogActions } from "@/components/catalog-form/CatalogFormDialogActions";
+import { CatalogFormDialogTitle } from "@/components/catalog-form/CatalogFormDialogTitle";
+import { PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS } from "@/features/users/constants/profileDialog.constants";
+import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/features/users/constants/catalogDialog.constants";
 import { userLanguagesSx } from "@/features/users/components/user-profile/userLanguages.styles";
-import {
-  SKILL_CREATE_DIALOG,
-  SKILL_EDIT_DIALOG,
-} from "../constants/skills.constants";
+import { useSkillFormDialog } from "@/features/skills/hooks/useSkillFormDialog";
+import type { SkillFormValues } from "@/features/skills/types/skillForm.types";
 import type { SkillCategoryOption, SkillRow } from "../types";
-
-const dialogInputLabelSlotProps = {
-  inputLabel: { shrink: true },
-} as const;
-
-const skillDialogPaperSx = [
-  userLanguagesSx.languageDialog,
-  userLanguagesSx.addLanguageDialog,
-] as const;
 
 type SkillFormDialogProps = {
   open: boolean;
@@ -36,7 +21,7 @@ type SkillFormDialogProps = {
   categories: SkillCategoryOption[];
   saving: boolean;
   onClose: () => void;
-  onSubmit: (values: { name: string; categoryId: string }) => Promise<void>;
+  onSubmit: (values: SkillFormValues) => Promise<void>;
 };
 
 function SkillFormDialogContent({
@@ -47,71 +32,26 @@ function SkillFormDialogContent({
   onClose,
   onSubmit,
 }: Omit<SkillFormDialogProps, "open">) {
-  const labels = mode === "create" ? SKILL_CREATE_DIALOG : SKILL_EDIT_DIALOG;
-  const [name, setName] = React.useState(() =>
-    mode === "edit" && skill ? skill.name : "",
-  );
-  const [categoryId, setCategoryId] = React.useState(() =>
-    mode === "edit" && skill ? skill.categoryId : (categories[0]?.id ?? ""),
-  );
-  const [submitError, setSubmitError] = React.useState<string | null>(null);
-
-  const handleSubmit = async () => {
-    const trimmedName = name.trim();
-    if (!trimmedName) {
-      setSubmitError("Enter a skill name.");
-      return;
-    }
-    if (!categoryId) {
-      setSubmitError("Select a category.");
-      return;
-    }
-    if (
-      mode === "edit" &&
-      skill &&
-      trimmedName === skill.name &&
-      categoryId === skill.categoryId
-    ) {
-      onClose();
-      return;
-    }
-    setSubmitError(null);
-    try {
-      await onSubmit({ name: trimmedName, categoryId });
-      onClose();
-    } catch (err) {
-      setSubmitError(formatProfileSubmitError(err));
-    }
-  };
-
-  const unchanged = Boolean(
-    mode === "edit" &&
-    skill &&
-    name.trim() === skill.name &&
-    categoryId === skill.categoryId,
-  );
+  const {
+    labels,
+    name,
+    setName,
+    categoryId,
+    setCategoryId,
+    submitError,
+    confirmDisabled,
+    handleSubmit,
+  } = useSkillFormDialog({
+    mode,
+    skill,
+    categories,
+    onClose,
+    onSubmit,
+  });
 
   return (
     <>
-      <DialogTitle
-        component="div"
-        sx={userLanguagesSx.addLanguageDialogTitleRoot}
-      >
-        <Box sx={userLanguagesSx.dialogTitleRow}>
-          <Box component="span" sx={userLanguagesSx.dialogTitleText}>
-            {labels.title}
-          </Box>
-          <IconButton
-            type="button"
-            aria-label="Close dialog"
-            onClick={onClose}
-            size="small"
-            sx={userLanguagesSx.dialogCloseBtn}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      </DialogTitle>
+      <CatalogFormDialogTitle title={labels.title} onClose={onClose} />
       <DialogContent sx={userLanguagesSx.addLanguageDialogContent}>
         <TextField
           variant="outlined"
@@ -121,7 +61,7 @@ function SkillFormDialogContent({
           fullWidth
           autoFocus
           sx={userLanguagesSx.dialogField}
-          slotProps={dialogInputLabelSlotProps}
+          slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
         />
         <TextField
           select
@@ -132,7 +72,7 @@ function SkillFormDialogContent({
           fullWidth
           disabled={categories.length === 0}
           sx={userLanguagesSx.dialogField}
-          slotProps={dialogInputLabelSlotProps}
+          slotProps={PROFILE_DIALOG_INPUT_LABEL_SLOT_PROPS}
         >
           {categories.length === 0 ? (
             <MenuItem value="" disabled>
@@ -148,31 +88,14 @@ function SkillFormDialogContent({
         </TextField>
         {submitError ? <Alert severity="error">{submitError}</Alert> : null}
       </DialogContent>
-      <DialogActions sx={userLanguagesSx.dialogActions}>
-        <Button
-          variant="outlined"
-          onClick={onClose}
-          disabled={saving}
-          sx={userLanguagesSx.dialogCancelBtn}
-        >
-          {labels.cancel}
-        </Button>
-        <Button
-          variant="contained"
-          disableElevation
-          disabled={
-            saving ||
-            !name.trim() ||
-            !categoryId ||
-            categories.length === 0 ||
-            unchanged
-          }
-          onClick={() => void handleSubmit()}
-          sx={userLanguagesSx.dialogConfirmBtn}
-        >
-          {labels.confirm}
-        </Button>
-      </DialogActions>
+      <CatalogFormDialogActions
+        cancelLabel={labels.cancel}
+        confirmLabel={labels.confirm}
+        saving={saving}
+        confirmDisabled={saving || confirmDisabled}
+        onClose={onClose}
+        onConfirm={() => void handleSubmit()}
+      />
     </>
   );
 }
@@ -186,19 +109,17 @@ export function SkillFormDialog({
   onClose,
   onSubmit,
 }: SkillFormDialogProps) {
-  const formKey = `${mode}-${skill?.id ?? "new"}`;
-
   return (
     <Dialog
       open={open}
       onClose={onClose}
       fullWidth
       maxWidth={false}
-      sx={skillDialogPaperSx}
+      sx={CATALOG_FORM_DIALOG_PAPER_SX}
     >
       {open ? (
         <SkillFormDialogContent
-          key={formKey}
+          key={`${mode}-${skill?.id ?? "new"}`}
           mode={mode}
           skill={skill}
           categories={categories}

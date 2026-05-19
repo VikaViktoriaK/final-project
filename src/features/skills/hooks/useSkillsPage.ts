@@ -13,12 +13,10 @@ import {
   useSkillsCatalogQuery,
   useUpdateSkillMutation,
 } from "../api/skills";
+import type { SkillFormValues } from "../types/skillForm.types";
 import type { SkillRow, SkillsSortField } from "../types";
 
-export type SkillFormValues = {
-  name: string;
-  categoryId: string;
-};
+export type { SkillFormValues };
 
 export function useSkillsPage() {
   const [query, setQuery] = React.useState("");

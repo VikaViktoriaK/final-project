@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,17 +11,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
-import { useCreateUserMutation } from "../api/createUser";
-import { useUserEditOptionsQuery } from "../api/updateUser";
-import {
-  createUserSchema,
-  type CreateUserFieldErrors,
-} from "../schemas/createUser.schema";
-import {
-  DEFAULT_USER_CREATE_FORM,
-  type UserCreateFormState,
-} from "../types/userCreate.types";
-import { usersTableSx } from "./usersTable.styles";
+import { editDialogSx } from "@/features/users/components/styles/editDialog.styles";
+import { useUserCreateDialog } from "@/features/users/hooks/useUserCreateDialog";
 
 type UserCreateDialogProps = {
   open: boolean;
@@ -30,95 +20,25 @@ type UserCreateDialogProps = {
   onCreated: () => void;
 };
 
+const SELECT_MENU_PROPS = { sx: editDialogSx.editDialogSelectMenu };
+
 export function UserCreateDialog({
   open,
   onClose,
   onCreated,
 }: UserCreateDialogProps) {
-  const [form, setForm] = React.useState<UserCreateFormState>(
-    DEFAULT_USER_CREATE_FORM,
-  );
-  const [submitError, setSubmitError] = React.useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = React.useState<CreateUserFieldErrors>(
-    {},
-  );
-  const [createUser, { loading, error }] = useCreateUserMutation();
-  const { data: optionsData, loading: loadingOptions } =
-    useUserEditOptionsQuery();
-
-  const handleField =
-    (key: keyof UserCreateFormState) =>
-    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setForm((prev) => ({ ...prev, [key]: event.target.value }));
-      if (
-        key === "email" ||
-        key === "password" ||
-        key === "firstName" ||
-        key === "lastName"
-      ) {
-        setFieldErrors((prev) => ({ ...prev, [key]: undefined }));
-      }
-    };
-
-  const handleSubmit = async () => {
-    const validation = createUserSchema.safeParse({
-      email: form.email.trim(),
-      password: form.password,
-      firstName: form.firstName,
-      lastName: form.lastName,
-    });
-
-    if (!validation.success) {
-      const flattened = validation.error.flatten().fieldErrors;
-      setFieldErrors({
-        email: flattened.email?.[0],
-        password: flattened.password?.[0],
-        firstName: flattened.firstName?.[0],
-        lastName: flattened.lastName?.[0],
-      });
-      setSubmitError(null);
-      return;
-    }
-
-    setFieldErrors({});
-    setSubmitError(null);
-
-    try {
-      await createUser({
-        variables: {
-          user: {
-            auth: {
-              email: form.email.trim(),
-              password: form.password,
-            },
-            profile: {
-              ...(form.firstName.trim()
-                ? { first_name: form.firstName.trim() }
-                : {}),
-              ...(form.lastName.trim()
-                ? { last_name: form.lastName.trim() }
-                : {}),
-            },
-            cvsIds: [],
-            role: form.role,
-            ...(form.departmentId ? { departmentId: form.departmentId } : {}),
-            ...(form.positionId ? { positionId: form.positionId } : {}),
-          },
-        },
-      });
-
-      onCreated();
-      onClose();
-    } catch {
-      setSubmitError("Failed to create user");
-    }
-  };
-
-  const roleOptions = ["Employee", "Admin"];
-  const departments = optionsData?.departments ?? [];
-  const positions = optionsData?.positions ?? [];
-  const isBusy = loading || loadingOptions;
-  const selectMenuProps = { sx: usersTableSx.editDialogSelectMenu };
+  const {
+    form,
+    submitError,
+    fieldErrors,
+    mutationError,
+    departments,
+    positions,
+    roleOptions,
+    isBusy,
+    handleField,
+    handleSubmit,
+  } = useUserCreateDialog({ onClose, onCreated });
 
   return (
     <Dialog
@@ -126,20 +46,20 @@ export function UserCreateDialog({
       onClose={onClose}
       fullWidth
       maxWidth="md"
-      sx={usersTableSx.editDialogRoot}
+      sx={editDialogSx.editDialogRoot}
     >
-      <DialogTitle sx={usersTableSx.editDialogTitle}>
+      <DialogTitle sx={editDialogSx.editDialogTitle}>
         Add user
         <IconButton
           onClick={onClose}
           aria-label="Close"
-          sx={usersTableSx.editDialogCloseBtn}
+          sx={editDialogSx.editDialogCloseBtn}
         >
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={usersTableSx.editDialogContent}>
-        <Box sx={usersTableSx.editDialogGrid}>
+      <DialogContent sx={editDialogSx.editDialogContent}>
+        <Box sx={editDialogSx.editDialogGrid}>
           <TextField
             label="Email"
             value={form.email}
@@ -147,7 +67,7 @@ export function UserCreateDialog({
             fullWidth
             error={Boolean(fieldErrors.email)}
             helperText={fieldErrors.email}
-            sx={usersTableSx.editDialogField}
+            sx={editDialogSx.editDialogField}
           />
           <TextField
             label="Password"
@@ -157,7 +77,7 @@ export function UserCreateDialog({
             fullWidth
             error={Boolean(fieldErrors.password)}
             helperText={fieldErrors.password}
-            sx={usersTableSx.editDialogField}
+            sx={editDialogSx.editDialogField}
           />
           <TextField
             label="First Name"
@@ -166,7 +86,7 @@ export function UserCreateDialog({
             fullWidth
             error={Boolean(fieldErrors.firstName)}
             helperText={fieldErrors.firstName}
-            sx={usersTableSx.editDialogField}
+            sx={editDialogSx.editDialogField}
           />
           <TextField
             label="Last Name"
@@ -175,7 +95,7 @@ export function UserCreateDialog({
             fullWidth
             error={Boolean(fieldErrors.lastName)}
             helperText={fieldErrors.lastName}
-            sx={usersTableSx.editDialogField}
+            sx={editDialogSx.editDialogField}
           />
           <TextField
             select
@@ -183,8 +103,8 @@ export function UserCreateDialog({
             value={form.departmentId}
             onChange={handleField("departmentId")}
             fullWidth
-            sx={usersTableSx.editDialogField}
-            slotProps={{ select: { MenuProps: selectMenuProps } }}
+            sx={editDialogSx.editDialogField}
+            slotProps={{ select: { MenuProps: SELECT_MENU_PROPS } }}
           >
             {departments.map((department) => (
               <MenuItem key={department.id} value={department.id}>
@@ -198,8 +118,8 @@ export function UserCreateDialog({
             value={form.positionId}
             onChange={handleField("positionId")}
             fullWidth
-            sx={usersTableSx.editDialogField}
-            slotProps={{ select: { MenuProps: selectMenuProps } }}
+            sx={editDialogSx.editDialogField}
+            slotProps={{ select: { MenuProps: SELECT_MENU_PROPS } }}
           >
             {positions.map((position) => (
               <MenuItem key={position.id} value={position.id}>
@@ -207,15 +127,15 @@ export function UserCreateDialog({
               </MenuItem>
             ))}
           </TextField>
-          <Box sx={usersTableSx.editDialogSpacer}>
+          <Box sx={editDialogSx.editDialogSpacer}>
             <TextField
               select
               label="Role"
               value={form.role}
               onChange={handleField("role")}
               fullWidth
-              sx={usersTableSx.editDialogField}
-              slotProps={{ select: { MenuProps: selectMenuProps } }}
+              sx={editDialogSx.editDialogField}
+              slotProps={{ select: { MenuProps: SELECT_MENU_PROPS } }}
             >
               {roleOptions.map((role) => (
                 <MenuItem key={role} value={role}>
@@ -226,21 +146,23 @@ export function UserCreateDialog({
           </Box>
         </Box>
         {submitError ? <Alert severity="error">{submitError}</Alert> : null}
-        {error ? <Alert severity="error">{error.message}</Alert> : null}
+        {mutationError ? (
+          <Alert severity="error">{mutationError.message}</Alert>
+        ) : null}
       </DialogContent>
-      <DialogActions sx={usersTableSx.editDialogActions}>
+      <DialogActions sx={editDialogSx.editDialogActions}>
         <Button
           onClick={onClose}
           disabled={isBusy}
-          sx={usersTableSx.editDialogCancelBtn}
+          sx={editDialogSx.editDialogCancelBtn}
         >
           Cancel
         </Button>
         <Button
-          onClick={handleSubmit}
+          onClick={() => void handleSubmit()}
           variant="contained"
           disabled={isBusy}
-          sx={usersTableSx.editDialogUpdateBtn}
+          sx={editDialogSx.editDialogUpdateBtn}
         >
           Create
         </Button>

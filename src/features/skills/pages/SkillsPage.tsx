@@ -1,13 +1,9 @@
 "use client";
 
-import Box from "@mui/material/Box";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { PageLoader } from "@/components/PageLoader";
-import { UsersSearch } from "@/features/users/components/UsersSearch";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
 import { SkillFormDialog } from "../components/SkillFormDialog";
 import { SkillsFilter } from "../components/SkillsFilter";
 import { SkillsTable } from "../components/SkillsTable";
@@ -42,51 +38,42 @@ export function SkillsPage() {
 
   return (
     <>
-      <Box sx={usersTableSx.usersPageContainer}>
-        <Breadcrumbs aria-label="breadcrumb" sx={usersTableSx.breadcrumbs}>
-          <Typography component="span" sx={usersTableSx.breadcrumbItemActive}>
-            {SKILLS_PAGE_TITLE}
-          </Typography>
-        </Breadcrumbs>
-        <Box sx={usersTableSx.topBar}>
-          <Box sx={usersTableSx.topBarSearch}>
-            <UsersSearch value={query} onChange={setQuery} />
-          </Box>
-          <Box sx={usersTableSx.topBarActions}>
-            <SkillsFilter
-              orderBy={orderBy}
-              order={order}
-              onOrderByChange={setOrderBy}
-              onOrderChange={setOrder}
-            />
-            {isAdmin ? (
-              <Button
-                variant="text"
-                sx={usersTableSx.addUserBtn}
-                onClick={form.openCreate}
-              >
-                {SKILLS_CREATE_LABEL}
-              </Button>
-            ) : null}
-          </Box>
-        </Box>
-        {error ? (
-          <Typography color="error.main">{error.message}</Typography>
-        ) : null}
-        {loading ? (
-          <PageLoader />
-        ) : (
-          <SkillsTable
-            skills={processedSkills}
+      <CatalogPageShell
+        title={SKILLS_PAGE_TITLE}
+        searchQuery={query}
+        onSearchChange={setQuery}
+        filter={
+          <SkillsFilter
             orderBy={orderBy}
             order={order}
-            onSort={handleSort}
-            onEdit={form.openEdit}
-            onDelete={deleteDialog.requestDelete}
-            canManage={isAdmin}
+            onOrderByChange={setOrderBy}
+            onOrderChange={setOrder}
           />
-        )}
-      </Box>
+        }
+        action={
+          isAdmin ? (
+            <Button
+              variant="text"
+              sx={catalogPageSx.addUserBtn}
+              onClick={form.openCreate}
+            >
+              {SKILLS_CREATE_LABEL}
+            </Button>
+          ) : null
+        }
+        errorMessage={error?.message}
+        loading={loading}
+      >
+        <SkillsTable
+          skills={processedSkills}
+          orderBy={orderBy}
+          order={order}
+          onSort={handleSort}
+          onEdit={form.openEdit}
+          onDelete={deleteDialog.requestDelete}
+          canManage={isAdmin}
+        />
+      </CatalogPageShell>
 
       <SkillFormDialog
         open={form.open}

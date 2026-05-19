@@ -4,7 +4,7 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import { usersTableSx } from "./usersTable.styles";
+import { searchFieldSx } from "./styles/searchField.styles";
 
 export function UsersSearch({
   value,
@@ -21,7 +21,7 @@ export function UsersSearch({
       variant="outlined"
       size="small"
       fullWidth
-      sx={usersTableSx.searchField}
+      sx={searchFieldSx.searchField}
       slotProps={{
         input: {
           startAdornment: (

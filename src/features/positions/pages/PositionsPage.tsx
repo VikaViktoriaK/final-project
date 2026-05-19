@@ -1,13 +1,9 @@
 "use client";
 
-import Box from "@mui/material/Box";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { PageLoader } from "@/components/PageLoader";
-import { UsersSearch } from "@/features/users/components/UsersSearch";
-import { usersTableSx } from "@/features/users/components/usersTable.styles";
+import { catalogPageSx } from "@/features/users/components/styles/catalogPage.styles";
 import { PositionFormDialog } from "../components/PositionFormDialog";
 import { PositionsFilter } from "../components/PositionsFilter";
 import { PositionsTable } from "../components/PositionsTable";
@@ -35,48 +31,39 @@ export function PositionsPage() {
 
   return (
     <>
-      <Box sx={usersTableSx.usersPageContainer}>
-        <Breadcrumbs aria-label="breadcrumb" sx={usersTableSx.breadcrumbs}>
-          <Typography component="span" sx={usersTableSx.breadcrumbItemActive}>
-            {POSITIONS_PAGE_TITLE}
-          </Typography>
-        </Breadcrumbs>
-        <Box sx={usersTableSx.topBar}>
-          <Box sx={usersTableSx.topBarSearch}>
-            <UsersSearch value={search.query} onChange={search.setQuery} />
-          </Box>
-          <Box sx={usersTableSx.topBarActions}>
-            <PositionsFilter
-              order={search.order}
-              onOrderChange={search.setOrder}
-            />
-            {isAdmin ? (
-              <Button
-                variant="text"
-                sx={usersTableSx.addUserBtn}
-                onClick={form.openCreate}
-              >
-                {POSITIONS_CREATE_LABEL}
-              </Button>
-            ) : null}
-          </Box>
-        </Box>
-        {error ? (
-          <Typography color="error.main">{error.message}</Typography>
-        ) : null}
-        {loading ? (
-          <PageLoader />
-        ) : (
-          <PositionsTable
-            positions={processedPositions}
+      <CatalogPageShell
+        title={POSITIONS_PAGE_TITLE}
+        searchQuery={search.query}
+        onSearchChange={search.setQuery}
+        filter={
+          <PositionsFilter
             order={search.order}
-            onToggleNameSort={search.toggleOrder}
-            onEdit={form.openEdit}
-            onDelete={deleteDialog.requestDelete}
-            canManage={isAdmin}
+            onOrderChange={search.setOrder}
           />
-        )}
-      </Box>
+        }
+        action={
+          isAdmin ? (
+            <Button
+              variant="text"
+              sx={catalogPageSx.addUserBtn}
+              onClick={form.openCreate}
+            >
+              {POSITIONS_CREATE_LABEL}
+            </Button>
+          ) : null
+        }
+        errorMessage={error?.message}
+        loading={loading}
+      >
+        <PositionsTable
+          positions={processedPositions}
+          order={search.order}
+          onToggleNameSort={search.toggleOrder}
+          onEdit={form.openEdit}
+          onDelete={deleteDialog.requestDelete}
+          canManage={isAdmin}
+        />
+      </CatalogPageShell>
 
       <PositionFormDialog
         open={form.open}
