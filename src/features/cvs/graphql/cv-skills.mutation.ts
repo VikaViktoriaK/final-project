@@ -10,6 +10,15 @@ export const ADD_CV_SKILL_MUTATION = gql`
   ${CV_FULL_FIELDS}
 `;
 
+export const UPDATE_CV_SKILL_MUTATION = gql`
+  mutation UpdateCvSkill($skill: UpdateCvSkillInput!) {
+    updateCvSkill(skill: $skill) {
+      ...CvFullFields
+    }
+  }
+  ${CV_FULL_FIELDS}
+`;
+
 export const DELETE_CV_SKILLS_MUTATION = gql`
   mutation DeleteCvSkills($skill: DeleteCvSkillInput!) {
     deleteCvSkill(skill: $skill) {

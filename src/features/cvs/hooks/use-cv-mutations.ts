@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
 import { getAuthUser } from "@/features/auth/lib/auth-storage";
@@ -10,6 +11,7 @@ import { EXPORT_PDF_MUTATION } from "../graphql/export-pdf.mutation";
 import {
   ADD_CV_SKILL_MUTATION,
   DELETE_CV_SKILLS_MUTATION,
+  UPDATE_CV_SKILL_MUTATION,
 } from "../graphql/cv-skills.mutation";
 import {
   ADD_CV_PROJECT_MUTATION,
@@ -27,6 +29,12 @@ import type {
 } from "../schemas";
 import type { Cv, MasteryLevel, Project, Skill, SkillCategory } from "../types";
 import buildCvPreviewHtml from "../utils/build-cv-preview-html";
+import { groupSkillsByCategory } from "../utils/group-skills";
+import exportCvPdfClient from "../utils/export-cv-pdf-client";
+import {
+  downloadPdfPayload,
+  isServerPdfUnavailable,
+} from "../utils/download-pdf-payload";
 import { runMutation, type MutationResult } from "../utils/mutation-result";
 
 function cvRefetch(cvId: string) {
@@ -39,9 +47,18 @@ function useCvSkillCatalog() {
   }>(SKILL_CATEGORIES_QUERY);
   const { data: skillsData } = useQuery<{ skills: Skill[] }>(SKILLS_QUERY);
 
+  const allSkills = useMemo(
+    () =>
+      (skillsData?.skills ?? []).map((skill) => ({
+        ...skill,
+        id: String(skill.id),
+      })),
+    [skillsData?.skills],
+  );
+
   return {
     categories: categoriesData?.skillCategories ?? [],
-    allSkills: skillsData?.skills ?? [],
+    allSkills,
   };
 }
 
@@ -59,6 +76,11 @@ function useCvSkillMutations(cvId: string) {
 
   const [deleteSkills, { loading: deleting }] = useMutation(
     DELETE_CV_SKILLS_MUTATION,
+    { refetchQueries: refetch },
+  );
+
+  const [updateSkill, { loading: updating }] = useMutation(
+    UPDATE_CV_SKILL_MUTATION,
     { refetchQueries: refetch },
   );
 
@@ -80,6 +102,24 @@ function useCvSkillMutations(cvId: string) {
       });
     }, "Failed to add skill");
 
+  const updateCvSkill = async (input: {
+    name: string;
+    categoryId?: string | null;
+    mastery: MasteryLevel;
+  }): Promise<MutationResult> =>
+    runMutation(async () => {
+      await updateSkill({
+        variables: {
+          skill: {
+            cvId,
+            name: input.name,
+            categoryId: input.categoryId ?? undefined,
+            mastery: input.mastery,
+          },
+        },
+      });
+    }, "Failed to update skill");
+
   const removeCvSkills = async (names: string[]): Promise<MutationResult> =>
     runMutation(async () => {
       await deleteSkills({
@@ -89,8 +129,9 @@ function useCvSkillMutations(cvId: string) {
 
   return {
     addCvSkill,
+    updateCvSkill,
     removeCvSkills,
-    loading: adding || deleting,
+    loading: adding || updating || deleting,
   };
 }
 
@@ -210,9 +251,9 @@ function useUpdateCvMutation(cvId: string) {
         variables: {
           cv: {
             cvId,
-            name: values.name,
-            education: values.education?.trim() ? values.education : undefined,
-            description: values.description,
+            name: values.name.trim(),
+            education: values.education.trim(),
+            description: values.description.trim(),
           },
         },
       });
@@ -249,13 +290,17 @@ function useDeleteCvMutation() {
 }
 
 function useExportPdfMutation() {
+  const { categories } = useCvSkillCatalog();
   const [exportPdfMutation, { loading }] = useMutation<{ exportPdf: string }>(
     EXPORT_PDF_MUTATION,
   );
 
-  const exportPdf = async (cv: Cv): Promise<MutationResult> =>
-    runMutation(async () => {
-      const html = buildCvPreviewHtml(cv);
+  const exportPdf = async (cv: Cv): Promise<MutationResult> => {
+    const grouped = groupSkillsByCategory(cv.skills, categories);
+    const html = buildCvPreviewHtml(cv, grouped);
+    const fileName = `${cv.name.replace(/\s+/g, "-")}.pdf`;
+
+    const serverResult = await runMutation(async () => {
       const result = await exportPdfMutation({
         variables: { pdf: { html } },
       });
@@ -263,19 +308,25 @@ function useExportPdfMutation() {
       if (!payload) {
         throw new Error("PDF export failed");
       }
+      downloadPdfPayload(payload, fileName);
+    }, "");
 
-      const link = document.createElement("a");
-      if (payload.startsWith("data:")) {
-        link.href = payload;
-      } else if (payload.startsWith("http")) {
-        link.href = payload;
-        link.target = "_blank";
-      } else {
-        link.href = `data:application/pdf;base64,${payload}`;
-      }
-      link.download = `${cv.name.replace(/\s+/g, "-")}.pdf`;
-      link.click();
-    }, "Failed to export PDF");
+    if (serverResult.ok) {
+      return serverResult;
+    }
+
+    if (!isServerPdfUnavailable(serverResult.message)) {
+      return {
+        ok: false,
+        message: serverResult.message || "Failed to export PDF",
+      };
+    }
+
+    return runMutation(
+      () => exportCvPdfClient({ html, fileName }),
+      "Failed to export PDF",
+    );
+  };
 
   return { exportPdf, loading };
 }
