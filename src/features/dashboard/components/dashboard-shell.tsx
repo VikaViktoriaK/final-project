@@ -2,6 +2,7 @@
 
 import { Box } from "@mui/material";
 import type { ReactNode } from "react";
+import DashboardMobileNav from "./dashboard-mobile-nav";
 import DashboardSidebar from "./dashboard-sidebar";
 import { dashboardStyles } from "../styles/dashboard.styles";
 
@@ -15,6 +16,7 @@ function DashboardShell({ children }: DashboardShellProps) {
       <DashboardSidebar />
       <Box sx={dashboardStyles.main}>
         <Box sx={dashboardStyles.mainContent}>{children}</Box>
+        <DashboardMobileNav />
       </Box>
     </Box>
   );

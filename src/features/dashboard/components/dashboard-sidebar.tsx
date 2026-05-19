@@ -6,22 +6,11 @@ import useLogout from "@/features/auth/hooks/use-logout";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleSidebarCollapsed } from "@/store/slices/ui-slice";
 import { dashboardStyles } from "../styles/dashboard.styles";
-
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutlineOutlined";
-import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
-import TranslateOutlinedIcon from "@mui/icons-material/TranslateOutlined";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import NextLink from "next/link";
-
-const navItems = [
-  { label: "Employees", href: "/users", icon: PeopleOutlineIcon },
-  { label: "Skills", href: "/users", icon: ShowChartOutlinedIcon },
-  { label: "Languages", href: "/users", icon: TranslateOutlinedIcon },
-  { label: "CVs", href: "/cvs", icon: DescriptionOutlinedIcon },
-] as const;
+import AppArrow from "@/components/app-arrow";
+import { DASHBOARD_NAV_ITEMS, isNavItemActive } from "../constants/nav-items";
 
 function DashboardSidebar() {
   const pathname = usePathname();
@@ -40,17 +29,15 @@ function DashboardSidebar() {
   return (
     <Box
       component="nav"
+      aria-label="Main navigation"
       sx={[
         dashboardStyles.sidebar,
         sidebarCollapsed && dashboardStyles.sidebarCollapsed,
       ]}
     >
       <Box sx={dashboardStyles.navList}>
-        {navItems.map(({ label, href, icon: Icon }) => {
-          const isActive =
-            href === "/cvs"
-              ? pathname.startsWith("/cvs")
-              : pathname.startsWith(href);
+        {DASHBOARD_NAV_ITEMS.map(({ label, href, icon: Icon }) => {
+          const isActive = isNavItemActive(pathname, href);
 
           return (
             <Box
@@ -83,13 +70,7 @@ function DashboardSidebar() {
           sx={dashboardStyles.iconButton}
           aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          <ChevronLeftIcon
-            fontSize="small"
-            sx={{
-              transform: sidebarCollapsed ? "rotate(180deg)" : "none",
-              transition: "transform 0.2s",
-            }}
-          />
+          <AppArrow direction={sidebarCollapsed ? "right" : "left"} size={14} />
         </Button>
         <Button
           type="button"
