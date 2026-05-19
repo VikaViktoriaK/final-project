@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import type { CreateCvFormValues } from "../schemas";
+import { CV_FIELD_LIMITS, type CreateCvFormValues } from "../schemas";
 import { cvsStyles } from "../styles/cvs.styles";
 
 type CreateCvDialogProps = {
@@ -23,6 +23,8 @@ type CreateCvDialogProps = {
   register: UseFormRegister<CreateCvFormValues>;
   errors: FieldErrors<CreateCvFormValues>;
   isPending: boolean;
+  hasChanges: boolean;
+  canCreate: boolean;
   errorMessage?: string;
   onSubmit: () => void;
 };
@@ -33,6 +35,8 @@ function CreateCvDialog({
   register,
   errors,
   isPending,
+  hasChanges,
+  canCreate,
   errorMessage,
   onSubmit,
 }: CreateCvDialogProps) {
@@ -71,6 +75,9 @@ function CreateCvDialog({
             {...register("name")}
             error={!!errors.name}
             helperText={errors.name?.message}
+            slotProps={{
+              htmlInput: { maxLength: CV_FIELD_LIMITS.name.maxLength },
+            }}
             fullWidth
           />
           <TextField
@@ -79,6 +86,9 @@ function CreateCvDialog({
             {...register("education")}
             error={!!errors.education}
             helperText={errors.education?.message}
+            slotProps={{
+              htmlInput: { maxLength: CV_FIELD_LIMITS.education.maxLength },
+            }}
             fullWidth
           />
           <TextField
@@ -87,6 +97,9 @@ function CreateCvDialog({
             {...register("description")}
             error={!!errors.description}
             helperText={errors.description?.message}
+            slotProps={{
+              htmlInput: { maxLength: CV_FIELD_LIMITS.description.maxLength },
+            }}
             fullWidth
             multiline
             minRows={4}
@@ -107,8 +120,10 @@ function CreateCvDialog({
         <Button
           type="submit"
           form="create-cv-form"
-          sx={cvsStyles.secondaryButton}
-          disabled={isPending}
+          sx={[
+            hasChanges ? cvsStyles.primaryButton : cvsStyles.primaryButtonMuted,
+          ]}
+          disabled={!canCreate}
         >
           {isPending ? (
             <CircularProgress size={18} color="inherit" />
