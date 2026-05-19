@@ -1,7 +1,7 @@
 "use client";
 
 import { InputAdornment, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import AppSearchIcon from "@/components/app-search-icon";
 import type { ChangeEvent } from "react";
 import { cvsStyles } from "../styles/cvs.styles";
 
@@ -25,8 +25,8 @@ function CvSearchField({
       slotProps={{
         input: {
           startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon sx={cvsStyles.searchIcon} />
+            <InputAdornment position="start" sx={cvsStyles.searchIconWrap}>
+              <AppSearchIcon size={24} />
             </InputAdornment>
           ),
         },
