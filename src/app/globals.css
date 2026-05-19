@@ -1,6 +1,6 @@
 :root {
   --app-bg: #1f1f1f;
-  --app-surface: #303030;
+  --app-surface: #353535;
   --app-sidebar-bg: #1a1a1a;
   --app-dialog-surface: #2a2a2a;
   --app-divider: rgba(255, 255, 255, 0.08);
@@ -18,9 +18,13 @@
   --color-primary-hover: #b52b2c;
   --color-primary-subtle: rgba(198, 48, 49, 0.08);
   --color-primary-light: #fdecea;
+  --color-mastery-novice: #757575;
   --color-mastery-advanced: #e6b800;
   --color-mastery-proficient: #4caf50;
   --color-mastery-expert: #5b8def;
+  --color-skill-bar: #5d9cec;
+  --color-action-danger: #d9534f;
+  --color-skill-bar-track: #1e2a3a;
 
   --color-text-primary: #1a1a1a;
   --color-text-secondary: #333;
@@ -39,7 +43,7 @@ body {
 
 body {
   margin: 0;
-  background: var(--app-bg);
+  background-color: var(--app-surface);
   color: var(--app-text);
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
