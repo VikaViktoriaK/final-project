@@ -1,24 +1,13 @@
 "use client";
 
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
+import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { PageLoader } from "@/components/PageLoader";
-import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { UsersSearch } from "@/features/users/components/UsersSearch";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
-import {
-  useCreateSkillMutation,
-  useDeleteSkillMutation,
-  useSkillsCatalogQuery,
-  useUpdateSkillMutation,
-} from "../api/skills";
 import { SkillFormDialog } from "../components/SkillFormDialog";
 import { SkillsFilter } from "../components/SkillsFilter";
 import { SkillsTable } from "../components/SkillsTable";
@@ -27,105 +16,29 @@ import {
   SKILLS_PAGE_TITLE,
   SKILL_DELETE_DIALOG,
 } from "../constants/skills.constants";
-import type { SkillRow, SkillsSortField } from "../types";
+import { useSkillsPage } from "../hooks/useSkillsPage";
 
 export function SkillsPage() {
-  const [query, setQuery] = React.useState("");
-  const [orderBy, setOrderBy] = React.useState<SkillsSortField>("name");
-  const [order, setOrder] = React.useState<"asc" | "desc">("asc");
-  const [formOpen, setFormOpen] = React.useState(false);
-  const [formMode, setFormMode] = React.useState<"create" | "edit">("create");
-  const [editingSkill, setEditingSkill] = React.useState<SkillRow | null>(null);
-  const [deletingSkill, setDeletingSkill] = React.useState<SkillRow | null>(
-    null,
-  );
-  const [isDeleteOpen, setDeleteOpen] = React.useState(false);
-
-  const { role } = useAuthSnapshot();
-  const isAdmin = role === "Admin";
-
-  const { skills, categories, loading, error, refetch } =
-    useSkillsCatalogQuery();
-  const [createSkill, { loading: creating }] = useCreateSkillMutation();
-  const [updateSkill, { loading: updating }] = useUpdateSkillMutation();
-  const [deleteSkill, { loading: deleting }] = useDeleteSkillMutation();
-
-  const normalize = React.useCallback(
-    (value: string) => value.trim().toLowerCase(),
-    [],
-  );
-
-  const handleSort = React.useCallback(
-    (field: SkillsSortField) => {
-      if (field === orderBy) {
-        setOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-      } else {
-        setOrderBy(field);
-        setOrder("asc");
-      }
-    },
-    [orderBy],
-  );
-
-  const processedSkills = React.useMemo(() => {
-    const q = normalize(query);
-    const result = q
-      ? skills.filter((item) => normalize(item.name).includes(q))
-      : [...skills];
-
-    result.sort((a, b) => {
-      const compareName = () =>
-        normalize(a.name).localeCompare(normalize(b.name), undefined, {
-          sensitivity: "base",
-        });
-      const compareCategory = () =>
-        normalize(a.categoryName).localeCompare(
-          normalize(b.categoryName),
-          undefined,
-          { sensitivity: "base" },
-        );
-
-      let cmp =
-        orderBy === "name" ? compareName() : compareCategory() || compareName();
-
-      if (order === "desc") cmp = -cmp;
-      return cmp;
-    });
-
-    return result;
-  }, [normalize, order, orderBy, query, skills]);
-
-  const openCreate = () => {
-    setFormMode("create");
-    setEditingSkill(null);
-    setFormOpen(true);
-  };
-
-  const openEdit = (skill: SkillRow) => {
-    setFormMode("edit");
-    setEditingSkill(skill);
-    setFormOpen(true);
-  };
-
-  const handleFormSubmit = async (values: {
-    name: string;
-    categoryId: string;
-  }) => {
-    if (formMode === "create") {
-      await createSkill({ variables: { skill: values } });
-    } else if (editingSkill) {
-      await updateSkill({
-        variables: {
-          skill: {
-            skillId: editingSkill.id,
-            name: values.name,
-            categoryId: values.categoryId,
-          },
-        },
-      });
-    }
-    await refetch();
-  };
+  const {
+    isAdmin,
+    loading,
+    error,
+    query,
+    setQuery,
+    orderBy,
+    setOrderBy,
+    order,
+    setOrder,
+    handleSort,
+    form,
+    deleteDialog,
+    categories,
+    processedSkills,
+    saving,
+    deleting,
+    handleFormSubmit,
+    handleDeleteConfirm,
+  } = useSkillsPage();
 
   return (
     <>
@@ -150,7 +63,7 @@ export function SkillsPage() {
               <Button
                 variant="text"
                 sx={usersTableSx.addUserBtn}
-                onClick={openCreate}
+                onClick={form.openCreate}
               >
                 {SKILLS_CREATE_LABEL}
               </Button>
@@ -168,62 +81,36 @@ export function SkillsPage() {
             orderBy={orderBy}
             order={order}
             onSort={handleSort}
-            onEdit={openEdit}
-            onDelete={(skill) => {
-              setDeletingSkill(skill);
-              setDeleteOpen(true);
-            }}
+            onEdit={form.openEdit}
+            onDelete={deleteDialog.requestDelete}
             canManage={isAdmin}
           />
         )}
       </Box>
 
       <SkillFormDialog
-        open={formOpen}
-        mode={formMode}
-        skill={editingSkill}
+        open={form.open}
+        mode={form.mode}
+        skill={form.item}
         categories={categories}
-        saving={creating || updating}
-        onClose={() => setFormOpen(false)}
+        saving={saving}
+        onClose={form.close}
         onSubmit={handleFormSubmit}
       />
 
-      <Dialog
-        open={isDeleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        sx={usersTableSx.deleteDialogRoot}
+      <ConfirmDeleteDialog
+        open={deleteDialog.open}
+        title={SKILL_DELETE_DIALOG.title}
+        cancelLabel={SKILL_DELETE_DIALOG.cancel}
+        confirmLabel={SKILL_DELETE_DIALOG.confirm}
+        deleting={deleting}
+        canConfirm={Boolean(deleteDialog.target)}
+        onClose={deleteDialog.close}
+        onConfirm={handleDeleteConfirm}
       >
-        <DialogTitle>{SKILL_DELETE_DIALOG.title}</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete skill{" "}
-          <strong>{deletingSkill?.name}</strong>?
-        </DialogContent>
-        <DialogActions sx={usersTableSx.deleteDialogActions}>
-          <Button
-            onClick={() => setDeleteOpen(false)}
-            disabled={deleting}
-            sx={usersTableSx.deleteDialogCancelBtn}
-          >
-            {SKILL_DELETE_DIALOG.cancel}
-          </Button>
-          <Button
-            variant="contained"
-            disabled={!deletingSkill || deleting}
-            sx={usersTableSx.deleteDialogDeleteBtn}
-            onClick={async () => {
-              if (!deletingSkill) return;
-              await deleteSkill({
-                variables: { skill: { skillId: deletingSkill.id } },
-              });
-              setDeleteOpen(false);
-              setDeletingSkill(null);
-              await refetch();
-            }}
-          >
-            {SKILL_DELETE_DIALOG.confirm}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        Are you sure you want to delete skill{" "}
+        <strong>{deleteDialog.target?.name}</strong>?
+      </ConfirmDeleteDialog>
     </>
   );
 }

@@ -1,4 +1,6 @@
-/** Add-language dialog action labels (match UI mock). */
+export const USER_LANGUAGES_ADD_LABEL = "Add language";
+export const USER_LANGUAGES_REMOVE_LABEL = "Remove languages";
+
 export const ADD_LANGUAGE_DIALOG_LABELS = {
   title: "Add language",
   languageField: "Language",
@@ -7,7 +9,6 @@ export const ADD_LANGUAGE_DIALOG_LABELS = {
   confirm: "CONFIRM",
 } as const;
 
-/** Bulk-delete confirmation (after selecting rows on the languages page). */
 export const CONFIRM_BULK_REMOVE_LANGUAGES_LABELS = {
   title: "Delete languages",
   cancel: "CANCEL",
@@ -22,7 +23,6 @@ export const UPDATE_LANGUAGE_DIALOG_LABELS = {
   confirm: "CONFIRM",
 } as const;
 
-/** CEFR-style + Native for new profile language rows. */
 export const LANGUAGE_PROFICIENCY_OPTIONS = [
   "A1",
   "A2",

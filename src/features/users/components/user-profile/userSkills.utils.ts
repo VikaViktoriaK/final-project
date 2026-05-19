@@ -1,4 +1,3 @@
-import { FALLBACK_SKILL_CATEGORIES } from "@/features/users/constants/userSkills.constants";
 import { masteryToProgressColor } from "@/features/users/constants/userSkills.mastery";
 import type {
   NormalizedSkillCatalogItem,
@@ -27,7 +26,7 @@ export function resolveSkillCategoryId(row: ProfileSkillRow): string {
 
 export function resolveSkillCategoryName(
   categoryId: string,
-  categories: SkillCategoryCatalogItem[] = FALLBACK_SKILL_CATEGORIES,
+  categories: SkillCategoryCatalogItem[] = [],
 ): string {
   return (
     categories.find((c) => c.id === categoryId)?.name ?? categoryId ?? "Other"
@@ -46,7 +45,7 @@ export function normalizeCatalogItem(
 
 export function enrichProfileSkill(
   row: ProfileSkillRow,
-  categories: SkillCategoryCatalogItem[] = FALLBACK_SKILL_CATEGORIES,
+  categories: SkillCategoryCatalogItem[] = [],
 ): UserSkill {
   const categoryId = resolveSkillCategoryId(row);
   return {
@@ -64,7 +63,7 @@ export function enrichProfileSkill(
  */
 export function groupSkillsByCategory(
   skills: ProfileSkillRow[],
-  categories: SkillCategoryCatalogItem[] = FALLBACK_SKILL_CATEGORIES,
+  categories: SkillCategoryCatalogItem[] = [],
 ): UserSkillCategory[] {
   const byCategoryId = new Map<string, UserSkill[]>();
 

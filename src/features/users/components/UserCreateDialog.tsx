@@ -12,9 +12,16 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
-import { z } from "zod";
 import { useCreateUserMutation } from "../api/createUser";
 import { useUserEditOptionsQuery } from "../api/updateUser";
+import {
+  createUserSchema,
+  type CreateUserFieldErrors,
+} from "../schemas/createUser.schema";
+import {
+  DEFAULT_USER_CREATE_FORM,
+  type UserCreateFormState,
+} from "../types/userCreate.types";
 import { usersTableSx } from "./usersTable.styles";
 
 type UserCreateDialogProps = {
@@ -23,61 +30,24 @@ type UserCreateDialogProps = {
   onCreated: () => void;
 };
 
-type FormState = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  departmentId: string;
-  positionId: string;
-  role: string;
-};
-
-const DEFAULT_FORM: FormState = {
-  email: "",
-  password: "",
-  firstName: "",
-  lastName: "",
-  departmentId: "",
-  positionId: "",
-  role: "Employee",
-};
-
-const createUserSchema = z.object({
-  email: z.string().email("Invalid email format."),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters long.")
-    .max(20, "Password is too long."),
-  firstName: z
-    .string()
-    .trim()
-    .min(2, "First name must be at least 2 characters long."),
-  lastName: z
-    .string()
-    .trim()
-    .min(2, "Last name must be at least 2 characters long."),
-});
-
 export function UserCreateDialog({
   open,
   onClose,
   onCreated,
 }: UserCreateDialogProps) {
-  const [form, setForm] = React.useState<FormState>(DEFAULT_FORM);
+  const [form, setForm] = React.useState<UserCreateFormState>(
+    DEFAULT_USER_CREATE_FORM,
+  );
   const [submitError, setSubmitError] = React.useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = React.useState<{
-    email?: string;
-    password?: string;
-    firstName?: string;
-    lastName?: string;
-  }>({});
+  const [fieldErrors, setFieldErrors] = React.useState<CreateUserFieldErrors>(
+    {},
+  );
   const [createUser, { loading, error }] = useCreateUserMutation();
   const { data: optionsData, loading: loadingOptions } =
     useUserEditOptionsQuery();
 
   const handleField =
-    (key: keyof FormState) =>
+    (key: keyof UserCreateFormState) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setForm((prev) => ({ ...prev, [key]: event.target.value }));
       if (
@@ -139,8 +109,7 @@ export function UserCreateDialog({
 
       onCreated();
       onClose();
-    } catch (e) {
-      console.error("createUser failed", e);
+    } catch {
       setSubmitError("Failed to create user");
     }
   };

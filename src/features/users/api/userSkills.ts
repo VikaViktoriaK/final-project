@@ -1,10 +1,6 @@
 import * as React from "react";
 import { gql } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client/react";
-import {
-  FALLBACK_SKILL_CATALOG,
-  FALLBACK_SKILL_CATEGORIES,
-} from "@/features/users/constants/userSkills.constants";
 import { normalizeCatalogItem } from "@/features/users/components/user-profile/userSkills.utils";
 import type {
   NormalizedSkillCatalogItem,
@@ -120,11 +116,10 @@ export function useSkillCategoriesQuery(enabled: boolean) {
     skip: !enabled,
   });
 
-  const categories = React.useMemo(() => {
-    const fromApi = query.data?.skillCategories;
-    if (fromApi?.length) return fromApi;
-    return FALLBACK_SKILL_CATEGORIES;
-  }, [query.data?.skillCategories]);
+  const categories = React.useMemo(
+    () => query.data?.skillCategories ?? [],
+    [query.data?.skillCategories],
+  );
 
   return { ...query, categories };
 }
@@ -136,10 +131,8 @@ export function useSkillsCatalogQuery(enabled: boolean) {
 
   const catalog = React.useMemo((): NormalizedSkillCatalogItem[] => {
     const fromApi = query.data?.skills;
-    if (fromApi?.length) {
-      return fromApi.map(normalizeCatalogItem);
-    }
-    return FALLBACK_SKILL_CATALOG;
+    if (!fromApi?.length) return [];
+    return fromApi.map(normalizeCatalogItem);
   }, [query.data?.skills]);
 
   return { ...query, catalog };
