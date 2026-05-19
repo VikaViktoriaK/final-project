@@ -17,20 +17,11 @@ function useCvPreviewPage() {
     [cv, categories],
   );
 
-  const domains = useMemo(() => {
-    if (!cv) {
-      return "";
-    }
-    return [
-      ...new Set(cv.projects.map((project) => project.domain).filter(Boolean)),
-    ].join(", ");
-  }, [cv]);
-
-  const handleExportPdf = async () => {
+  const handleExportPdf = async (previewElement?: HTMLElement | null) => {
     if (!cv) {
       return;
     }
-    const result = await exportPdf(cv);
+    const result = await exportPdf(cv, previewElement);
     if (result.ok) {
       showSuccess("PDF exported");
       return;
@@ -41,7 +32,6 @@ function useCvPreviewPage() {
   return {
     cv,
     groupedSkills,
-    domains,
     exporting,
     handleExportPdf,
     FeedbackSnackbar,

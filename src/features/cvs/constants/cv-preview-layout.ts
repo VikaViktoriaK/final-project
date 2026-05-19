@@ -1,0 +1,5 @@
+export const CV_PREVIEW_CONTENT_WIDTH = 850;
+
+export const CV_PREVIEW_SIDEBAR_WIDTH = 260;
+
+export const CV_PREVIEW_MAIN_WIDTH = 600;

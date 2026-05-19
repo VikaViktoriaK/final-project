@@ -1,4 +1,4 @@
-import type { MasteryLevel } from "../types";
+import type { Cv, MasteryLevel } from "../types";
 import type { GroupedSkills } from "./group-skills";
 import formatCvDate from "./format-date";
 
@@ -75,13 +75,27 @@ function formatProjectRoles(roles: string[]): string {
   return roles.length ? roles.join(", ") : "—";
 }
 
+function formatCvPreviewSubtitle(cv: Cv): string {
+  const role = cv.projects.find((project) => project.roles.length > 0)
+    ?.roles[0];
+  return role ? role.toUpperCase() : "";
+}
+
+function getCvPreviewDomains(cv: Cv): string {
+  return [
+    ...new Set(cv.projects.map((project) => project.domain).filter(Boolean)),
+  ].join(", ");
+}
+
 export {
   buildSkillTableRows,
   formatCvPeriod,
   formatCvDate,
+  formatCvPreviewSubtitle,
   formatLanguageLine,
   formatProjectEnvironment,
   formatProjectRoles,
+  getCvPreviewDomains,
   masteryToExperienceYears,
 };
 export type { SkillTableRow };

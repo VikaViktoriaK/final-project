@@ -30,7 +30,9 @@ import type {
 import type { Cv, MasteryLevel, Project, Skill, SkillCategory } from "../types";
 import buildCvPreviewHtml from "../utils/build-cv-preview-html";
 import { groupSkillsByCategory } from "../utils/group-skills";
-import exportCvPdfClient from "../utils/export-cv-pdf-client";
+import exportCvPdfClient, {
+  exportCvPdfFromElement,
+} from "../utils/export-cv-pdf-client";
 import {
   downloadPdfPayload,
   isServerPdfUnavailable,
@@ -295,7 +297,10 @@ function useExportPdfMutation() {
     EXPORT_PDF_MUTATION,
   );
 
-  const exportPdf = async (cv: Cv): Promise<MutationResult> => {
+  const exportPdf = async (
+    cv: Cv,
+    previewElement?: HTMLElement | null,
+  ): Promise<MutationResult> => {
     const grouped = groupSkillsByCategory(cv.skills, categories);
     const html = buildCvPreviewHtml(cv, grouped);
     const fileName = `${cv.name.replace(/\s+/g, "-")}.pdf`;
@@ -320,6 +325,13 @@ function useExportPdfMutation() {
         ok: false,
         message: serverResult.message || "Failed to export PDF",
       };
+    }
+
+    if (previewElement) {
+      return runMutation(
+        () => exportCvPdfFromElement({ element: previewElement, fileName }),
+        "Failed to export PDF",
+      );
     }
 
     return runMutation(
