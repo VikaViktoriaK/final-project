@@ -1,82 +1,57 @@
 "use client";
 
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
-import { useRouter } from "next/navigation";
+import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { PageLoader } from "@/components/PageLoader";
-import { UsersTable } from "@/features/users/components/UsersTable";
-import { UsersSearch } from "@/features/users/components/UsersSearch";
-import { UsersFilter } from "@/features/users/components/UsersFilter";
-import { UserEditDialog } from "@/features/users/components/UserEditDialog";
 import { UserCreateDialog } from "@/features/users/components/UserCreateDialog";
-import { useUsersQuery } from "@/features/users/api/getUsers";
-import { useDeleteUserMutation } from "@/features/users/api/deleteUser";
+import { UserEditDialog } from "@/features/users/components/UserEditDialog";
+import { UsersFilter } from "@/features/users/components/UsersFilter";
+import { UsersSearch } from "@/features/users/components/UsersSearch";
+import { UsersTable } from "@/features/users/components/UsersTable";
 import { usersTableSx } from "@/features/users/components/usersTable.styles";
-import type { UserRow } from "@/features/users/types";
-import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
+import {
+  USER_DELETE_DIALOG,
+  USERS_CREATE_LABEL,
+  USERS_PAGE_TITLE,
+} from "@/features/users/constants/users.constants";
+import { useUsersPage } from "@/features/users/hooks/useUsersPage";
 
 export function UsersPage() {
-  const router = useRouter();
-  const [query, setQuery] = React.useState("");
-  const [order, setOrder] = React.useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof UserRow>("firstName");
-  const [editingUser, setEditingUser] = React.useState<UserRow | null>(null);
-  const [isEditOpen, setEditOpen] = React.useState(false);
-  const [isCreateOpen, setCreateOpen] = React.useState(false);
-  const [deletingUser, setDeletingUser] = React.useState<UserRow | null>(null);
-  const [isDeleteOpen, setDeleteOpen] = React.useState(false);
-
-  const { users, loading, error, refetch } = useUsersQuery();
-  const [deleteUser, { loading: deleting }] = useDeleteUserMutation();
-  const { role } = useAuthSnapshot();
-  const isAdmin = role === "Admin";
-
-  const normalize = React.useCallback(
-    (value: string) => value.trim().toLowerCase(),
-    [],
-  );
-
-  const processedUsers = React.useMemo(() => {
-    let result = [...users];
-
-    const q = normalize(query);
-    if (q) {
-      result = result.filter((u) =>
-        `${u.firstName} ${u.lastName} ${u.email}`.toLowerCase().includes(q),
-      );
-    }
-
-    return result.sort((a, b) => {
-      const aValue = normalize(String(a[orderBy] ?? ""));
-      const bValue = normalize(String(b[orderBy] ?? ""));
-      const aEmpty = !aValue;
-      const bEmpty = !bValue;
-
-      if (aEmpty && !bEmpty) return 1;
-      if (!aEmpty && bEmpty) return -1;
-      if (aEmpty && bEmpty) return 0;
-
-      if (order === "asc") {
-        return aValue.localeCompare(bValue, undefined, { sensitivity: "base" });
-      } else {
-        return bValue.localeCompare(aValue, undefined, { sensitivity: "base" });
-      }
-    });
-  }, [normalize, order, orderBy, query, users]);
+  const {
+    isAdmin,
+    loading,
+    error,
+    query,
+    setQuery,
+    order,
+    setOrder,
+    orderBy,
+    setOrderBy,
+    processedUsers,
+    editingUser,
+    editOpen,
+    openEdit,
+    closeEdit,
+    createOpen,
+    openCreate,
+    closeCreate,
+    viewUser,
+    requestDeleteUser,
+    deleteDialog,
+    deleting,
+    handleDeleteConfirm,
+    handleSaved,
+  } = useUsersPage();
 
   return (
     <>
       <Box sx={usersTableSx.usersPageContainer}>
         <Breadcrumbs aria-label="breadcrumb" sx={usersTableSx.breadcrumbs}>
           <Typography component="span" sx={usersTableSx.breadcrumbItemActive}>
-            Employees
+            {USERS_PAGE_TITLE}
           </Typography>
         </Breadcrumbs>
         <Box sx={usersTableSx.topBar}>
@@ -94,85 +69,54 @@ export function UsersPage() {
               <Button
                 variant="text"
                 sx={usersTableSx.addUserBtn}
-                onClick={() => setCreateOpen(true)}
+                onClick={openCreate}
               >
-                + Create user
+                {USERS_CREATE_LABEL}
               </Button>
             ) : null}
           </Box>
         </Box>
-        {error ? <Box color="error.main">{error.message}</Box> : null}
+        {error ? (
+          <Typography color="error.main">{error.message}</Typography>
+        ) : null}
         {loading ? (
           <PageLoader />
         ) : (
           <UsersTable
             users={processedUsers}
-            onEditUser={(user) => {
-              setEditingUser(user);
-              setEditOpen(true);
-            }}
-            onViewUser={(user) => {
-              router.push(`/users/${user.id}/profile`);
-            }}
-            onDeleteUser={(user) => {
-              if (!isAdmin) return;
-              setDeletingUser(user);
-              setDeleteOpen(true);
-            }}
+            onEditUser={openEdit}
+            onViewUser={viewUser}
+            onDeleteUser={requestDeleteUser}
           />
         )}
       </Box>
+
       <UserEditDialog
-        key={`${editingUser?.id ?? "user-edit-dialog"}-${isEditOpen ? "open" : "closed"}`}
-        open={isEditOpen}
+        key={`${editingUser?.id ?? "user-edit-dialog"}-${editOpen ? "open" : "closed"}`}
+        open={editOpen}
         user={editingUser}
-        onClose={() => setEditOpen(false)}
-        onSaved={() => {
-          void refetch();
-        }}
+        onClose={closeEdit}
+        onSaved={handleSaved}
       />
       <UserCreateDialog
-        key={isCreateOpen ? "create-open" : "create-closed"}
-        open={isCreateOpen}
-        onClose={() => setCreateOpen(false)}
-        onCreated={() => {
-          void refetch();
-        }}
+        key={createOpen ? "create-open" : "create-closed"}
+        open={createOpen}
+        onClose={closeCreate}
+        onCreated={handleSaved}
       />
-      <Dialog
-        open={isDeleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        sx={usersTableSx.deleteDialogRoot}
+      <ConfirmDeleteDialog
+        open={deleteDialog.open}
+        title={USER_DELETE_DIALOG.title}
+        cancelLabel={USER_DELETE_DIALOG.cancel}
+        confirmLabel={USER_DELETE_DIALOG.confirm}
+        deleting={deleting}
+        canConfirm={Boolean(deleteDialog.target)}
+        onClose={deleteDialog.close}
+        onConfirm={handleDeleteConfirm}
       >
-        <DialogTitle>Delete user</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete user{" "}
-          <strong>{deletingUser?.email}</strong>?
-        </DialogContent>
-        <DialogActions sx={usersTableSx.deleteDialogActions}>
-          <Button
-            onClick={() => setDeleteOpen(false)}
-            disabled={deleting}
-            sx={usersTableSx.deleteDialogCancelBtn}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            disabled={!deletingUser || deleting}
-            sx={usersTableSx.deleteDialogDeleteBtn}
-            onClick={async () => {
-              if (!deletingUser) return;
-              await deleteUser({ variables: { userId: deletingUser.id } });
-              setDeleteOpen(false);
-              setDeletingUser(null);
-              await refetch();
-            }}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+        Are you sure you want to delete user{" "}
+        <strong>{deleteDialog.target?.email}</strong>?
+      </ConfirmDeleteDialog>
     </>
   );
 }

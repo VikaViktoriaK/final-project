@@ -1,29 +1,22 @@
 "use client";
 
-import * as React from "react";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import type { UserRow } from "../types";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { USER_SORT_OPTIONS } from "@/features/users/constants/users.constants";
+import type { UserSortField } from "@/features/users/types/usersList.types";
+import type { SortOrder } from "@/lib/search";
 import { usersTableSx } from "./usersTable.styles";
 
-interface UsersFilterProps {
-  orderBy: keyof UserRow;
-  order: "asc" | "desc";
-  onOrderChange: (order: "asc" | "desc") => void;
-  onOrderByChange: (property: keyof UserRow) => void;
-}
-
-const SORT_OPTIONS: { value: keyof UserRow; label: string }[] = [
-  { value: "firstName", label: "First Name" },
-  { value: "lastName", label: "Last Name" },
-  { value: "email", label: "Email" },
-  { value: "department", label: "Department" },
-  { value: "position", label: "Position" },
-];
+type UsersFilterProps = {
+  orderBy: UserSortField;
+  order: SortOrder;
+  onOrderChange: (order: SortOrder) => void;
+  onOrderByChange: (field: UserSortField) => void;
+};
 
 export function UsersFilter({
   orderBy,
@@ -31,16 +24,6 @@ export function UsersFilter({
   onOrderChange,
   onOrderByChange,
 }: UsersFilterProps) {
-  const handleSortFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    onOrderByChange(event.target.value as keyof UserRow);
-  };
-
-  const handleToggleOrder = () => {
-    onOrderChange(order === "asc" ? "desc" : "asc");
-  };
-
   return (
     <Box sx={usersTableSx.usersFilter}>
       <TextField
@@ -48,10 +31,12 @@ export function UsersFilter({
         label="Sort by"
         value={orderBy}
         size="small"
-        onChange={handleSortFieldChange}
+        onChange={(event) =>
+          onOrderByChange(event.target.value as UserSortField)
+        }
         sx={usersTableSx.usersFilterSelect}
       >
-        {SORT_OPTIONS.map((option) => (
+        {USER_SORT_OPTIONS.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
@@ -59,8 +44,9 @@ export function UsersFilter({
       </TextField>
 
       <IconButton
-        onClick={handleToggleOrder}
+        onClick={() => onOrderChange(order === "asc" ? "desc" : "asc")}
         title={order === "asc" ? "Ascending" : "Descending"}
+        aria-label={order === "asc" ? "Sort ascending" : "Sort descending"}
         sx={usersTableSx.usersFilterOrderBtn}
       >
         {order === "asc" ? (
