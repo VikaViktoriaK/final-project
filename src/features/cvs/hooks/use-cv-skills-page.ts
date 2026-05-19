@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useCvContext } from "../context/cv-context";
 import useActionFeedback from "./shared/use-action-feedback";
 import useDialog from "./shared/use-dialog";
@@ -63,7 +63,10 @@ function useCvSkillsPage() {
     );
   }, [allSkills, cv?.skills]);
 
-  const selectedSkillId = addForm.watch("skillId");
+  const selectedSkillId = useWatch({
+    control: addForm.control,
+    name: "skillId",
+  });
 
   useEffect(() => {
     if (!addDialog.isOpen || !selectedSkillId) {
