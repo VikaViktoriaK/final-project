@@ -1,5 +1,3 @@
-"use client";
-
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { SIDEBAR_STORAGE_KEY } from "./sidebar.constants";
 

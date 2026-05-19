@@ -1,5 +1,3 @@
-"use client";
-
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { UserProfileForm } from "@/features/users/components/user-profile/UserProfileForm";
