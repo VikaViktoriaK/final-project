@@ -16,6 +16,20 @@ const pillButtonBase: SxProps<Theme> = {
   boxShadow: "none",
 };
 
+const dialogCreateCvButtonBase: SxProps<Theme> = {
+  ...pillButtonBase,
+  alignSelf: "auto",
+  width: "auto",
+  maxWidth: { sm: 300 },
+  minWidth: { xs: 180, sm: 210 },
+  height: { xs: 60, sm: 66 },
+  minHeight: { xs: 60, sm: 66 },
+  flex: "0 0 auto",
+  mt: 0,
+  fontSize: { xs: 11, sm: 12 },
+  px: { xs: 3.75, sm: 4.5 },
+};
+
 /**
  * CV feature styles — grouped by screen / component.
  * Import as `cvsStyles` from this file; keys are unchanged for existing components.
@@ -314,13 +328,21 @@ export const cvsStyles = {
     justifyContent: "flex-start",
     alignItems: "center",
     gap: "2px",
-    color: "inherit !important",
     fontFamily: "inherit",
     fontSize: "inherit",
     fontWeight: "inherit",
     lineHeight: "inherit",
     letterSpacing: "inherit",
     verticalAlign: "middle",
+    "&.MuiTableSortLabel-root": {
+      color: "inherit",
+    },
+    "&.MuiTableSortLabel-root:hover": {
+      color: "inherit",
+    },
+    "&.MuiTableSortLabel-root.Mui-active": {
+      color: "inherit",
+    },
     "& .MuiTableSortLabel-icon": {
       margin: 0,
       padding: 0,
@@ -496,6 +518,34 @@ export const cvsStyles = {
     },
   },
 
+  /** Create CV — compact modal (1.5× mock scale), no inner scrollbars. */
+  dialogCreateCv: {
+    "& .MuiDialog-paper": {
+      width: { xs: "calc(100% - 32px)", sm: "auto" },
+      maxWidth: { sm: 660 },
+      minWidth: { sm: 540 },
+      maxHeight: "none",
+      overflow: "visible",
+    },
+    "& .MuiDialogTitle-root": {
+      px: 3.75,
+      pt: 3,
+      pb: 0,
+    },
+  },
+
+  dialogCreateCvContent: {
+    overflow: "visible",
+    px: 3.75,
+    pt: 1.5,
+    pb: 3.75,
+  },
+
+  dialogCreateCvForm: {
+    width: "100%",
+    maxWidth: "100%",
+  },
+
   dialogTitle: {
     display: "flex",
     alignItems: "center",
@@ -633,8 +683,8 @@ export const cvsStyles = {
   },
 
   skillSelectControl: {
-    "& .MuiSelect-select": {
-      pr: "56px !important",
+    "& .MuiSelect-select.MuiSelect-select": {
+      pr: 7,
       fontSize: 15,
       lineHeight: 1.5,
     },
@@ -760,9 +810,49 @@ export const cvsStyles = {
     },
     "& .MuiFormHelperText-root": {
       color: "var(--app-text-muted)",
+      minHeight: 20,
+      lineHeight: "20px",
+      margin: 0,
+      mt: 0.5,
+      display: "block",
     },
     "& .MuiSelect-icon": {
       color: "var(--app-text-muted)",
+    },
+  },
+
+  /** Create CV dialog inputs — compact mock × 1.5. */
+  formFieldCompact: {
+    "& .MuiOutlinedInput-root": {
+      "& .MuiOutlinedInput-input": {
+        py: 1.875,
+      },
+    },
+    "& .MuiOutlinedInput-root.MuiInputBase-multiline": {
+      py: 1.125,
+    },
+    "& .MuiFormHelperText-root": {
+      minHeight: 0,
+      mt: 0.375,
+    },
+  },
+
+  /** Multiline CV fields — hide scrollbars (details + create). */
+  formFieldMultiline: {
+    "& .MuiOutlinedInput-root": {
+      alignItems: "flex-start",
+      py: 1,
+    },
+    "& textarea": {
+      overflow: "auto",
+      resize: "none",
+      scrollbarWidth: "none",
+      msOverflowStyle: "none",
+      "&::-webkit-scrollbar": {
+        display: "none",
+        width: 0,
+        height: 0,
+      },
     },
   },
 
@@ -893,7 +983,78 @@ export const cvsStyles = {
   // ---------------------------------------------------------------------------
 
   detailsForm: {
+    width: "100%",
     maxWidth: 720,
+  },
+
+  detailsFormStack: {
+    gap: "20px",
+    width: "100%",
+  },
+
+  /** Field spacing inside Create CV dialog (12px × 1.5). */
+  detailsFormStackCompact: {
+    gap: "18px",
+    width: "100%",
+  },
+
+  detailsFormAlert: {
+    mt: 2,
+    width: "100%",
+  },
+
+  detailsFormActions: {
+    mt: 2,
+    width: "100%",
+    justifyContent: "flex-end",
+    "& > .MuiButton-root": {
+      width: { xs: "100%", sm: "auto" },
+      minWidth: { xs: 0, sm: 160 },
+      maxWidth: { sm: 410 },
+      flex: { xs: "1 1 0", sm: "0 0 auto" },
+    },
+  },
+
+  dialogCreateCvActions: {
+    mt: 3,
+    width: "100%",
+    justifyContent: "flex-end",
+    gap: 1.5,
+    "& > .MuiButton-root": {
+      width: "auto",
+      minWidth: { xs: 180, sm: 210 },
+      maxWidth: { sm: 300 },
+      flex: "0 0 auto",
+      mt: 0,
+    },
+  },
+
+  dialogCreateCvCancelButton: {
+    ...dialogCreateCvButtonBase,
+    bgcolor: "transparent",
+    backgroundColor: "transparent",
+    color: "var(--app-text-muted)",
+    border: "1px solid var(--app-control-border)",
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "transparent",
+        backgroundColor: "transparent",
+        borderColor: "var(--app-overlay-25)",
+        color: "var(--app-text)",
+        boxShadow: "none",
+      },
+    },
+    "&.Mui-disabled": {
+      bgcolor: "transparent",
+      backgroundColor: "transparent",
+      color: "var(--app-text-muted)",
+      borderColor: "var(--app-control-border)",
+      opacity: 0.45,
+    },
+  },
+
+  dialogCreateCvCreateButton: {
+    ...dialogCreateCvButtonBase,
   },
 
   updateButton: {
@@ -1426,11 +1587,38 @@ export const cvsStyles = {
   previewPaper: {
     bgcolor: "#ffffff",
     color: "#1f1f1f",
-    p: { xs: 2, sm: 3, md: 5 },
-    maxWidth: 960,
+    p: { xs: 2, sm: 3 },
+    maxWidth: 852,
     width: "100%",
     overflow: "hidden",
     mx: "auto",
+    boxSizing: "border-box",
+  },
+
+  previewDocument: {
+    width: "100%",
+    maxWidth: 852,
+  },
+
+  previewHero: {
+    mb: 4,
+  },
+
+  previewHeroName: {
+    fontFamily: 'Georgia, "Times New Roman", serif',
+    fontSize: { xs: 26, sm: 32 },
+    fontWeight: 400,
+    lineHeight: 1.2,
+    color: "#1f1f1f",
+    mb: 0.5,
+  },
+
+  previewHeroSubtitle: {
+    fontSize: 14,
+    fontWeight: 500,
+    letterSpacing: "0.4px",
+    textTransform: "uppercase",
+    color: "#666666",
   },
 
   previewTableScroll: {
@@ -1439,18 +1627,30 @@ export const cvsStyles = {
     WebkitOverflowScrolling: "touch",
   },
 
-  previewTopGrid: {
+  previewSplitGrid: {
     display: "grid",
-    gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-    gap: { xs: 3, md: 6 },
+    gridTemplateColumns: { xs: "1fr", md: "260px minmax(0, 1fr)" },
+    columnGap: { xs: 0, md: 0 },
     mb: 5,
   },
 
-  previewRightColumn: {
+  previewSidebar: {
+    minWidth: 0,
+  },
+
+  previewMainColumn: {
     borderLeft: { xs: "none", md: "1px solid var(--color-primary)" },
-    pl: { xs: 0, md: 6 },
+    pl: { xs: 0, md: 3 },
     pt: { xs: 2, md: 0 },
     borderTop: { xs: "1px solid var(--color-primary)", md: "none" },
+    minWidth: 0,
+  },
+
+  previewSummaryHeadline: {
+    fontSize: 14,
+    fontWeight: 500,
+    color: "#1f1f1f",
+    mb: 1.5,
   },
 
   previewBlockTitle: {
@@ -1532,15 +1732,20 @@ export const cvsStyles = {
 
   previewProjectGrid: {
     display: "grid",
-    gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-    gap: { xs: 2, md: 6 },
+    gridTemplateColumns: { xs: "1fr", md: "260px minmax(0, 1fr)" },
+    columnGap: 0,
+  },
+
+  previewProjectSidebar: {
+    minWidth: 0,
   },
 
   previewProjectRight: {
     borderLeft: { xs: "none", md: "1px solid var(--color-primary)" },
-    pl: { xs: 0, md: 6 },
+    pl: { xs: 0, md: 3 },
     pt: { xs: 2, md: 0 },
     borderTop: { xs: "1px solid var(--color-primary)", md: "none" },
+    minWidth: 0,
   },
 
   previewProjectName: {

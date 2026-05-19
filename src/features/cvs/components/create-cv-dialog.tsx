@@ -2,19 +2,19 @@
 
 import {
   Alert,
+  Box,
   Button,
   CircularProgress,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
   Stack,
-  TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import { CV_FIELD_LIMITS, type CreateCvFormValues } from "../schemas";
+import type { CreateCvFormValues } from "../schemas";
+import CvDetailsFormFields from "./cv-details-form-fields";
 import { cvsStyles } from "../styles/cvs.styles";
 
 type CreateCvDialogProps = {
@@ -44,9 +44,9 @@ function CreateCvDialog({
     <Dialog
       open={open}
       onClose={onClose}
-      sx={cvsStyles.dialog}
-      fullWidth
-      maxWidth="sm"
+      scroll="body"
+      sx={[cvsStyles.dialog, cvsStyles.dialogCreateCv]}
+      maxWidth={false}
     >
       <DialogTitle sx={cvsStyles.dialogTitle}>
         Create CV
@@ -60,78 +60,59 @@ function CreateCvDialog({
         </IconButton>
       </DialogTitle>
 
-      <DialogContent>
-        <Stack
+      <DialogContent sx={cvsStyles.dialogCreateCvContent}>
+        <Box
           component="form"
           id="create-cv-form"
-          spacing={2.5}
           noValidate
           onSubmit={onSubmit}
-          sx={cvsStyles.dialogContent}
+          sx={cvsStyles.dialogCreateCvForm}
         >
-          <TextField
-            label="Name"
-            sx={cvsStyles.formField}
-            {...register("name")}
-            error={!!errors.name}
-            helperText={errors.name?.message}
-            slotProps={{
-              htmlInput: { maxLength: CV_FIELD_LIMITS.name.maxLength },
-            }}
-            fullWidth
+          <CvDetailsFormFields
+            register={register}
+            errors={errors}
+            autoFocusName
+            compact
           />
-          <TextField
-            label="Education"
-            sx={cvsStyles.formField}
-            {...register("education")}
-            error={!!errors.education}
-            helperText={errors.education?.message}
-            slotProps={{
-              htmlInput: { maxLength: CV_FIELD_LIMITS.education.maxLength },
-            }}
-            fullWidth
-          />
-          <TextField
-            label="Description"
-            sx={cvsStyles.formField}
-            {...register("description")}
-            error={!!errors.description}
-            helperText={errors.description?.message}
-            slotProps={{
-              htmlInput: { maxLength: CV_FIELD_LIMITS.description.maxLength },
-            }}
-            fullWidth
-            multiline
-            minRows={4}
-          />
-          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-        </Stack>
-      </DialogContent>
 
-      <DialogActions sx={cvsStyles.dialogActions}>
-        <Button
-          type="button"
-          onClick={onClose}
-          sx={cvsStyles.cancelButton}
-          disabled={isPending}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          form="create-cv-form"
-          sx={[
-            hasChanges ? cvsStyles.primaryButton : cvsStyles.primaryButtonMuted,
-          ]}
-          disabled={!canCreate}
-        >
-          {isPending ? (
-            <CircularProgress size={18} color="inherit" />
-          ) : (
-            "Create"
-          )}
-        </Button>
-      </DialogActions>
+          {errorMessage ? (
+            <Alert severity="error" sx={cvsStyles.detailsFormAlert}>
+              {errorMessage}
+            </Alert>
+          ) : null}
+
+          <Stack
+            direction="row"
+            spacing={1.5}
+            sx={cvsStyles.dialogCreateCvActions}
+          >
+            <Button
+              type="button"
+              onClick={onClose}
+              sx={cvsStyles.dialogCreateCvCancelButton}
+              disabled={isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              sx={[
+                cvsStyles.dialogCreateCvCreateButton,
+                hasChanges
+                  ? cvsStyles.updateButtonActive
+                  : cvsStyles.updateButtonMuted,
+              ]}
+              disabled={!canCreate}
+            >
+              {isPending ? (
+                <CircularProgress size={18} color="inherit" />
+              ) : (
+                "Create"
+              )}
+            </Button>
+          </Stack>
+        </Box>
+      </DialogContent>
     </Dialog>
   );
 }
