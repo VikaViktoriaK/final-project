@@ -1,14 +1,15 @@
 import type { Cv } from "../types";
 
-export type CvSortField = "name" | "employee";
+export type CvSortField = "name" | "education" | "employee";
 export type SortDirection = "asc" | "desc";
 
 function filterCvs(cvs: Cv[], search: string): Cv[] {
   const query = search.trim().toLowerCase();
+  const validCvs = cvs.filter((cv): cv is Cv => Boolean(cv?.id && cv?.name));
   if (!query) {
-    return cvs;
+    return validCvs;
   }
-  return cvs.filter((cv) => {
+  return validCvs.filter((cv) => {
     const employee = cv.user?.email ?? "";
     return (
       cv.name.toLowerCase().includes(query) ||
@@ -19,22 +20,25 @@ function filterCvs(cvs: Cv[], search: string): Cv[] {
   });
 }
 
+function getSortValue(cv: Cv, sortField: CvSortField): string {
+  if (sortField === "name") {
+    return cv.name.toLowerCase();
+  }
+  if (sortField === "education") {
+    return (cv.education ?? "").toLowerCase();
+  }
+  return (cv.user?.email ?? "").toLowerCase();
+}
+
 function sortCvs(
   cvs: Cv[],
   sortField: CvSortField,
   direction: SortDirection,
 ): Cv[] {
-  const sorted = [...cvs].sort((a, b) => {
-    const aValue =
-      sortField === "name"
-        ? a.name.toLowerCase()
-        : (a.user?.email ?? "").toLowerCase();
-    const bValue =
-      sortField === "name"
-        ? b.name.toLowerCase()
-        : (b.user?.email ?? "").toLowerCase();
-    return aValue.localeCompare(bValue);
-  });
+  const validCvs = cvs.filter((cv): cv is Cv => Boolean(cv?.id && cv?.name));
+  const sorted = [...validCvs].sort((a, b) =>
+    getSortValue(a, sortField).localeCompare(getSortValue(b, sortField)),
+  );
   return direction === "asc" ? sorted : sorted.reverse();
 }
 

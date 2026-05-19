@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import useCvs from "./use-cvs";
@@ -9,7 +10,11 @@ import useAnchoredMenu from "./shared/use-anchored-menu";
 import useDialog from "./shared/use-dialog";
 import useSearch from "./shared/use-search";
 import { useCreateCvMutation, useDeleteCvMutation } from "./use-cv-mutations";
-import { createCvSchema, type CreateCvFormValues } from "../schemas";
+import {
+  createCvSchema,
+  EMPTY_CV_FORM_VALUES,
+  type CreateCvFormValues,
+} from "../schemas";
 import {
   filterCvs,
   sortCvs,
@@ -19,6 +24,7 @@ import {
 import type { Cv } from "../types";
 
 function useCvsPage() {
+  const router = useRouter();
   const { query: search, onChange: handleSearchChange } = useSearch();
   const createDialog = useDialog();
   const deleteDialog = useDialog<Cv>();
@@ -35,8 +41,21 @@ function useCvsPage() {
 
   const createForm = useForm<CreateCvFormValues>({
     resolver: zodResolver(createCvSchema),
-    defaultValues: { name: "", education: "", description: "" },
+    mode: "onChange",
+    defaultValues: EMPTY_CV_FORM_VALUES,
   });
+
+  const {
+    formState: {
+      errors: createErrors,
+      isSubmitting: isCreateSubmitting,
+      isDirty,
+      isValid,
+    },
+  } = createForm;
+  const isCreatePending = isCreateSubmitting || creating;
+  const hasCreateChanges = isDirty && isValid;
+  const canCreate = hasCreateChanges && !isCreatePending;
 
   const allCvs = useMemo(() => data?.cvs ?? [], [data?.cvs]);
   const cvs = useMemo(
@@ -58,13 +77,13 @@ function useCvsPage() {
   };
 
   const openCreateDialog = () => {
-    createForm.reset();
+    createForm.reset(EMPTY_CV_FORM_VALUES);
     setCreateError(null);
     createDialog.open();
   };
 
   const closeCreateDialog = () => {
-    createForm.reset();
+    createForm.reset(EMPTY_CV_FORM_VALUES);
     setCreateError(null);
     createDialog.close();
   };
@@ -75,6 +94,7 @@ function useCvsPage() {
     if (result.ok) {
       showSuccess("CV created");
       closeCreateDialog();
+      router.push(`/cvs/${result.data.id}/details`);
       return;
     }
     setCreateError(result.message);
@@ -118,8 +138,11 @@ function useCvsPage() {
     deleteDialog,
     tableMenu,
     editHref,
-    creating,
     createError,
+    createErrors,
+    isCreatePending,
+    hasCreateChanges,
+    canCreate,
     deleting,
     createForm,
     openCreateDialog,

@@ -15,7 +15,8 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NextLink from "next/link";
-import { Fragment } from "react";
+import { TableSortArrowIcon } from "@/components/app-arrow";
+import type { MouseEvent } from "react";
 import type { Cv } from "../types";
 import type { CvSortField, SortDirection } from "../utils/cv-list";
 import { cvsStyles } from "../styles/cvs.styles";
@@ -28,10 +29,93 @@ type CvsTableProps = {
   onSort: (field: CvSortField) => void;
   menuAnchor: HTMLElement | null;
   editHref: string;
-  onOpenMenu: (event: React.MouseEvent<HTMLElement>, cv: Cv) => void;
+  onOpenMenu: (event: MouseEvent<HTMLElement>, cv: Cv) => void;
   onCloseMenu: () => void;
   onDelete: () => void;
 };
+
+type CvRowMenuProps = {
+  cv: Cv;
+  showMenu: boolean;
+  onOpenMenu: (event: MouseEvent<HTMLElement>, cv: Cv) => void;
+};
+
+function CvRowMenu({ cv, showMenu, onOpenMenu }: CvRowMenuProps) {
+  if (!showMenu) {
+    return null;
+  }
+
+  const handleOpenMenu = (event: MouseEvent<HTMLElement>) => {
+    onOpenMenu(event, cv);
+  };
+
+  return (
+    <IconButton
+      type="button"
+      size="small"
+      aria-label="CV actions"
+      onClick={handleOpenMenu}
+      sx={cvsStyles.menuIconButton}
+    >
+      <MoreVertIcon />
+    </IconButton>
+  );
+}
+
+type SortHeaderProps = {
+  label: string;
+  field: CvSortField;
+  sortField: CvSortField;
+  sortDirection: SortDirection;
+  onSort: (field: CvSortField) => void;
+};
+
+function SortHeader({
+  label,
+  field,
+  sortField,
+  sortDirection,
+  onSort,
+}: SortHeaderProps) {
+  const handleClick = () => {
+    onSort(field);
+  };
+
+  const isActive = sortField === field;
+
+  return (
+    <TableSortLabel
+      active={isActive}
+      direction={isActive ? sortDirection : "asc"}
+      onClick={handleClick}
+      IconComponent={TableSortArrowIcon}
+      sx={cvsStyles.tableSortLabel}
+    >
+      {label}
+    </TableSortLabel>
+  );
+}
+
+type CvNameCellProps = {
+  cv: Cv;
+};
+
+function CvNameCell({ cv }: CvNameCellProps) {
+  return (
+    <Box sx={cvsStyles.tableNameStack}>
+      <Box
+        component={NextLink}
+        href={`/cvs/${cv.id}/details`}
+        sx={cvsStyles.tableNamePrimary}
+      >
+        {cv.name}
+      </Box>
+      <Typography component="p" sx={cvsStyles.tableNameDescription}>
+        {cv.description}
+      </Typography>
+    </Box>
+  );
+}
 
 function CvsTable({
   cvs,
@@ -45,104 +129,102 @@ function CvsTable({
   onCloseMenu,
   onDelete,
 }: CvsTableProps) {
-  const handleSortByName = () => {
-    onSort("name");
-  };
-
-  const handleSortByEmployee = () => {
-    onSort("employee");
-  };
-
   return (
     <>
-      <Table sx={cvsStyles.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={cvsStyles.tableHeadCell}>
-              <TableSortLabel
-                active={sortField === "name"}
-                direction={sortField === "name" ? sortDirection : "asc"}
-                onClick={handleSortByName}
-                sx={cvsStyles.tableSortLabel}
+      <Box sx={cvsStyles.tableContainer}>
+        <Table sx={cvsStyles.table}>
+          <TableHead>
+            <TableRow sx={cvsStyles.tableHeadRow}>
+              <TableCell
+                sx={[cvsStyles.tableHeadCell, cvsStyles.tableHeadCellName]}
               >
-                Name
-              </TableSortLabel>
-            </TableCell>
-            <TableCell sx={cvsStyles.tableHeadCell}>Education</TableCell>
-            <TableCell sx={cvsStyles.tableHeadCell}>
-              <TableSortLabel
-                active={sortField === "employee"}
-                direction={sortField === "employee" ? sortDirection : "asc"}
-                onClick={handleSortByEmployee}
-                sx={cvsStyles.tableSortLabel}
+                <SortHeader
+                  label="Name"
+                  field="name"
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  onSort={onSort}
+                />
+              </TableCell>
+              <TableCell
+                sx={[cvsStyles.tableHeadCell, cvsStyles.tableColEducation]}
               >
-                Employee
-              </TableSortLabel>
-            </TableCell>
-            <TableCell sx={cvsStyles.tableHeadCell} width={48} />
-          </TableRow>
-        </TableHead>
+                <SortHeader
+                  label="Education"
+                  field="education"
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  onSort={onSort}
+                />
+              </TableCell>
+              <TableCell
+                sx={[cvsStyles.tableHeadCell, cvsStyles.tableColEmployee]}
+              >
+                <SortHeader
+                  label="Employee"
+                  field="employee"
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  onSort={onSort}
+                />
+              </TableCell>
+              <TableCell
+                sx={[cvsStyles.tableHeadCell, cvsStyles.tableColActions]}
+              />
+            </TableRow>
+          </TableHead>
 
-        <TableBody>
-          {cvs.map((cv) => {
-            const employee = cv.user?.email ?? "Unassigned";
-            const showMenu = canManageCv(cv);
+          <TableBody>
+            {cvs.map((cv) => {
+              const employee = cv.user?.email ?? "Unassigned";
 
-            const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
-              onOpenMenu(event, cv);
-            };
-
-            return (
-              <Fragment key={cv.id}>
-                <TableRow sx={cvsStyles.tableRow}>
-                  <TableCell>
-                    <Box
-                      component={NextLink}
-                      href={`/cvs/${cv.id}/details`}
-                      sx={cvsStyles.cvNameLink}
-                    >
-                      {cv.name}
-                    </Box>
+              return (
+                <TableRow key={cv.id} sx={cvsStyles.tableDataRow}>
+                  <TableCell sx={cvsStyles.tableColName}>
+                    <CvNameCell cv={cv} />
                   </TableCell>
-                  <TableCell>{cv.education ?? "—"}</TableCell>
-                  <TableCell>{employee}</TableCell>
-                  <TableCell align="right">
-                    {showMenu && (
-                      <IconButton
-                        type="button"
-                        size="small"
-                        aria-label="CV actions"
-                        onClick={handleOpenMenu}
-                        sx={cvsStyles.menuIconButton}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    )}
+                  <TableCell sx={cvsStyles.tableColEducation}>
+                    {cv.education ?? "—"}
                   </TableCell>
-                </TableRow>
-                <TableRow sx={cvsStyles.tableRow}>
-                  <TableCell colSpan={4} sx={cvsStyles.tableDescriptionCell}>
-                    <Typography component="span" sx={cvsStyles.cvDescription}>
-                      {cv.description}
+                  <TableCell sx={cvsStyles.tableColEmployee}>
+                    <Typography sx={cvsStyles.tableEmployeeText}>
+                      {employee}
                     </Typography>
                   </TableCell>
+                  <TableCell align="right" sx={cvsStyles.tableColActions}>
+                    <CvRowMenu
+                      cv={cv}
+                      showMenu={canManageCv(cv)}
+                      onOpenMenu={onOpenMenu}
+                    />
+                  </TableCell>
                 </TableRow>
-              </Fragment>
-            );
-          })}
-        </TableBody>
-      </Table>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Box>
 
       <Menu
         anchorEl={menuAnchor}
         open={Boolean(menuAnchor)}
         onClose={onCloseMenu}
+        slotProps={{ paper: { sx: cvsStyles.contextMenuPaper } }}
       >
-        <MenuItem component={NextLink} href={editHref} onClick={onCloseMenu}>
-          Edit
+        <MenuItem
+          component={NextLink}
+          href={editHref}
+          onClick={onCloseMenu}
+          sx={cvsStyles.contextMenuItem}
+        >
+          Details
         </MenuItem>
-        <MenuItem onClick={onDelete} sx={cvsStyles.menuItemDanger}>
-          Delete
+        <MenuItem
+          divider
+          onClick={onDelete}
+          sx={[cvsStyles.contextMenuItem, cvsStyles.menuItemDanger]}
+        >
+          Delete CV
         </MenuItem>
       </Menu>
     </>

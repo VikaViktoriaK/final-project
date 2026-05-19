@@ -3,8 +3,8 @@
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
+  IconButton,
   Typography,
 } from "@mui/material";
 import useAuthErrorRedirect from "@/features/auth/hooks/use-auth-error-redirect";
@@ -37,26 +37,32 @@ function CvsPage() {
 
   return (
     <>
-      <Box>
-        <Typography component="h1" sx={cvsStyles.pageTitle}>
-          CVs
-        </Typography>
-
-        <Box sx={cvsStyles.pageHeader}>
-          <Box sx={cvsStyles.pageHeaderSpacer} />
-          <CvSearchField
-            value={page.search}
-            onChange={page.handleSearchChange}
-          />
-          {showCreateButton && (
-            <Button
-              type="button"
-              onClick={page.openCreateDialog}
-              sx={cvsStyles.createButton}
-            >
-              + Create CV
-            </Button>
-          )}
+      <Box sx={cvsStyles.cvContentFrame}>
+        <Box sx={cvsStyles.pageTopBar}>
+          <Typography component="h2" sx={cvsStyles.pageTitle}>
+            CVs
+          </Typography>
+          <Box sx={cvsStyles.pageToolbar}>
+            <CvSearchField
+              value={page.search}
+              onChange={page.handleSearchChange}
+            />
+            {showCreateButton && (
+              <IconButton
+                type="button"
+                onClick={page.openCreateDialog}
+                aria-label="Create CV"
+                sx={cvsStyles.createIconButton}
+              >
+                <Typography
+                  component="span"
+                  sx={cvsStyles.createIconButtonGlyph}
+                >
+                  +
+                </Typography>
+              </IconButton>
+            )}
+          </Box>
         </Box>
 
         {page.isEmpty && (
@@ -88,8 +94,10 @@ function CvsPage() {
           open={page.createDialog.isOpen}
           onClose={page.closeCreateDialog}
           register={page.createForm.register}
-          errors={page.createForm.formState.errors}
-          isPending={page.createForm.formState.isSubmitting || page.creating}
+          errors={page.createErrors}
+          isPending={page.isCreatePending}
+          hasChanges={page.hasCreateChanges}
+          canCreate={page.canCreate}
           errorMessage={page.createError ?? undefined}
           onSubmit={page.submitCreateCv}
         />
