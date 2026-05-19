@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { useCvContext } from "../context/cv-context";
 import useActionFeedback from "./shared/use-action-feedback";
 import { useCvSkillCatalog, useExportPdfMutation } from "./use-cv-mutations";
-import getCvDisplayName from "../utils/get-cv-display-name";
 import { groupSkillsByCategory } from "../utils/group-skills";
 
 function useCvPreviewPage() {
@@ -27,8 +26,6 @@ function useCvPreviewPage() {
     ].join(", ");
   }, [cv]);
 
-  const displayName = cv ? getCvDisplayName(cv) : "";
-
   const handleExportPdf = async () => {
     if (!cv) {
       return;
@@ -45,7 +42,6 @@ function useCvPreviewPage() {
     cv,
     groupedSkills,
     domains,
-    displayName,
     exporting,
     handleExportPdf,
     FeedbackSnackbar,
