@@ -4,16 +4,16 @@ export const dashboardStyles = {
   root: {
     display: "flex",
     minHeight: "100dvh",
-    bgcolor: "var(--app-bg)",
+    bgcolor: "var(--app-surface)",
     color: "var(--app-text)",
   },
 
   sidebar: {
+    display: { xs: "none", md: "flex" },
     width: 240,
     flexShrink: 0,
-    bgcolor: "var(--app-sidebar-bg)",
+    bgcolor: "var(--app-surface)",
     borderRight: "1px solid var(--app-divider)",
-    display: "flex",
     flexDirection: "column",
     py: 2,
     transition: "width 0.2s",
@@ -86,7 +86,7 @@ export const dashboardStyles = {
     height: 36,
     bgcolor: "var(--color-primary)",
     fontSize: 14,
-    fontWeight: 700,
+    fontWeight: 500,
   },
 
   main: {
@@ -100,7 +100,96 @@ export const dashboardStyles = {
   mainContent: {
     flex: 1,
     overflow: "auto",
+    bgcolor: "var(--app-surface)",
     px: { xs: 2, md: 4 },
     py: { xs: 2, md: 3 },
+  },
+
+  /** Bottom bar on small screens — 56px, equal flex spacing, icons-only when tight. */
+  mobileNav: {
+    display: { xs: "flex", md: "none" },
+    flexShrink: 0,
+    height: 56,
+    alignItems: "center",
+    borderTop: "1px solid var(--app-divider)",
+    bgcolor: "var(--app-surface)",
+    px: 1,
+    containerType: "inline-size",
+    containerName: "mobile-nav",
+  },
+
+  mobileNavInner: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    width: "100%",
+    minWidth: 0,
+    gap: 0.5,
+  },
+
+  mobileNavItem: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 0.75,
+    flex: "1 1 0",
+    minWidth: 0,
+    maxWidth: "100%",
+    px: { xs: 0.75, sm: 1.5 },
+    py: 1,
+    borderRadius: "24px",
+    color: "var(--app-text-muted)",
+    textDecoration: "none",
+    fontSize: 14,
+    fontWeight: 500,
+    lineHeight: "24px",
+    transition: "background-color 0.2s, color 0.2s",
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "var(--app-overlay-06)",
+        color: "var(--app-text)",
+      },
+    },
+  },
+
+  mobileNavItemActive: {
+    bgcolor: "var(--app-overlay-12)",
+    color: "var(--app-text)",
+  },
+
+  mobileNavItemLabel: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    "@container mobile-nav (max-width: 640px)": {
+      display: "none",
+    },
+  },
+
+  mobileNavUser: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: "1 1 0",
+    minWidth: 0,
+    gap: 0.75,
+    px: { xs: 0.5, sm: 1 },
+  },
+
+  mobileNavUserButton: {
+    p: 0,
+    minWidth: 0,
+  },
+
+  mobileNavUserName: {
+    fontSize: 13,
+    color: "var(--app-text)",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    maxWidth: 88,
+    "@container mobile-nav (max-width: 640px)": {
+      display: "none",
+    },
   },
 } satisfies Record<string, SxProps<Theme>>;

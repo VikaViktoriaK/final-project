@@ -17,6 +17,7 @@
   --color-primary: #c63031;
   --color-primary-hover: #b52b2c;
   --color-primary-subtle: rgba(198, 48, 49, 0.08);
+  --color-primary-pill-bg: #c630310a;
   --color-primary-light: #fdecea;
   --color-mastery-novice: #757575;
   --color-mastery-advanced: #e6b800;
@@ -45,5 +46,11 @@ body {
   margin: 0;
   background-color: var(--app-surface);
   color: var(--app-text);
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: var(--font-roboto, "Roboto"), "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
