@@ -8,6 +8,7 @@ import {
   isNativeProficiency,
   languageRowKey,
 } from "@/features/users/components/user-profile/userLanguages.utils";
+import { profileSelectionSx } from "./profileSelection.styles";
 import { userLanguagesSx } from "./userLanguages.styles";
 import {
   CONFIRM_BULK_REMOVE_LANGUAGES_LABELS,
@@ -68,9 +69,13 @@ export function UserLanguagesList({
                   type="button"
                   focusRipple
                   sx={[
+                    profileSelectionSx.chip,
                     userLanguagesSx.languageEntryClickable,
                     removeMode && selectedKeys.has(languageRowKey(lang))
-                      ? userLanguagesSx.languageEntryClickableSelected
+                      ? {
+                          ...profileSelectionSx.chipSelected,
+                          ...userLanguagesSx.languageEntryClickableSelected,
+                        }
                       : null,
                   ]}
                   aria-pressed={

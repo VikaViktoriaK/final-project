@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,16 +5,16 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { SortableTableHeader } from "@/shared/ui/catalog/SortableTableHeader";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import type { PositionRow } from "../types";
 import { PositionsTableRow } from "./PositionsTableRow";
 import { positionsTableSx } from "./positionsTable.styles";
-import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 type PositionsTableProps = {
   positions: PositionRow[];
   order: "asc" | "desc";
-  onToggleNameSort: () => void;
+  onSort: () => void;
   onEdit: (position: PositionRow) => void;
   onDelete: (position: PositionRow) => void;
   canManage: boolean;
@@ -24,7 +23,7 @@ type PositionsTableProps = {
 export function PositionsTable({
   positions,
   order,
-  onToggleNameSort,
+  onSort,
   onEdit,
   onDelete,
   canManage,
@@ -42,33 +41,14 @@ export function PositionsTable({
         </colgroup>
         <TableHead>
           <TableRow>
-            <TableCell
-              sx={positionsTableSx.nameHeadCell}
-              aria-sort={order === "asc" ? "ascending" : "descending"}
-            >
-              <Box
-                component="button"
-                type="button"
-                onClick={onToggleNameSort}
-                aria-label={`Sort by name, ${order === "asc" ? "ascending" : "descending"}`}
-                sx={{
-                  ...catalogTableSx.headDepartmentLabel,
-                  border: "none",
-                  background: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  color: "inherit",
-                  font: "inherit",
-                }}
-              >
-                <span>Name</span>
-                <ArrowUpwardIcon
-                  sx={{
-                    transform: order === "desc" ? "rotate(180deg)" : "none",
-                    transition: "transform 0.2s ease",
-                  }}
-                />
-              </Box>
+            <TableCell sx={positionsTableSx.nameHeadCell}>
+              <SortableTableHeader
+                label="Name"
+                field="name"
+                sortField="name"
+                sortDirection={order}
+                onSort={() => onSort()}
+              />
             </TableCell>
             <TableCell sx={positionsTableSx.actionsHeadCell} />
           </TableRow>

@@ -5,7 +5,6 @@ import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { DepartmentFormDialog } from "../components/DepartmentFormDialog";
-import { DepartmentsFilter } from "../components/DepartmentsFilter";
 import { DepartmentsTable } from "../components/DepartmentsTable";
 import {
   DEPARTMENTS_CREATE_LABEL,
@@ -35,12 +34,6 @@ export function DepartmentsPage() {
         title={DEPARTMENTS_PAGE_TITLE}
         searchQuery={search.query}
         onSearchChange={search.setQuery}
-        filter={
-          <DepartmentsFilter
-            order={search.order}
-            onOrderChange={search.setOrder}
-          />
-        }
         action={
           isAdmin ? (
             <Button
@@ -58,7 +51,7 @@ export function DepartmentsPage() {
         <DepartmentsTable
           departments={processedDepartments}
           order={search.order}
-          onToggleNameSort={search.toggleOrder}
+          onSort={search.toggleOrder}
           onEdit={form.openEdit}
           onDelete={deleteDialog.requestDelete}
           canManage={isAdmin}

@@ -1484,7 +1484,6 @@ export const cvsStyles = {
     lineHeight: "24px",
     fontWeight: 500,
     letterSpacing: "0.15px",
-    textTransform: "uppercase",
     "& .MuiTableSortLabel-root": {
       whiteSpace: "nowrap",
     },

@@ -4,3 +4,5 @@ export type LanguageRow = {
   nativeName: string;
   iso2: string;
 };
+
+export type LanguagesSortField = "name";

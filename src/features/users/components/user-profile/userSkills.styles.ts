@@ -26,8 +26,8 @@ export const userSkillsSx = {
     display: "grid",
     gridTemplateColumns: {
       xs: "1fr",
-      sm: "repeat(2, minmax(220px, 1fr))",
-      lg: "repeat(3, minmax(220px, 1fr))",
+      sm: "repeat(2, minmax(0, 1fr))",
+      lg: "repeat(3, minmax(0, 1fr))",
     },
     gap: 2,
     alignItems: "center",
@@ -38,12 +38,6 @@ export const userSkillsSx = {
   skillListItem: {
     listStyle: "none",
     minWidth: 0,
-  },
-  skillCardSelected: {
-    outline: "2px solid #df4d4d",
-    outlineOffset: 2,
-    bgcolor: "rgba(223,77,77,0.12)",
-    borderRadius: "40px !important",
   },
   actionsRow: {
     display: "flex",

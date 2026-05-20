@@ -1,5 +1,6 @@
 import { catalogPageSx } from "./catalogPage.styles";
 import { catalogFilterSx } from "./filter.styles";
+import { catalogTableHeadSx } from "./catalogTableHead.styles";
 import { dataTableSx } from "./dataTable.styles";
 import { deleteDialogSx } from "./deleteDialog.styles";
 import { rowMenuSx } from "./rowMenu.styles";
@@ -10,6 +11,7 @@ export const catalogTableSx = {
   ...searchFieldSx,
   ...dataTableSx,
   ...catalogFilterSx,
+  ...catalogTableHeadSx,
   ...rowMenuSx,
   ...deleteDialogSx,
 } as const;

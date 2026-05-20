@@ -1,0 +1,54 @@
+export const catalogTableHeadSx = {
+  headCell: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: 500,
+    fontSize: 14,
+    lineHeight: "24px",
+    letterSpacing: "0.15px",
+    color: "var(--app-text)",
+    whiteSpace: "nowrap",
+    verticalAlign: "middle",
+  },
+  headCellMuted: {
+    color: "var(--app-text-muted)",
+  },
+  tableSortLabel: {
+    display: "inline-flex",
+    width: "auto",
+    maxWidth: "100%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: "2px",
+    fontFamily: "inherit",
+    fontSize: "inherit",
+    fontWeight: "inherit",
+    lineHeight: "inherit",
+    letterSpacing: "inherit",
+    verticalAlign: "middle",
+    "&.MuiTableSortLabel-root": {
+      color: "inherit",
+    },
+    "&.MuiTableSortLabel-root:hover": {
+      color: "inherit",
+    },
+    "&.MuiTableSortLabel-root.Mui-active": {
+      color: "inherit",
+    },
+    "& .MuiTableSortLabel-icon": {
+      margin: 0,
+      padding: 0,
+      width: 0,
+      minWidth: 0,
+      opacity: 0,
+      overflow: "hidden",
+      transition: "opacity 0.4s ease, transform 0.35s ease",
+    },
+    "&.Mui-active .MuiTableSortLabel-icon": {
+      width: 18,
+      minWidth: 18,
+      height: 18,
+      opacity: 1,
+    },
+  },
+} as const;

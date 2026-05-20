@@ -10,7 +10,7 @@ export type CatalogPageShellProps = {
   title: string;
   searchQuery: string;
   onSearchChange: (value: string) => void;
-  filter: ReactNode;
+  filter?: ReactNode;
   action?: ReactNode;
   errorMessage?: string | null;
   loading: boolean;

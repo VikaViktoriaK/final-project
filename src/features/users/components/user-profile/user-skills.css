@@ -3,15 +3,16 @@
  */
 .user-skill-card.MuiButtonBase-root {
   display: grid !important;
-  grid-template-columns: minmax(64px, 0.5fr) 1fr;
-  gap: 16px;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
   align-items: center;
   width: 100%;
-  min-width: 220px;
+  min-width: 0;
+  max-width: 100%;
   height: 48px;
   padding: 8px 16px;
   border: 0;
-  border-radius: 40px;
+  border-radius: 999px;
   box-sizing: border-box;
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 0.875rem;
@@ -27,7 +28,7 @@
 
 .user-skill-card:hover:not(:disabled),
 .user-skill-card:focus-visible:not(:disabled) {
-  border-radius: 40px;
+  border-radius: 999px;
   background-color: rgba(255, 255, 255, 0.06);
   color: var(--app-text);
 }

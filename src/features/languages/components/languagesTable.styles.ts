@@ -1,28 +1,56 @@
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
-const headCell = {
-  color: "var(--app-text-muted)",
-  fontWeight: 600,
-  letterSpacing: 0.2,
-  whiteSpace: "nowrap" as const,
-};
-
 export const languagesTableSx = {
-  nameHeadCell: headCell,
-  nativeNameHeadCell: headCell,
-  iso2HeadCell: {
-    ...headCell,
-    width: 100,
+  nameHeadCell: {
+    ...catalogTableSx.headCell,
+    width: "30%",
   },
-  nameCell: {},
+  nativeNameHeadCell: {
+    ...catalogTableSx.headCell,
+    width: "42%",
+  },
+  iso2HeadCell: {
+    ...catalogTableSx.headCell,
+    ...catalogTableSx.headCellMuted,
+    width: 72,
+    minWidth: 72,
+    maxWidth: 72,
+    pr: 1.5,
+    pl: 1,
+    whiteSpace: "nowrap",
+  },
+  nameCell: {
+    width: "30%",
+  },
   nativeNameCell: {
     color: "var(--app-text-muted)",
+    width: "42%",
+    maxWidth: 0,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
   iso2Cell: {
     color: "var(--app-text-muted)",
     textTransform: "uppercase",
+    width: 72,
+    minWidth: 72,
+    maxWidth: 72,
+    pr: 1.5,
+    pl: 1,
+    whiteSpace: "nowrap",
   },
-  actionsHeadCell: catalogTableSx.headCell,
-  actionsCell: catalogTableSx.actionsCell,
-  sortButton: catalogTableSx.headDepartmentLabel,
+  actionsHeadCell: {
+    ...catalogTableSx.headCell,
+    width: 56,
+    minWidth: 56,
+    textAlign: "center",
+    pl: 2,
+  },
+  actionsCell: {
+    ...catalogTableSx.actionsCell,
+    width: 56,
+    minWidth: 56,
+    pl: 2,
+  },
 } as const;

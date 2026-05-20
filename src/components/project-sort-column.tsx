@@ -2,7 +2,7 @@
 
 import { TableSortLabel } from "@mui/material";
 import { TableSortArrowIcon } from "@/components/app-arrow";
-import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import type { ProjectSortColumnProps } from "./types";
 
 function ProjectSortColumn({
@@ -22,7 +22,7 @@ function ProjectSortColumn({
       direction={sortField === field ? sortDirection : "asc"}
       onClick={handleClick}
       IconComponent={TableSortArrowIcon}
-      sx={cvsStyles.tableSortLabel}
+      sx={catalogTableSx.tableSortLabel}
     >
       {label}
     </TableSortLabel>

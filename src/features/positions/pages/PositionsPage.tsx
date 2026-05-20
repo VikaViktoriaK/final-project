@@ -5,7 +5,6 @@ import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { PositionFormDialog } from "../components/PositionFormDialog";
-import { PositionsFilter } from "../components/PositionsFilter";
 import { PositionsTable } from "../components/PositionsTable";
 import {
   POSITIONS_CREATE_LABEL,
@@ -35,12 +34,6 @@ export function PositionsPage() {
         title={POSITIONS_PAGE_TITLE}
         searchQuery={search.query}
         onSearchChange={search.setQuery}
-        filter={
-          <PositionsFilter
-            order={search.order}
-            onOrderChange={search.setOrder}
-          />
-        }
         action={
           isAdmin ? (
             <Button
@@ -58,7 +51,7 @@ export function PositionsPage() {
         <PositionsTable
           positions={processedPositions}
           order={search.order}
-          onToggleNameSort={search.toggleOrder}
+          onSort={search.toggleOrder}
           onEdit={form.openEdit}
           onDelete={deleteDialog.requestDelete}
           canManage={isAdmin}

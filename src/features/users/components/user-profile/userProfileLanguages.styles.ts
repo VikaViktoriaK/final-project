@@ -29,7 +29,6 @@ export const userProfileLanguagesSx = {
     listStyle: "none",
   },
   languageEntryClickable: {
-    border: "2px solid transparent",
     padding: 0,
     margin: 0,
     background: "transparent",
@@ -37,24 +36,17 @@ export const userProfileLanguagesSx = {
     display: "flex",
     alignItems: "baseline",
     gap: 3,
-    borderRadius: 1,
     font: "inherit",
     color: "inherit",
     textAlign: "left",
     py: 1,
-    px: 1.5,
+    px: 2,
     mx: -0.5,
     "&:hover": {
       bgcolor: "rgba(255,255,255,0.06)",
     },
-    "&:focus-visible": {
-      outline: "2px solid #df4d4d",
-      outlineOffset: 2,
-    },
   },
   languageEntryClickableSelected: {
-    borderColor: "#df4d4d",
-    bgcolor: "rgba(223,77,77,0.12)",
     "&:hover": {
       bgcolor: "rgba(223,77,77,0.16)",
     },

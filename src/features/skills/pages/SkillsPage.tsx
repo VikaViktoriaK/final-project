@@ -5,7 +5,6 @@ import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { SkillFormDialog } from "../components/SkillFormDialog";
-import { SkillsFilter } from "../components/SkillsFilter";
 import { SkillsTable } from "../components/SkillsTable";
 import {
   SKILLS_CREATE_LABEL,
@@ -22,9 +21,7 @@ export function SkillsPage() {
     query,
     setQuery,
     orderBy,
-    setOrderBy,
     order,
-    setOrder,
     handleSort,
     form,
     deleteDialog,
@@ -42,14 +39,6 @@ export function SkillsPage() {
         title={SKILLS_PAGE_TITLE}
         searchQuery={query}
         onSearchChange={setQuery}
-        filter={
-          <SkillsFilter
-            orderBy={orderBy}
-            order={order}
-            onOrderByChange={setOrderBy}
-            onOrderChange={setOrder}
-          />
-        }
         action={
           isAdmin ? (
             <Button

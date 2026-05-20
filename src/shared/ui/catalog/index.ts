@@ -6,5 +6,7 @@ export { CatalogPageShell } from "./CatalogPageShell";
 export type { CatalogPageShellProps } from "./CatalogPageShell";
 export { CatalogSearch } from "./CatalogSearch";
 export type { CatalogSearchProps } from "./CatalogSearch";
+export { SortableTableHeader } from "./SortableTableHeader";
+export type { SortableTableHeaderProps } from "./SortableTableHeader";
 export { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
 export type { ConfirmDeleteDialogProps } from "./ConfirmDeleteDialog";

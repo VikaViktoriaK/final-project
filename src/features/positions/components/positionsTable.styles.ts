@@ -1,13 +1,13 @@
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 export const positionsTableSx = {
-  nameHeadCell: {
-    color: "var(--app-text-muted)",
-    fontWeight: 600,
-    letterSpacing: 0.2,
-    whiteSpace: "nowrap",
-  },
+  nameHeadCell: catalogTableSx.headCell,
   nameCell: {},
-  actionsHeadCell: catalogTableSx.headCell,
+  actionsHeadCell: {
+    ...catalogTableSx.headCell,
+    width: 48,
+    minWidth: 48,
+    textAlign: "center",
+  },
   actionsCell: catalogTableSx.actionsCell,
 } as const;

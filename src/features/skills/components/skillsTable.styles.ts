@@ -1,19 +1,12 @@
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
-const headSortable = {
-  color: "var(--app-text-muted)",
-  fontWeight: 600,
-  letterSpacing: 0.2,
-  whiteSpace: "nowrap" as const,
-};
-
 export const skillsTableSx = {
   nameHeadCell: {
-    ...headSortable,
+    ...catalogTableSx.headCell,
     width: "50%",
   },
   categoryHeadCell: {
-    ...headSortable,
+    ...catalogTableSx.headCell,
     width: "auto",
   },
   nameCell: {
@@ -22,7 +15,15 @@ export const skillsTableSx = {
   categoryCell: {
     color: "var(--app-text-muted)",
   },
-  actionsHeadCell: catalogTableSx.headCell,
-  actionsCell: catalogTableSx.actionsCell,
-  sortButton: catalogTableSx.headDepartmentLabel,
+  actionsHeadCell: {
+    ...catalogTableSx.headCell,
+    width: 56,
+    minWidth: 56,
+    textAlign: "center",
+  },
+  actionsCell: {
+    ...catalogTableSx.actionsCell,
+    width: 56,
+    minWidth: 56,
+  },
 } as const;

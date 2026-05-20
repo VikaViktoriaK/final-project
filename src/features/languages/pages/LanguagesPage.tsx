@@ -5,7 +5,6 @@ import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { LanguageFormDialog } from "../components/LanguageFormDialog";
-import { LanguagesFilter } from "../components/LanguagesFilter";
 import { LanguagesTable } from "../components/LanguagesTable";
 import {
   LANGUAGES_CREATE_LABEL,
@@ -19,7 +18,11 @@ export function LanguagesPage() {
     isAdmin,
     loading,
     error,
-    search,
+    query,
+    setQuery,
+    orderBy,
+    order,
+    handleSort,
     form,
     deleteDialog,
     processedLanguages,
@@ -33,14 +36,8 @@ export function LanguagesPage() {
     <>
       <CatalogPageShell
         title={LANGUAGES_PAGE_TITLE}
-        searchQuery={search.query}
-        onSearchChange={search.setQuery}
-        filter={
-          <LanguagesFilter
-            order={search.order}
-            onOrderChange={search.setOrder}
-          />
-        }
+        searchQuery={query}
+        onSearchChange={setQuery}
         action={
           isAdmin ? (
             <Button
@@ -57,8 +54,9 @@ export function LanguagesPage() {
       >
         <LanguagesTable
           languages={processedLanguages}
-          order={search.order}
-          onToggleNameSort={search.toggleOrder}
+          orderBy={orderBy}
+          order={order}
+          onSort={handleSort}
           onEdit={form.openEdit}
           onDelete={deleteDialog.requestDelete}
           canManage={isAdmin}

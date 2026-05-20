@@ -6,7 +6,7 @@ import {
   masteryToProgressPercent,
 } from "@/features/users/constants/userSkills.mastery";
 import type { UserSkill } from "@/features/users/types/userSkills.types";
-import { userSkillsSx } from "@/features/users/components/user-profile/userSkills.styles";
+import { profileSelectionSx } from "./profileSelection.styles";
 import "./user-skills.css";
 
 type UserSkillCardProps = {
@@ -35,7 +35,10 @@ export function UserSkillCard({
       aria-pressed={selected ? true : undefined}
       aria-valuenow={progressValue}
       aria-label={`${skill.name}, ${skill.mastery}, ${progressValue}%`}
-      sx={selected ? userSkillsSx.skillCardSelected : undefined}
+      sx={[
+        profileSelectionSx.chip,
+        selected ? profileSelectionSx.chipSelected : null,
+      ]}
     >
       <Box
         className="user-skill-card__progress"
