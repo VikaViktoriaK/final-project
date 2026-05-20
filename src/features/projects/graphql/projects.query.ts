@@ -1,16 +1,11 @@
 import { gql } from "@apollo/client";
+import { PROJECT_FIELDS } from "./project.fragments";
 
 export const PROJECTS_QUERY = gql`
   query Projects {
     projects {
-      id
-      name
-      internal_name
-      domain
-      description
-      start_date
-      end_date
-      environment
+      ...ProjectFields
     }
   }
+  ${PROJECT_FIELDS}
 `;

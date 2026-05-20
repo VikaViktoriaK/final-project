@@ -1,3 +1,7 @@
+import type { Project } from "@/features/projects/types";
+
+export type { Project };
+
 export type MasteryLevel =
   | "Novice"
   | "Advanced"
@@ -28,17 +32,6 @@ export type SkillMastery = {
 export type LanguageProficiency = {
   name: string;
   proficiency: ProficiencyLevel;
-};
-
-export type Project = {
-  id: string;
-  name: string;
-  internal_name: string;
-  domain: string;
-  description: string;
-  start_date: string;
-  end_date: string | null;
-  environment: string[];
 };
 
 export type CvProject = {

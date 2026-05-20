@@ -13,7 +13,7 @@ import {
 import { useMemo, useRef, useState, type MouseEvent, type Ref } from "react";
 import type { Skill } from "../types";
 import { cvsStyles } from "../styles/cvs.styles";
-import { groupCatalogSkills } from "../utils/group-catalog-skills";
+import { groupCatalogSkills } from "@/lib/group-catalog-skills";
 
 type SkillSelectFieldProps = {
   skills: Skill[];

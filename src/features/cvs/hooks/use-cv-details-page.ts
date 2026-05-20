@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useCvContext } from "../context/cv-context";
-import useActionFeedback from "./shared/use-action-feedback";
+import useActionFeedback from "@/hooks/use-action-feedback";
 import { useUpdateCvMutation } from "./use-cv-mutations";
 import { updateCvSchema, type UpdateCvFormValues } from "../schemas";
 

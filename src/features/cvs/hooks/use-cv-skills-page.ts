@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useCvContext } from "../context/cv-context";
-import useActionFeedback from "./shared/use-action-feedback";
-import useDialog from "./shared/use-dialog";
+import useActionFeedback from "@/hooks/use-action-feedback";
+import useDialog from "@/hooks/use-dialog";
 import { useCvSkillCatalog, useCvSkillMutations } from "./use-cv-mutations";
 import {
   addSkillSchema,

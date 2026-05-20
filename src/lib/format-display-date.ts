@@ -1,4 +1,4 @@
-function formatCvDate(value: string | null | undefined): string {
+function formatDisplayDate(value: string | null | undefined): string {
   if (!value) {
     return "Till now";
   }
@@ -13,4 +13,4 @@ function formatCvDate(value: string | null | undefined): string {
   });
 }
 
-export default formatCvDate;
+export default formatDisplayDate;

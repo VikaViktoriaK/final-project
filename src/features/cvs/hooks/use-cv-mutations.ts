@@ -21,7 +21,7 @@ import {
 import { CV_QUERY } from "../graphql/cv.query";
 import { CVS_QUERY } from "../graphql/cvs.query";
 import { SKILL_CATEGORIES_QUERY, SKILLS_QUERY } from "../graphql/skills.query";
-import { PROJECTS_QUERY } from "../graphql/projects.query";
+import { PROJECTS_QUERY } from "@/features/projects/graphql/projects.query";
 import type {
   CreateCvFormValues,
   ProjectMutationInput,
@@ -37,7 +37,7 @@ import {
   downloadPdfPayload,
   isServerPdfUnavailable,
 } from "../utils/download-pdf-payload";
-import { runMutation, type MutationResult } from "../utils/mutation-result";
+import { runMutation, type MutationResult } from "@/lib/mutation-result";
 
 function cvRefetch(cvId: string) {
   return [{ query: CV_QUERY, variables: { cvId } }];

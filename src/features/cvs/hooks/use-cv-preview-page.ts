@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useCvContext } from "../context/cv-context";
-import useActionFeedback from "./shared/use-action-feedback";
+import useActionFeedback from "@/hooks/use-action-feedback";
 import { useCvSkillCatalog, useExportPdfMutation } from "./use-cv-mutations";
 import { groupSkillsByCategory } from "../utils/group-skills";
 

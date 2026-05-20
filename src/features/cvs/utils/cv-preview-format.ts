@@ -1,6 +1,8 @@
 import type { Cv, MasteryLevel } from "../types";
 import type { GroupedSkills } from "./group-skills";
-import formatCvDate from "./format-date";
+import formatDisplayDate from "@/lib/format-display-date";
+
+const formatCvDate = formatDisplayDate;
 
 const MASTERY_EXPERIENCE_YEARS: Record<MasteryLevel, number> = {
   Novice: 1,

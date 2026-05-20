@@ -1,14 +1,28 @@
 import type { SxProps, Theme } from "@mui/material/styles";
 
+const AUTH_PANEL_WIDTH = 560;
+const AUTH_PANEL_HEIGHT = 844;
+const AUTH_CONTENT_WIDTH = 220;
+const AUTH_FIELD_WIDTH = AUTH_PANEL_WIDTH;
+const AUTH_FIELD_HEIGHT = 48;
+const AUTH_BUTTON_RADIUS = "40px";
+const AUTH_FIELD_BORDER_WIDTH = 1;
+const AUTH_FIELD_GAP = 20;
+const AUTH_HEADER_TO_FIELDS_GAP = 40;
+const AUTH_FIELDS_TO_BUTTON_GAP = 40;
+
 export const authFormStyles = {
   pageContainer: {
     minHeight: "100dvh",
     height: "100dvh",
     width: "100%",
+    maxWidth: "100vw",
     bgcolor: "var(--app-surface)",
     display: "flex",
-    alignItems: "stretch",
+    alignItems: "flex-start",
     justifyContent: "center",
+    pt: 0,
+    boxSizing: "border-box",
     overflow: "hidden",
   },
 
@@ -28,47 +42,66 @@ export const authFormStyles = {
     textAlign: "center",
   },
 
-  formContainer: {
-    width: "100%",
-    flex: 1,
-    minHeight: 0,
-    maxWidth: {
-      xs: "100%",
-      md: 760,
+  authPanel: {
+    width: {
+      xs: `min(${AUTH_PANEL_WIDTH}px, 100%)`,
+      md: AUTH_PANEL_WIDTH,
     },
+    maxWidth: AUTH_PANEL_WIDTH,
+    height: `min(${AUTH_PANEL_HEIGHT}px, 100dvh)`,
+    pt: 0,
+    mt: 0,
     px: {
       xs: 2.5,
-      sm: 6,
-      md: 8,
+      md: 0,
     },
-    pt: {
-      xs: 2,
-      md: 3,
-    },
-    pb: 5,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    overflowY: "auto",
-    overflowX: "hidden",
+    alignItems: "stretch",
+    justifyContent: "flex-start",
+    overflow: "hidden",
+    flexShrink: 0,
+    boxSizing: "border-box",
+  },
+
+  form: {
+    width: "100%",
+    height: "100%",
+    minHeight: 0,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "stretch",
+    justifyContent: "flex-start",
+    overflow: "hidden",
+    pt: 0,
+    mt: 0,
   },
 
   tabs: {
+    width: "100%",
+    height: AUTH_FIELD_HEIGHT,
+    minHeight: AUTH_FIELD_HEIGHT,
     display: "flex",
     justifyContent: "center",
-    gap: {
-      xs: 5,
-      sm: 6,
-    },
-    mb: {
-      xs: 24,
-      md: 24,
+    alignItems: "flex-end",
+    gap: 6,
+    m: 0,
+    mt: 0,
+    pt: 0,
+    mb: "169px",
+    flexShrink: 0,
+    "& .MuiButton-root": {
+      m: 0,
     },
   },
 
   tab: {
-    width: 140,
-    pb: 2,
+    width: 150,
+    height: AUTH_FIELD_HEIGHT,
+    minWidth: 150,
+    minHeight: AUTH_FIELD_HEIGHT,
+    py: 0,
+    pb: 0,
     px: 0,
     fontSize: 12,
     fontWeight: 500,
@@ -77,7 +110,8 @@ export const authFormStyles = {
     borderRadius: 0,
     textTransform: "uppercase",
     letterSpacing: "0.4px",
-    transition: "color 0.2s",
+    borderBottom: "2px solid transparent",
+    transition: "color 0.2s, border-color 0.2s",
     "@media (hover: hover)": {
       "&:hover": {
         color: "var(--app-text)",
@@ -88,7 +122,7 @@ export const authFormStyles = {
 
   activeTab: {
     color: "var(--color-primary)",
-    borderBottom: "2px solid var(--color-primary)",
+    borderBottomColor: "var(--color-primary)",
     "@media (hover: hover)": {
       "&:hover": {
         color: "var(--color-primary)",
@@ -97,88 +131,88 @@ export const authFormStyles = {
     },
   },
 
-  headerText: {
-    textAlign: "center",
-    mb: {
-      xs: 3.5,
-      md: 4.75,
+  formBody: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 0,
+    flex: 1,
+    minHeight: 0,
+    overflow: "hidden",
+    "& > .MuiTextField-root + .MuiTextField-root": {
+      mt: `${AUTH_FIELD_GAP}px`,
     },
+  },
+
+  formBodyStandalone: {
+    pt: "217px",
+  },
+
+  headerText: {
+    width: "100%",
+    textAlign: "center",
+    mb: `${AUTH_HEADER_TO_FIELDS_GAP}px`,
+    flexShrink: 0,
   },
 
   title: {
-    fontSize: {
-      xs: 26,
-      md: 32,
-    },
+    fontSize: 32,
     fontWeight: 400,
-    lineHeight: 1.2,
+    lineHeight: "40px",
     color: "var(--app-text)",
-    mb: {
-      xs: 2.25,
-      md: 2.75,
-    },
+    mb: 2.75,
   },
 
   subtitle: {
-    fontSize: {
-      xs: 12,
-      md: 16,
-    },
+    fontSize: 16,
     lineHeight: 1.45,
-    color: "var(--app-text)",
-  },
-
-  form: {
-    width: "100%",
-    maxWidth: 560,
-    alignItems: "center",
-    gap: {
-      xs: 2,
-      md: 2.25,
-    },
-  },
-
-  centeredForm: {
-    width: "100%",
-    maxWidth: 560,
-    alignItems: "center",
-    gap: {
-      xs: 2,
-      md: 2.25,
-    },
-    mt: {
-      xs: "22vh",
-      md: "24vh",
-    },
+    color: "var(--app-text-muted)",
   },
 
   textField: {
-    width: "100%",
+    width: AUTH_FIELD_WIDTH,
+    maxWidth: "100%",
     "& .MuiInputBase-root": {
-      height: 48,
+      height: AUTH_FIELD_HEIGHT,
       bgcolor: "transparent",
       fontSize: 16,
       lineHeight: "23px",
       color: "var(--app-text)",
     },
     "& .MuiOutlinedInput-root": {
+      height: AUTH_FIELD_HEIGHT,
       borderRadius: 0,
+      overflow: "hidden",
       "& fieldset": {
+        borderWidth: AUTH_FIELD_BORDER_WIDTH,
         borderColor: "var(--app-control-border)",
+        borderRadius: 0,
       },
       "@media (hover: hover)": {
         "&:hover fieldset": {
+          borderWidth: AUTH_FIELD_BORDER_WIDTH,
           borderColor: "var(--app-text-muted)",
         },
       },
       "&.Mui-focused fieldset": {
+        borderWidth: AUTH_FIELD_BORDER_WIDTH,
         borderColor: "var(--app-text)",
       },
     },
     "& .MuiInputBase-input": {
-      height: "23px",
-      padding: "12.5px 44px 12.5px 12px",
-      boxSizing: "content-box",
+      height: AUTH_FIELD_HEIGHT,
+      padding: "0 16px",
+      boxSizing: "border-box",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
+    "& .MuiInputBase-inputAdornedEnd": {
+      paddingRight: "44px",
+    },
+    "& .MuiFormHelperText-root": {
+      maxWidth: "100%",
+      overflowWrap: "anywhere",
     },
     "& input::placeholder": {
       color: "var(--app-text)",
@@ -200,13 +234,13 @@ export const authFormStyles = {
   },
 
   submitButton: {
-    width: 220,
-    height: 48,
-    mt: {
-      xs: 3,
-      md: 4.75,
-    },
-    borderRadius: "40px",
+    width: AUTH_CONTENT_WIDTH,
+    maxWidth: "100%",
+    height: AUTH_FIELD_HEIGHT,
+    mt: `${AUTH_FIELDS_TO_BUTTON_GAP}px`,
+    alignSelf: "center",
+    flexShrink: 0,
+    borderRadius: AUTH_BUTTON_RADIUS,
     bgcolor: "var(--color-primary)",
     color: "#ffffff",
     fontSize: 14,
@@ -228,10 +262,8 @@ export const authFormStyles = {
   },
 
   textAction: {
-    mt: {
-      xs: 1.25,
-      md: 1.75,
-    },
+    mt: 1.75,
+    flexShrink: 0,
     fontSize: 12,
     fontWeight: 500,
     lineHeight: "16px",
@@ -245,5 +277,11 @@ export const authFormStyles = {
         color: "var(--app-text)",
       },
     },
+  },
+
+  formAlert: {
+    width: AUTH_FIELD_WIDTH,
+    maxWidth: "100%",
+    mt: `${AUTH_FIELD_GAP}px`,
   },
 } satisfies Record<string, SxProps<Theme>>;

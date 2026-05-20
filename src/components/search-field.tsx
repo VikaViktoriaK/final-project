@@ -2,20 +2,10 @@
 
 import { InputAdornment, TextField } from "@mui/material";
 import AppSearchIcon from "@/components/app-search-icon";
-import type { ChangeEvent } from "react";
-import { cvsStyles } from "../styles/cvs.styles";
+import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
+import type { SearchFieldProps } from "./types";
 
-type CvSearchFieldProps = {
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  compact?: boolean;
-};
-
-function CvSearchField({
-  value,
-  onChange,
-  compact = false,
-}: CvSearchFieldProps) {
+function SearchField({ value, onChange, compact = false }: SearchFieldProps) {
   return (
     <TextField
       placeholder="Search"
@@ -35,4 +25,4 @@ function CvSearchField({
   );
 }
 
-export default CvSearchField;
+export default SearchField;

@@ -8,11 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import useAuthErrorRedirect from "@/features/auth/hooks/use-auth-error-redirect";
+import ConfirmDialog from "@/components/confirm-dialog";
+import ConfirmHighlight from "@/components/confirm-highlight";
+import SearchField from "@/components/search-field";
 import CvsTable from "./cvs-table";
 import CreateCvDialog from "./create-cv-dialog";
-import CvConfirmDialog from "./cv-confirm-dialog";
-import CvConfirmHighlight from "./cv-confirm-highlight";
-import CvSearchField from "./cv-search-field";
 import useCvsPage from "../hooks/use-cvs-page";
 import { canCreateCv, canManageCv } from "../utils/cv-permissions";
 import { cvsStyles } from "../styles/cvs.styles";
@@ -43,7 +43,7 @@ function CvsPage() {
             CVs
           </Typography>
           <Box sx={cvsStyles.pageToolbar}>
-            <CvSearchField
+            <SearchField
               value={page.search}
               onChange={page.handleSearchChange}
             />
@@ -102,15 +102,15 @@ function CvsPage() {
           onSubmit={page.submitCreateCv}
         />
 
-        <CvConfirmDialog
+        <ConfirmDialog
           open={page.deleteDialog.isOpen}
           title="Delete CV"
           message={
             <>
               Are you sure you want to delete CV{" "}
-              <CvConfirmHighlight>
+              <ConfirmHighlight>
                 {page.deleteDialog.payload?.name}
-              </CvConfirmHighlight>
+              </ConfirmHighlight>
               ?
             </>
           }

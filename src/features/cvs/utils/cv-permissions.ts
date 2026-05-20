@@ -1,10 +1,6 @@
 import { getAuthUser } from "@/features/auth/lib/auth-storage";
+import { isAdmin } from "@/features/auth/utils/permissions";
 import type { Cv } from "../types";
-
-function isAdmin(): boolean {
-  const user = getAuthUser();
-  return user?.role?.toLowerCase() === "admin";
-}
 
 function canManageCv(cv: Cv): boolean {
   const user = getAuthUser();

@@ -1,4 +1,4 @@
-import type { Skill } from "../types";
+import type { Skill } from "@/features/cvs/types";
 
 type CatalogSkillGroup = {
   categoryLabel: string;

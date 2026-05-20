@@ -3,7 +3,7 @@
 import { Box, Chip, IconButton, Typography } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { MouseEvent } from "react";
-import formatCvDate from "../utils/format-date";
+import formatDisplayDate from "@/lib/format-display-date";
 import type { CvProject } from "../types";
 import { cvsStyles } from "../styles/cvs.styles";
 
@@ -28,10 +28,10 @@ function CvProjectCard({ project, canEdit, onOpenMenu }: CvProjectCardProps) {
           {project.domain}
         </Typography>
         <Typography sx={[cvsStyles.projectGridCell, cvsStyles.projectMeta]}>
-          {formatCvDate(project.start_date)}
+          {formatDisplayDate(project.start_date)}
         </Typography>
         <Typography sx={[cvsStyles.projectGridCell, cvsStyles.projectMeta]}>
-          {formatCvDate(project.end_date)}
+          {formatDisplayDate(project.end_date)}
         </Typography>
         <Box sx={cvsStyles.projectGridActions}>
           {canEdit ? (

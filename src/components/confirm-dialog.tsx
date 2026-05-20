@@ -11,20 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import type { ReactNode } from "react";
-import { cvsStyles } from "../styles/cvs.styles";
+import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
+import type { ConfirmDialogProps } from "./types";
 
-type CvConfirmDialogProps = {
-  open: boolean;
-  title: string;
-  message: ReactNode;
-  confirmLabel?: string;
-  loading?: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-};
-
-function CvConfirmDialog({
+function ConfirmDialog({
   open,
   title,
   message,
@@ -32,7 +22,7 @@ function CvConfirmDialog({
   loading = false,
   onClose,
   onConfirm,
-}: CvConfirmDialogProps) {
+}: ConfirmDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} sx={cvsStyles.dialog}>
       <DialogTitle sx={cvsStyles.dialogTitle}>
@@ -75,4 +65,4 @@ function CvConfirmDialog({
   );
 }
 
-export default CvConfirmDialog;
+export default ConfirmDialog;

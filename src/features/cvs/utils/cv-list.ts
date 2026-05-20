@@ -1,7 +1,8 @@
+import type { SortDirection } from "@/lib/sort";
 import type { Cv } from "../types";
 
 export type CvSortField = "name" | "education" | "employee";
-export type SortDirection = "asc" | "desc";
+export type { SortDirection };
 
 function filterCvs(cvs: Cv[], search: string): Cv[] {
   const query = search.trim().toLowerCase();

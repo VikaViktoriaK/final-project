@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import useCvs from "./use-cvs";
-import useActionFeedback from "./shared/use-action-feedback";
-import useAnchoredMenu from "./shared/use-anchored-menu";
-import useDialog from "./shared/use-dialog";
-import useSearch from "./shared/use-search";
+import useActionFeedback from "@/hooks/use-action-feedback";
+import useAnchoredMenu from "@/hooks/use-anchored-menu";
+import useDialog from "@/hooks/use-dialog";
+import useSearch from "@/hooks/use-search";
 import { useCreateCvMutation, useDeleteCvMutation } from "./use-cv-mutations";
 import {
   createCvSchema,

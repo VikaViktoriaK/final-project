@@ -2,6 +2,7 @@
 
 import { Box } from "@mui/material";
 import type { ReactNode } from "react";
+import AuthFormPanel from "@/features/auth/components/auth-form-panel";
 import AuthGateScreen from "@/features/auth/components/auth-gate-screen";
 import useGuestOnly from "@/features/auth/hooks/use-guest-only";
 import { authFormStyles } from "@/features/auth/styles/auth-form.styles";
@@ -23,7 +24,7 @@ function AuthLayout({ children }: AuthLayoutProps) {
 
   return (
     <Box sx={authFormStyles.pageContainer}>
-      <Box sx={authFormStyles.formContainer}>{children}</Box>
+      <AuthFormPanel>{children}</AuthFormPanel>
     </Box>
   );
 }
