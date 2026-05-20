@@ -1,0 +1,245 @@
+export const userProfileSx = {
+  pageLayout: {
+    minHeight: "100vh",
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gap: 2,
+    px: 2,
+    py: 2,
+    "@media (min-width: 768px)": {
+      gridTemplateColumns: "140px minmax(0, 1fr)",
+      gap: 3,
+      px: 3,
+      py: 3,
+    },
+    "@media (min-width: 1200px)": {
+      gridTemplateColumns: "180px minmax(0, 1fr)",
+    },
+  },
+  container: {
+    width: "100%",
+  },
+  breadcrumbs: {
+    mb: 2,
+    "& .MuiBreadcrumbs-separator": {
+      color: "var(--app-text-muted)",
+    },
+  },
+  breadcrumbLink: {
+    color: "var(--app-text-muted)",
+    fontSize: 14,
+  },
+  breadcrumbActive: {
+    color: "#df4d4d",
+    fontSize: 14,
+  },
+  tabs: {
+    minHeight: 40,
+    mb: 5,
+    "& .MuiTabs-indicator": {
+      backgroundColor: "#df4d4d",
+      height: 2,
+    },
+  },
+  tab: {
+    textTransform: "uppercase",
+    color: "var(--app-text-muted)",
+    minHeight: 40,
+    px: 2,
+    fontSize: 13,
+    fontWeight: 600,
+    "&.Mui-selected": {
+      color: "#df4d4d",
+    },
+  },
+  headerRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 3,
+    justifyContent: "center",
+    flexWrap: "wrap",
+    mb: 3,
+  },
+  avatar: {
+    width: 152,
+    height: 152,
+    bgcolor: "rgba(255,255,255,0.35)",
+    color: "rgba(0,0,0,0.45)",
+    fontSize: 69,
+    fontWeight: 500,
+  },
+  avatarButton: {
+    border: 0,
+    padding: 0,
+    background: "transparent",
+    cursor: "pointer",
+    borderRadius: "50%",
+    lineHeight: 0,
+    "&:disabled": {
+      cursor: "default",
+    },
+  },
+  uploadBlock: {
+    minWidth: 220,
+  },
+  avatarDropZone: {
+    borderRadius: 2,
+    border: "none",
+    px: 0,
+    py: 0,
+    transition: "background-color 0.15s ease",
+    outline: 0,
+  },
+  avatarDropZoneActive: {
+    backgroundColor: "rgba(223,77,77,0.12)",
+    borderRadius: 2,
+  },
+  avatarDropZoneDisabled: {
+    opacity: 0.55,
+    pointerEvents: "none",
+  },
+  removePhotoBtn: {
+    mt: 1,
+    textTransform: "none",
+    fontSize: 14,
+    color: "#ffb4b4",
+    px: 0,
+    minWidth: 0,
+    "&:hover": {
+      backgroundColor: "transparent",
+      textDecoration: "underline",
+    },
+    "&.Mui-disabled": {
+      color: "rgba(255,180,180,0.5)",
+    },
+  },
+  uploadBtn: {
+    color: "var(--app-text)",
+    justifyContent: "flex-start",
+    textTransform: "none",
+    px: 0,
+    minWidth: 0,
+    fontSize: 22,
+    lineHeight: 1.2,
+    "&:hover": {
+      backgroundColor: "transparent",
+      color: "var(--app-text)",
+    },
+    "& .MuiButton-startIcon": {
+      color: "var(--app-text)",
+    },
+  },
+  uploadText: {
+    color: "var(--app-text)",
+    fontSize: 22,
+  },
+  uploadHint: {
+    color: "var(--app-text-muted)",
+    fontSize: 13,
+    mt: 0.5,
+    display: "block",
+  },
+  identity: {
+    textAlign: "center",
+    mb: 4,
+  },
+  fullName: {
+    color: "var(--app-text)",
+    fontSize: 34,
+    fontWeight: 500,
+    lineHeight: 1.2,
+  },
+  email: {
+    color: "var(--app-text-muted)",
+    mt: 1,
+    fontSize: 18,
+  },
+  memberSince: {
+    color: "var(--app-text-muted)",
+    mt: 0.5,
+    fontSize: 15,
+  },
+  editSection: {
+    width: "100%",
+    maxWidth: 980,
+    mx: "auto",
+  },
+  formGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gap: 2,
+    "@media (min-width: 768px)": {
+      gridTemplateColumns: "1fr 1fr",
+    },
+  },
+  field: {
+    "& .MuiInputLabel-root": {
+      color: "var(--app-text-muted)",
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "#df4d4d",
+    },
+    "& .MuiOutlinedInput-root": {
+      color: "var(--app-text)",
+      "& fieldset": {
+        borderColor: "var(--app-control-border)",
+      },
+      "&:hover fieldset": {
+        borderColor: "rgba(255,255,255,0.4)",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#df4d4d",
+      },
+    },
+    "& .MuiSvgIcon-root": {
+      color: "var(--app-text-muted)",
+    },
+  },
+  fieldReadOnly: {
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "var(--app-text-muted)",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+      borderColor: "var(--app-control-border)",
+    },
+  },
+  updateBtnWrap: {
+    display: "flex",
+    justifyContent: "flex-end",
+    mt: 3,
+    width: "100%",
+    "@media (min-width: 768px)": {
+      width: "calc(50% - 8px)",
+      ml: "auto",
+    },
+  },
+  updateBtn: {
+    width: "100%",
+    height: 56,
+    minWidth: 0,
+    borderRadius: 999,
+    fontWeight: 700,
+  },
+  updateBtnDisabled: {
+    backgroundColor: "rgba(255,255,255,0.12)",
+    color: "rgba(255,255,255,0.7)",
+    "&:hover": {
+      backgroundColor: "rgba(255,255,255,0.12)",
+    },
+    "&.Mui-disabled": {
+      color: "rgba(255,255,255,0.7)",
+      backgroundColor: "rgba(255,255,255,0.12)",
+    },
+  },
+  updateBtnActive: {
+    backgroundColor: "#df4d4d",
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: "#cf3d3d",
+    },
+  },
+  formError: {
+    color: "#ffb4b4",
+    mt: 1.5,
+  },
+} as const;

@@ -8,8 +8,44 @@ export const labelTypography = {
   letterSpacing: "0.4px",
 } as const;
 
+const appText = "rgba(255, 255, 255, 0.92)";
+const appTextMuted = "rgba(255, 255, 255, 0.68)";
+const appSurface = "#353535";
+const appDialogSurface = "#2a2a2a";
+const appDivider = "rgba(255, 255, 255, 0.08)";
+const appPrimary = "#c63031";
+
 export function createAppTheme() {
   return createTheme({
+    palette: {
+      mode: "dark",
+      primary: {
+        main: appPrimary,
+        light: "#e85a5b",
+        dark: "#b52b2c",
+        contrastText: "#ffffff",
+      },
+      error: {
+        main: "#d9534f",
+      },
+      background: {
+        default: appSurface,
+        paper: appDialogSurface,
+      },
+      text: {
+        primary: appText,
+        secondary: appTextMuted,
+        disabled: "rgba(255, 255, 255, 0.38)",
+      },
+      divider: appDivider,
+      action: {
+        active: appText,
+        hover: "rgba(255, 255, 255, 0.08)",
+        selected: "rgba(255, 255, 255, 0.12)",
+        disabled: "rgba(255, 255, 255, 0.38)",
+        disabledBackground: "rgba(255, 255, 255, 0.12)",
+      },
+    },
     typography: {
       fontFamily:
         'var(--font-roboto, "Roboto"), "Helvetica", "Arial", sans-serif',
@@ -65,6 +101,23 @@ export function createAppTheme() {
             fontSize: 14,
             lineHeight: "20px",
             letterSpacing: "0.15px",
+            backgroundColor: appSurface,
+            color: appText,
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundImage: "none",
+          },
+        },
+      },
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            backgroundImage: "none",
+            backgroundColor: appDialogSurface,
           },
         },
       },
@@ -84,13 +137,43 @@ export function createAppTheme() {
           },
         },
       },
+      MuiTableContainer: {
+        styleOverrides: {
+          root: {
+            backgroundColor: appSurface,
+            backgroundImage: "none",
+          },
+        },
+      },
+      MuiTable: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "transparent",
+          },
+        },
+      },
       MuiTableCell: {
         styleOverrides: {
           root: {
             fontWeight: 500,
+            borderColor: appDivider,
+            backgroundColor: "transparent",
           },
           head: {
             fontWeight: 500,
+            backgroundColor: "transparent",
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255, 255, 255, 0.12)",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255, 255, 255, 0.2)",
+            },
           },
         },
       },

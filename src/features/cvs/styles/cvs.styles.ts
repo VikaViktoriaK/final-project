@@ -234,6 +234,7 @@ export const cvsStyles = {
 
   tableContainer: {
     width: "100%",
+    backgroundColor: "var(--app-surface)",
     containerType: "inline-size",
     containerName: "cvs-table",
   },
@@ -241,6 +242,7 @@ export const cvsStyles = {
   table: {
     width: "100%",
     tableLayout: "fixed",
+    backgroundColor: "transparent",
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontWeight: 500,
     fontSize: 14,

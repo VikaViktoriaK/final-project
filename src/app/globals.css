@@ -27,13 +27,12 @@
   --color-action-danger: #d9534f;
   --color-skill-bar-track: #1e2a3a;
 
+  /* Used on light surfaces (e.g. CV preview export) */
   --color-text-primary: #1a1a1a;
   --color-text-secondary: #333;
   --color-text-muted: #999;
-
   --color-bg-primary: #fff;
   --color-bg-secondary: #fafafa;
-
   --color-border: #f0f0f0;
 }
 

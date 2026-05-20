@@ -1,23 +1,22 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { useAppSelector } from "@/store/hooks";
+import { getAccessToken, subscribeToAuthTokens } from "../lib/auth-storage";
 
-function getServerSnapshot() {
+function getServerTokenSnapshot(): undefined {
   return undefined;
 }
 
+function getClientTokenSnapshot(): string | null {
+  return getAccessToken();
+}
+
 function useAuthToken() {
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
-  const isHydrated = useAppSelector((state) => state.auth.isHydrated);
-
-  const tokenFromStore = useSyncExternalStore(
-    () => () => {},
-    () => (isHydrated ? accessToken : undefined),
-    getServerSnapshot,
+  return useSyncExternalStore(
+    subscribeToAuthTokens,
+    getClientTokenSnapshot,
+    getServerTokenSnapshot,
   );
-
-  return tokenFromStore;
 }
 
 export default useAuthToken;

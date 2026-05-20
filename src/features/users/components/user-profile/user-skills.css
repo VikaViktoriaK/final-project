@@ -1,0 +1,88 @@
+/**
+ * Skill row card — stable classes (replaces generated e.g. .css-c71a96).
+ */
+.user-skill-card.MuiButtonBase-root {
+  display: grid !important;
+  grid-template-columns: minmax(64px, 0.5fr) 1fr;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  min-width: 220px;
+  height: 48px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 40px;
+  box-sizing: border-box;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.875rem;
+  color: rgb(118, 118, 118);
+  text-transform: none;
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color 200ms,
+    color 200ms;
+}
+
+.user-skill-card:hover:not(:disabled),
+.user-skill-card:focus-visible:not(:disabled) {
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--app-text);
+}
+
+.user-skill-card:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.user-skill-card__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.user-skill-card:hover:not(:disabled) .user-skill-card__name {
+  color: var(--app-text);
+}
+
+/* Progress track (left column) */
+.user-skill-card__progress {
+  width: 100%;
+  min-width: 64px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.user-skill-card__progress-fill {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: 2px;
+  transition:
+    width 300ms ease,
+    background-color 200ms ease;
+}
+
+/* MUI LinearProgress fallback — v9 uses .MuiLinearProgress-bar1 */
+.user-skill-progress.MuiLinearProgress-root {
+  width: 100% !important;
+  min-width: 64px;
+  height: 4px !important;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  opacity: 1;
+}
+
+.user-skill-progress .MuiLinearProgress-bar1,
+.user-skill-progress .MuiLinearProgress-bar {
+  border-radius: 2px;
+  transition:
+    background-color 200ms ease,
+    width 300ms ease;
+}
