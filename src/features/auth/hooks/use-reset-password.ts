@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 function useResetPassword() {
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams?.get("token") ?? null;
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [resetPassword, { loading, error }] = useMutation<

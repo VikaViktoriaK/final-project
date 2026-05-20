@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { CV_TABS } from "../constants/cv-tabs";
 
 function useCvShellNavigation(cvId: string) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
 
   const activeSegment =
     CV_TABS.find((tab) => pathname.includes(`/cvs/${cvId}/${tab.segment}`))
