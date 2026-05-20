@@ -2,15 +2,15 @@
  * Skill row card — stable classes (replaces generated e.g. .css-c71a96).
  */
 .user-skill-card.MuiButtonBase-root {
-  display: grid !important;
-  grid-template-columns: 72px minmax(0, 1fr);
+  display: inline-grid !important;
+  grid-template-columns: 120px auto;
   gap: 12px;
   align-items: center;
-  width: 100%;
-  min-width: 0;
+  width: fit-content;
   max-width: 100%;
+  min-width: 0;
   height: 48px;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border: 0;
   border-radius: 999px;
   box-sizing: border-box;
@@ -52,9 +52,9 @@
 /* Progress track (left column) */
 .user-skill-card__progress {
   width: 100%;
-  min-width: 64px;
-  height: 4px;
-  border-radius: 2px;
+  min-width: 120px;
+  height: 6px;
+  border-radius: 3px;
   background-color: rgba(255, 255, 255, 0.1);
   overflow: hidden;
   flex-shrink: 0;
@@ -64,7 +64,7 @@
   display: block;
   height: 100%;
   min-width: 0;
-  border-radius: 2px;
+  border-radius: 3px;
   transition:
     width 300ms ease,
     background-color 200ms ease;
@@ -73,16 +73,16 @@
 /* MUI LinearProgress fallback — v9 uses .MuiLinearProgress-bar1 */
 .user-skill-progress.MuiLinearProgress-root {
   width: 100% !important;
-  min-width: 64px;
-  height: 4px !important;
-  border-radius: 2px;
+  min-width: 120px;
+  height: 6px !important;
+  border-radius: 3px;
   background-color: rgba(255, 255, 255, 0.1) !important;
   opacity: 1;
 }
 
 .user-skill-progress .MuiLinearProgress-bar1,
 .user-skill-progress .MuiLinearProgress-bar {
-  border-radius: 2px;
+  border-radius: 3px;
   transition:
     background-color 200ms ease,
     width 300ms ease;

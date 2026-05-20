@@ -38,6 +38,8 @@ export const userSkillsSx = {
   skillListItem: {
     listStyle: "none",
     minWidth: 0,
+    display: "flex",
+    justifyContent: "flex-start",
   },
   actionsRow: {
     display: "flex",

@@ -54,7 +54,7 @@ export function UserSkillCard({
           sx={{
             width: `${progressValue}%`,
             bgcolor: progressColor,
-            minWidth: progressValue > 0 ? 4 : 0,
+            minWidth: progressValue > 0 ? 6 : 0,
           }}
         />
       </Box>
