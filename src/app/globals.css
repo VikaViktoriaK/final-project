@@ -1,22 +1,38 @@
 :root {
   --app-bg: #1f1f1f;
-  --app-surface: #303030;
+  --app-surface: #353535;
+  --app-sidebar-bg: #1a1a1a;
+  --app-dialog-surface: #2a2a2a;
   --app-divider: rgba(255, 255, 255, 0.08);
   --app-text: rgba(255, 255, 255, 0.92);
   --app-text-muted: rgba(255, 255, 255, 0.68);
+  --app-on-primary: #ffffff;
   --app-control-bg: rgba(255, 255, 255, 0.08);
   --app-control-border: rgba(255, 255, 255, 0.12);
+  --app-overlay-06: rgba(255, 255, 255, 0.06);
+  --app-overlay-12: rgba(255, 255, 255, 0.12);
+  --app-overlay-20: rgba(255, 255, 255, 0.2);
+  --app-overlay-25: rgba(255, 255, 255, 0.25);
+  --app-overlay-35: rgba(255, 255, 255, 0.35);
   --color-primary: #c63031;
   --color-primary-hover: #b52b2c;
+  --color-primary-subtle: rgba(198, 48, 49, 0.08);
+  --color-primary-pill-bg: #c630310a;
   --color-primary-light: #fdecea;
+  --color-mastery-novice: #757575;
+  --color-mastery-advanced: #e6b800;
+  --color-mastery-proficient: #4caf50;
+  --color-mastery-expert: #5b8def;
+  --color-skill-bar: #5d9cec;
+  --color-action-danger: #d9534f;
+  --color-skill-bar-track: #1e2a3a;
 
+  /* Used on light surfaces (e.g. CV preview export) */
   --color-text-primary: #1a1a1a;
   --color-text-secondary: #333;
   --color-text-muted: #999;
-
   --color-bg-primary: #fff;
   --color-bg-secondary: #fafafa;
-
   --color-border: #f0f0f0;
 }
 
@@ -27,7 +43,13 @@ body {
 
 body {
   margin: 0;
-  background: var(--app-bg);
+  background-color: var(--app-surface);
   color: var(--app-text);
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: var(--font-roboto, "Roboto"), "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

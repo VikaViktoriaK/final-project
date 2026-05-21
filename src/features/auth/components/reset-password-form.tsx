@@ -23,6 +23,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import NextLink from "next/link";
 import useResetPassword from "../hooks/use-reset-password";
 import { authFormStyles } from "../styles/auth-form.styles";
+import AuthFormBody from "./auth-form-body";
 import { useState } from "react";
 
 function ResetPasswordForm() {
@@ -60,91 +61,99 @@ function ResetPasswordForm() {
 
   return (
     <Stack
-      sx={authFormStyles.centeredForm}
+      sx={authFormStyles.form}
       component="form"
       onSubmit={handleSubmit(resetPasswordUser)}
       noValidate
     >
-      <Box sx={authFormStyles.headerText}>
-        <Typography variant="h2" component="h1" sx={authFormStyles.title}>
-          Reset password
-        </Typography>
-        <Typography sx={authFormStyles.subtitle}>
-          Enter your new password to continue
-        </Typography>
-      </Box>
-      <TextField
-        sx={authFormStyles.textField}
-        type={passwordInputType}
-        placeholder="New Password"
-        {...register("newPassword")}
-        error={!!errors.newPassword}
-        helperText={errors.newPassword?.message}
-        fullWidth
-        autoComplete="new-password"
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  type="button"
-                  aria-label={passwordVisibilityLabel}
-                  edge="end"
-                  onClick={togglePasswordVisibility}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
-      <TextField
-        sx={authFormStyles.textField}
-        type={confirmPasswordInputType}
-        placeholder="Confirm New Password"
-        {...register("confirmNewPassword")}
-        error={!!errors.confirmNewPassword}
-        helperText={errors.confirmNewPassword?.message}
-        fullWidth
-        autoComplete="new-password"
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  type="button"
-                  aria-label={confirmPasswordVisibilityLabel}
-                  edge="end"
-                  onClick={toggleConfirmPasswordVisibility}
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
-      <Button
-        sx={authFormStyles.submitButton}
-        type="submit"
-        variant="contained"
-        color="primary"
-        disabled={isSubmitDisabled}
-      >
-        {isPending ? <CircularProgress size={20} /> : "Reset Password"}
-      </Button>
-      <Link component={NextLink} href="/login" sx={authFormStyles.textAction}>
-        Sign in
-      </Link>
-      {isSuccess && (
-        <Alert severity="success">
-          Password reset successfully. You can now sign in with your new
-          password.
-        </Alert>
-      )}
-      {error && <Alert severity="error">{error.message}</Alert>}
-      {!token && <Alert severity="error">Token is required</Alert>}
+      <AuthFormBody standalone>
+        <Box sx={authFormStyles.headerText}>
+          <Typography variant="h2" component="h1" sx={authFormStyles.title}>
+            Reset password
+          </Typography>
+          <Typography sx={authFormStyles.subtitle}>
+            Enter your new password to continue
+          </Typography>
+        </Box>
+        <TextField
+          sx={authFormStyles.textField}
+          type={passwordInputType}
+          placeholder="New Password"
+          {...register("newPassword")}
+          error={!!errors.newPassword}
+          helperText={errors.newPassword?.message}
+          autoComplete="new-password"
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    type="button"
+                    aria-label={passwordVisibilityLabel}
+                    edge="end"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        <TextField
+          sx={authFormStyles.textField}
+          type={confirmPasswordInputType}
+          placeholder="Confirm New Password"
+          {...register("confirmNewPassword")}
+          error={!!errors.confirmNewPassword}
+          helperText={errors.confirmNewPassword?.message}
+          autoComplete="new-password"
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    type="button"
+                    aria-label={confirmPasswordVisibilityLabel}
+                    edge="end"
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        <Button
+          sx={authFormStyles.submitButton}
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isSubmitDisabled}
+        >
+          {isPending ? <CircularProgress size={20} /> : "Reset Password"}
+        </Button>
+        <Link component={NextLink} href="/login" sx={authFormStyles.textAction}>
+          Sign in
+        </Link>
+        {isSuccess && (
+          <Alert sx={authFormStyles.formAlert} severity="success">
+            Password reset successfully. You can now sign in with your new
+            password.
+          </Alert>
+        )}
+        {error && (
+          <Alert sx={authFormStyles.formAlert} severity="error">
+            {error.message}
+          </Alert>
+        )}
+        {!token && (
+          <Alert sx={authFormStyles.formAlert} severity="error">
+            Token is required
+          </Alert>
+        )}
+      </AuthFormBody>
     </Stack>
   );
 }

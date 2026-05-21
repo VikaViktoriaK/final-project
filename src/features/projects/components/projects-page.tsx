@@ -1,0 +1,156 @@
+"use client";
+
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+import ConfirmDialog from "@/components/confirm-dialog";
+import ConfirmHighlight from "@/components/confirm-highlight";
+import SearchField from "@/components/search-field";
+import SortableProjectsHeader from "@/components/sortable-projects-header";
+import useAuthErrorRedirect from "@/features/auth/hooks/use-auth-error-redirect";
+import { canManageProjects } from "@/features/auth/utils/permissions";
+import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
+import CatalogProjectFormDialog from "./catalog-project-form-dialog";
+import ProjectCard from "./project-card";
+import useProjectsPage from "../hooks/use-projects-page";
+import useSkillCatalog from "../hooks/use-skill-catalog";
+
+function ProjectsPage() {
+  const page = useProjectsPage();
+  const { skills: catalogSkills } = useSkillCatalog();
+  const canManage = canManageProjects();
+
+  useAuthErrorRedirect(page.error);
+
+  if (page.loading) {
+    return (
+      <Box sx={cvsStyles.loadingWrap}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (page.error) {
+    return <Alert severity="error">{page.error.message}</Alert>;
+  }
+
+  return (
+    <>
+      <Box sx={cvsStyles.cvContentFrame}>
+        <Box sx={cvsStyles.pageTopBar}>
+          <Typography component="h2" sx={cvsStyles.pageTitle}>
+            Projects
+          </Typography>
+          <Box sx={cvsStyles.pageToolbar}>
+            <SearchField
+              value={page.search}
+              onChange={page.handleSearchChange}
+            />
+            {canManage ? (
+              <Button
+                type="button"
+                onClick={page.openCreateDialog}
+                sx={cvsStyles.createButton}
+              >
+                + Create project
+              </Button>
+            ) : null}
+          </Box>
+        </Box>
+
+        {page.isEmpty && (
+          <Typography sx={cvsStyles.emptyState}>No projects found.</Typography>
+        )}
+
+        {!page.isEmpty && (
+          <Box sx={cvsStyles.projectsTableScroll}>
+            <Box sx={cvsStyles.projectsTableInner}>
+              <SortableProjectsHeader
+                sortField={page.sortField}
+                sortDirection={page.sortDirection}
+                onSort={page.handleSort}
+              />
+              <Box sx={cvsStyles.projectsList}>
+                {page.showNoResults ? (
+                  <Typography sx={cvsStyles.projectsEmptyResults}>
+                    No results found
+                  </Typography>
+                ) : (
+                  page.projects.map((project) => (
+                    <ProjectCard
+                      key={project.id}
+                      project={project}
+                      canManage={canManage}
+                      onOpenMenu={page.projectMenu.open}
+                    />
+                  ))
+                )}
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        <Menu
+          anchorEl={page.projectMenu.anchorEl}
+          open={page.projectMenu.isOpen}
+          onClose={page.projectMenu.close}
+          slotProps={{ paper: { sx: cvsStyles.contextMenuPaper } }}
+        >
+          <MenuItem
+            onClick={page.openUpdateDialog}
+            sx={cvsStyles.contextMenuItem}
+          >
+            Update
+          </MenuItem>
+          <MenuItem
+            divider
+            onClick={page.openDeleteDialog}
+            sx={[cvsStyles.contextMenuItem, cvsStyles.menuItemDanger]}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
+
+        <CatalogProjectFormDialog
+          open={page.formDialog.open}
+          mode={page.formDialog.mode}
+          control={page.formDialog.control}
+          register={page.formDialog.register}
+          errors={page.formDialog.errors}
+          skills={catalogSkills}
+          isSubmitting={page.formDialog.isSubmitting}
+          canSubmit={page.formDialog.canSubmit}
+          onClose={page.formDialog.onClose}
+          onSubmit={page.formDialog.onSubmit}
+        />
+
+        <ConfirmDialog
+          open={page.deleteDialog.isOpen}
+          title="Delete project"
+          message={
+            <>
+              Are you sure you want to delete project{" "}
+              <ConfirmHighlight>
+                {page.deleteDialog.payload?.name}
+              </ConfirmHighlight>
+              ?
+            </>
+          }
+          confirmLabel="Confirm"
+          loading={page.deleteDialog.loading}
+          onClose={page.deleteDialog.close}
+          onConfirm={page.deleteDialog.confirm}
+        />
+      </Box>
+      {page.FeedbackSnackbar}
+    </>
+  );
+}
+
+export default ProjectsPage;

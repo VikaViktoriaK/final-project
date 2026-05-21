@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import AuthGateScreen from "@/features/auth/components/auth-gate-screen";
+import DashboardShell from "@/features/dashboard/components/dashboard-shell";
 import useRequireAuth from "@/features/auth/hooks/use-require-auth";
 
 type DashboardLayoutProps = {
@@ -19,7 +20,7 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
     return <AuthGateScreen message="Redirecting to sign in…" />;
   }
 
-  return <>{children}</>;
+  return <DashboardShell>{children}</DashboardShell>;
 }
 
 export default DashboardLayout;

@@ -1,3 +1,5 @@
-export default function UsersPage() {
-  return <div>UsersPage</div>;
+import { UsersPage as UsersPageContent } from "@/features/users/pages/UsersPage";
+
+export default function UsersPageRoute() {
+  return <UsersPageContent />;
 }

@@ -1,0 +1,36 @@
+import { cvsStyles } from "./cvs.styles";
+
+const cvListStyles = {
+  pageTopBar: cvsStyles.pageTopBar,
+  pageTitle: cvsStyles.pageTitle,
+  pageToolbar: cvsStyles.pageToolbar,
+  searchField: cvsStyles.searchField,
+  searchFieldCompact: cvsStyles.searchFieldCompact,
+  searchIconWrap: cvsStyles.searchIconWrap,
+  createCvButton: cvsStyles.createCvButton,
+  tableContainer: cvsStyles.tableContainer,
+  table: cvsStyles.table,
+  tableColEducation: cvsStyles.tableColEducation,
+  tableColEmployee: cvsStyles.tableColEmployee,
+  tableColName: cvsStyles.tableColName,
+  tableColActions: cvsStyles.tableColActions,
+  tableHeadRow: cvsStyles.tableHeadRow,
+  tableHeadCell: cvsStyles.tableHeadCell,
+  tableHeadCellName: cvsStyles.tableHeadCellName,
+  tableSortLabel: cvsStyles.tableSortLabel,
+  tableDataRow: cvsStyles.tableDataRow,
+  tableDescriptionRow: cvsStyles.tableDescriptionRow,
+  tableDescriptionCell: cvsStyles.tableDescriptionCell,
+  tableNameStack: cvsStyles.tableNameStack,
+  tableNamePrimary: cvsStyles.tableNamePrimary,
+  tableNameDescription: cvsStyles.tableNameDescription,
+  tableEmployeeText: cvsStyles.tableEmployeeText,
+  dialogCreateCv: cvsStyles.dialogCreateCv,
+  dialogCreateCvContent: cvsStyles.dialogCreateCvContent,
+  dialogCreateCvForm: cvsStyles.dialogCreateCvForm,
+  dialogCreateCvActions: cvsStyles.dialogCreateCvActions,
+  dialogCreateCvCancelButton: cvsStyles.dialogCreateCvCancelButton,
+  dialogCreateCvCreateButton: cvsStyles.dialogCreateCvCreateButton,
+};
+
+export { cvListStyles };

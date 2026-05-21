@@ -1,0 +1,79 @@
+export const userSkillsSx = {
+  mainColumn: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: 280,
+  },
+  categoriesStack: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 4,
+    flex: 1,
+  },
+  categoryBlock: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+  },
+  categoryTitle: {
+    color: "var(--app-text)",
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: 1.4,
+    m: 0,
+  },
+  skillsGrid: {
+    display: "grid",
+    gridTemplateColumns: {
+      xs: "1fr",
+      sm: "repeat(2, minmax(0, 1fr))",
+      lg: "repeat(3, minmax(0, 1fr))",
+    },
+    gap: 2,
+    alignItems: "center",
+    listStyle: "none",
+    m: 0,
+    p: 0,
+  },
+  skillListItem: {
+    listStyle: "none",
+    minWidth: 0,
+    display: "flex",
+    justifyContent: "flex-start",
+  },
+  addSkillBtn: {
+    textTransform: "uppercase",
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 0.5,
+    color: "var(--app-text-muted)",
+    px: 0,
+    minWidth: 0,
+    "&:hover": {
+      backgroundColor: "transparent",
+      color: "var(--app-text)",
+    },
+  },
+  removeSkillsBtn: {
+    textTransform: "uppercase",
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 0.5,
+    color: "#df4d4d",
+    px: 0,
+    minWidth: 0,
+    "&:hover": {
+      backgroundColor: "transparent",
+      color: "#ef6d6d",
+    },
+  },
+  emptyState: {
+    color: "var(--app-text-muted)",
+    fontSize: 15,
+    py: 2,
+  },
+  errorText: {
+    color: "#ffb4b4",
+    fontSize: 14,
+  },
+} as const;

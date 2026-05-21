@@ -1,0 +1,111 @@
+/**
+ * Skill row card — stable classes (replaces generated e.g. .css-c71a96).
+ */
+.user-skill-card.MuiButtonBase-root {
+  display: inline-grid !important;
+  grid-template-columns: 120px auto;
+  gap: 12px;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  box-sizing: border-box;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.875rem;
+  color: rgb(118, 118, 118);
+  text-transform: none;
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color 200ms,
+    color 200ms,
+    border-color 0.2s ease;
+}
+
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected {
+  border-color: #df4d4d;
+  background-color: rgba(223, 77, 77, 0.12);
+}
+
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected:hover:not(
+    :disabled
+  ) {
+  background-color: rgba(223, 77, 77, 0.16);
+}
+
+.user-skill-card:hover:not(:disabled),
+.user-skill-card:focus-visible:not(:disabled) {
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--app-text);
+}
+
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected:hover:not(
+    :disabled
+  ),
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected:focus-visible:not(
+    :disabled
+  ) {
+  color: var(--app-text);
+}
+
+.user-skill-card:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.user-skill-card__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.user-skill-card:hover:not(:disabled) .user-skill-card__name {
+  color: var(--app-text);
+}
+
+/* Progress track (left column) */
+.user-skill-card__progress {
+  width: 100%;
+  min-width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.user-skill-card__progress-fill {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: 3px;
+  transform-origin: left center;
+  transition:
+    width 400ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 200ms ease;
+}
+
+/* MUI LinearProgress fallback — v9 uses .MuiLinearProgress-bar1 */
+.user-skill-progress.MuiLinearProgress-root {
+  width: 100% !important;
+  min-width: 120px;
+  height: 6px !important;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  opacity: 1;
+}
+
+.user-skill-progress .MuiLinearProgress-bar1,
+.user-skill-progress .MuiLinearProgress-bar {
+  border-radius: 3px;
+  transition:
+    background-color 200ms ease,
+    width 300ms ease;
+}

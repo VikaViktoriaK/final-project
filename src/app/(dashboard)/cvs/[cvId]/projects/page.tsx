@@ -1,5 +1,7 @@
-function ProjectsPage() {
-  return <div>ProjectsPage</div>;
+import CvProjectsPage from "@/features/cvs/pages/CvProjectsPage";
+
+function Page() {
+  return <CvProjectsPage />;
 }
 
-export default ProjectsPage;
+export default Page;

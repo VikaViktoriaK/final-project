@@ -1,0 +1,83 @@
+"use client";
+
+import { Alert, Box, CircularProgress, Tab, Tabs } from "@mui/material";
+import NextLink from "next/link";
+import type { ReactNode } from "react";
+import AppArrow from "@/components/app-arrow";
+import { CV_TABS } from "../../shared/constants/cv-tabs";
+import { CvProvider, useCvContext } from "../../shared/context/cv-context";
+import useCvShellNavigation from "../../shared/hooks/use-cv-shell-navigation";
+import { cvsStyles } from "../../styles/cvs.styles";
+
+type CvShellProps = {
+  cvId: string;
+  children: ReactNode;
+};
+
+function CvShellContent({ cvId, children }: CvShellProps) {
+  const { cv, loading, error } = useCvContext();
+  const { activeSegment, activeTabLabel, showSectionInBreadcrumb } =
+    useCvShellNavigation(cvId);
+
+  if (loading) {
+    return <CircularProgress size={28} />;
+  }
+
+  if (error) {
+    return <Alert severity="error">{error.message}</Alert>;
+  }
+
+  if (!cv) {
+    return <Alert severity="warning">CV not found.</Alert>;
+  }
+
+  return (
+    <Box sx={cvsStyles.cvContentFrame}>
+      <Box sx={cvsStyles.breadcrumb}>
+        <Box component={NextLink} href="/cvs" sx={cvsStyles.breadcrumbLink}>
+          CVs
+        </Box>
+        <AppArrow direction="right" size={10} sx={cvsStyles.breadcrumbArrow} />
+        <Box component="span" sx={cvsStyles.breadcrumbActive}>
+          {cv.name}
+        </Box>
+        {showSectionInBreadcrumb && (
+          <>
+            <AppArrow
+              direction="right"
+              size={10}
+              sx={cvsStyles.breadcrumbArrow}
+            />
+            <Box component="span" sx={cvsStyles.breadcrumbActive}>
+              {activeTabLabel}
+            </Box>
+          </>
+        )}
+      </Box>
+
+      <Tabs value={activeSegment} textColor="inherit" sx={cvsStyles.tabs}>
+        {CV_TABS.map((tab) => (
+          <Tab
+            key={tab.segment}
+            label={tab.label.toUpperCase()}
+            value={tab.segment}
+            component={NextLink}
+            href={`/cvs/${cvId}/${tab.segment}`}
+          />
+        ))}
+      </Tabs>
+
+      <Box sx={cvsStyles.tabContent}>{children}</Box>
+    </Box>
+  );
+}
+
+function CvShell({ cvId, children }: CvShellProps) {
+  return (
+    <CvProvider cvId={cvId}>
+      <CvShellContent cvId={cvId}>{children}</CvShellContent>
+    </CvProvider>
+  );
+}
+
+export default CvShell;

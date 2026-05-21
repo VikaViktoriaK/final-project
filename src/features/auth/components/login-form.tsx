@@ -19,6 +19,8 @@ import NextLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type LoginFormValues, loginSchema } from "../schemas/login.schema";
 import useLogin from "../hooks/use-login";
+import AuthFormBody from "./auth-form-body";
+import AuthFormTabs from "./auth-form-tabs";
 import { useState } from "react";
 
 function LoginForm() {
@@ -53,83 +55,72 @@ function LoginForm() {
       component="form"
       noValidate
     >
-      <Stack direction="row" sx={authFormStyles.tabs}>
+      <AuthFormTabs active="login" />
+      <AuthFormBody>
+        <Box sx={authFormStyles.headerText}>
+          <Typography variant="h2" component="h1" sx={authFormStyles.title}>
+            Sign in
+          </Typography>
+          <Typography sx={authFormStyles.subtitle}>
+            Welcome back. Sign in to continue
+          </Typography>
+        </Box>
+        <TextField
+          sx={authFormStyles.textField}
+          type="email"
+          placeholder="Email"
+          {...register("email")}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          autoComplete="email"
+        />
+        <TextField
+          sx={authFormStyles.textField}
+          type={passwordInputType}
+          placeholder="Password"
+          {...register("password")}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          autoComplete="current-password"
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    type="button"
+                    aria-label={passwordVisibilityLabel}
+                    edge="end"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
         <Button
-          type="button"
-          sx={[authFormStyles.tab, authFormStyles.activeTab]}
+          sx={authFormStyles.submitButton}
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isPending}
         >
-          Sign in
+          {isPending ? <CircularProgress size={20} /> : "Sign in"}
         </Button>
-        <Button
-          type="button"
+        <Link
           component={NextLink}
-          href="/registration"
-          sx={authFormStyles.tab}
+          href="/forgot-password"
+          sx={authFormStyles.textAction}
         >
-          Sign up
-        </Button>
-      </Stack>
-      <Box sx={authFormStyles.headerText}>
-        <Typography variant="h2" component="h1" sx={authFormStyles.title}>
-          Sign in
-        </Typography>
-        <Typography sx={authFormStyles.subtitle}>
-          Welcome back. Sign in to continue
-        </Typography>
-      </Box>
-      <TextField
-        sx={authFormStyles.textField}
-        type="email"
-        placeholder="Email"
-        {...register("email")}
-        error={!!errors.email}
-        helperText={errors.email?.message}
-        fullWidth
-        autoComplete="email"
-      />
-      <TextField
-        sx={authFormStyles.textField}
-        type={passwordInputType}
-        placeholder="Password"
-        {...register("password")}
-        error={!!errors.password}
-        helperText={errors.password?.message}
-        fullWidth
-        autoComplete="current-password"
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  type="button"
-                  aria-label={passwordVisibilityLabel}
-                  edge="end"
-                  onClick={togglePasswordVisibility}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
-      <Button
-        sx={authFormStyles.submitButton}
-        type="submit"
-        variant="contained"
-        color="primary"
-        disabled={isPending}
-      >
-        {isPending ? <CircularProgress size={20} /> : "Sign in"}
-      </Button>
-      <Link
-        component={NextLink}
-        href="/forgot-password"
-        sx={authFormStyles.textAction}
-      >
-        Forgot password
-      </Link>
-      {error && <Alert severity="error">{error.message}</Alert>}
+          Forgot password
+        </Link>
+        {error && (
+          <Alert sx={authFormStyles.formAlert} severity="error">
+            {error.message}
+          </Alert>
+        )}
+      </AuthFormBody>
     </Stack>
   );
 }

@@ -3,15 +3,19 @@
 import { useSyncExternalStore } from "react";
 import { getAccessToken, subscribeToAuthTokens } from "../lib/auth-storage";
 
-function getServerSnapshot() {
+function getServerTokenSnapshot(): undefined {
   return undefined;
+}
+
+function getClientTokenSnapshot(): string | null {
+  return getAccessToken();
 }
 
 function useAuthToken() {
   return useSyncExternalStore(
     subscribeToAuthTokens,
-    getAccessToken,
-    getServerSnapshot,
+    getClientTokenSnapshot,
+    getServerTokenSnapshot,
   );
 }
 
