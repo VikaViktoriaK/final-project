@@ -13,11 +13,10 @@ export const catalogTableSx = {
   ...dataTableSx,
   ...catalogFilterSx,
   ...catalogTableHeadSx,
-  ...catalogTableActionsSx,
   ...rowMenuSx,
   ...deleteDialogSx,
   catalogActionsColWidth: catalogTableActionsSx.colWidth,
-  catalogActionsHeadCell: catalogTableActionsSx.headCell,
-  catalogActionsCell: catalogTableActionsSx.cell,
+  catalogActionsHeadCell: catalogTableActionsSx.actionsHeadCell,
+  catalogActionsCell: catalogTableActionsSx.actionsCell,
   catalogActionsMenuButton: catalogTableActionsSx.menuButton,
 } as const;

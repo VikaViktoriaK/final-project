@@ -8,6 +8,9 @@ export const catalogTableHeadSx = {
     color: "var(--app-text)",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
+    textAlign: "left",
+    width: "auto",
+    minWidth: 0,
   },
   headCellMuted: {
     color: "var(--app-text-muted)",

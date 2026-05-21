@@ -5,7 +5,7 @@ export const CATALOG_TABLE_ACTIONS_COL_WIDTH = 56;
 
 export const catalogTableActionsSx = {
   colWidth: CATALOG_TABLE_ACTIONS_COL_WIDTH,
-  headCell: {
+  actionsHeadCell: {
     ...catalogTableHeadSx.headCell,
     width: CATALOG_TABLE_ACTIONS_COL_WIDTH,
     minWidth: CATALOG_TABLE_ACTIONS_COL_WIDTH,
@@ -15,7 +15,7 @@ export const catalogTableActionsSx = {
     pr: 2,
     pl: 0,
   },
-  cell: {
+  actionsCell: {
     width: CATALOG_TABLE_ACTIONS_COL_WIDTH,
     minWidth: CATALOG_TABLE_ACTIONS_COL_WIDTH,
     maxWidth: CATALOG_TABLE_ACTIONS_COL_WIDTH,

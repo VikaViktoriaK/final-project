@@ -19,6 +19,8 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "typecheck": "next typegen && tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "prepare": "husky"
   },
   "dependencies": {
