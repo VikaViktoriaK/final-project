@@ -1,3 +1,17 @@
+const dialogActionButtonBase = {
+  borderRadius: 999,
+  minWidth: 160,
+  height: 48,
+  minHeight: 48,
+  px: 4,
+  py: 0,
+  textTransform: "uppercase",
+  fontSize: 14,
+  fontWeight: 700,
+  letterSpacing: 0.6,
+  boxShadow: "none",
+} as const;
+
 export const editDialogSx = {
   editDialogGrid: {
     pt: 1,
@@ -71,23 +85,19 @@ export const editDialogSx = {
     px: 3,
     pb: 3,
     pt: 1,
-    gap: 1,
+    gap: 3,
     justifyContent: "flex-end",
   },
   editDialogCancelBtn: {
+    ...dialogActionButtonBase,
     color: "#fff",
     borderColor: "rgba(255,255,255,0.45)",
     border: "1px solid rgba(255,255,255,0.35)",
-    borderRadius: 999,
-    minWidth: 190,
-    height: 42,
   },
   editDialogUpdateBtn: {
+    ...dialogActionButtonBase,
     backgroundColor: "rgba(255,255,255,0.18)",
     color: "#fff",
-    borderRadius: 999,
-    minWidth: 190,
-    height: 42,
     "&:hover": {
       backgroundColor: "rgba(255,255,255,0.28)",
     },

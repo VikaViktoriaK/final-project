@@ -13,6 +13,8 @@ const pillButtonBase: SxProps<Theme> = {
   textTransform: "uppercase",
   textAlign: "center",
   ...labelTypography,
+  fontWeight: 700,
+  letterSpacing: 0.6,
   boxShadow: "none",
 };
 
@@ -20,14 +22,16 @@ const dialogCreateCvButtonBase: SxProps<Theme> = {
   ...pillButtonBase,
   alignSelf: "auto",
   width: "auto",
-  maxWidth: { sm: 300 },
-  minWidth: { xs: 180, sm: 210 },
-  height: { xs: 60, sm: 66 },
-  minHeight: { xs: 60, sm: 66 },
+  maxWidth: { sm: 220 },
+  minWidth: { xs: 0, sm: 160 },
+  height: 48,
+  minHeight: 48,
   flex: "0 0 auto",
   mt: 0,
-  fontSize: { xs: 11, sm: 12 },
-  px: { xs: 3.75, sm: 4.5 },
+  fontSize: 14,
+  fontWeight: 700,
+  letterSpacing: 0.6,
+  px: 4,
 };
 
 /**
@@ -64,9 +68,9 @@ export const cvsStyles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    gap: 1,
+    gap: 1.5,
     width: "100%",
-    mb: 3,
+    mb: 2,
   },
 
   pageTitle: {
@@ -86,7 +90,7 @@ export const cvsStyles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 1,
+    gap: 3,
     flexWrap: "nowrap",
     width: "100%",
     maxWidth: "100%",
@@ -184,16 +188,40 @@ export const cvsStyles = {
     lineHeight: 1,
   },
 
+  createCvButton: {
+    color: "#df4d4d",
+    textTransform: "uppercase",
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 0.5,
+    minWidth: 160,
+    height: 48,
+    minHeight: 48,
+    px: 2,
+    borderRadius: "40px",
+    "& .MuiButton-startIcon": {
+      color: "inherit",
+      mr: 1,
+    },
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "transparent",
+        color: "#ef6d6d",
+      },
+    },
+  },
+
   /** Pill CTA on projects tab (+ ADD PROJECT). */
   createButton: {
-    width: 220,
-    height: 40,
-    minWidth: 220,
+    width: "auto",
+    height: 48,
+    minWidth: 160,
     maxWidth: 220,
-    minHeight: 40,
-    maxHeight: 40,
+    minHeight: 48,
+    maxHeight: 48,
     flexShrink: 0,
-    p: 0,
+    px: 4,
+    py: 0,
     borderRadius: "40px",
     bgcolor: "var(--color-primary-pill-bg)",
     color: "var(--color-primary)",
@@ -264,7 +292,7 @@ export const cvsStyles = {
    */
   tableColEducation: {
     display: "table-cell",
-    width: "14%",
+    width: "28%",
     "@container cvs-table (max-width: 680px)": {
       display: "none",
     },
@@ -272,7 +300,7 @@ export const cvsStyles = {
 
   tableColEmployee: {
     display: "table-cell",
-    width: "auto",
+    width: "32%",
     "@container cvs-table (max-width: 440px)": {
       display: "none",
     },
@@ -280,8 +308,7 @@ export const cvsStyles = {
 
   tableColName: {
     verticalAlign: "top",
-    width: "32%",
-    maxWidth: 406,
+    width: "36%",
     minWidth: 0,
   },
 
@@ -293,9 +320,9 @@ export const cvsStyles = {
   },
 
   tableHeadRow: {
-    height: 58,
+    height: 62,
     "& th": {
-      height: 58,
+      height: 62,
       verticalAlign: "middle",
       borderBottom: "1px solid var(--app-divider)",
     },
@@ -308,7 +335,7 @@ export const cvsStyles = {
     lineHeight: "24px",
     letterSpacing: "0.15px",
     color: "var(--app-text)",
-    height: 58,
+    height: 62,
     py: 0,
     px: 2,
     verticalAlign: "middle",
@@ -317,8 +344,7 @@ export const cvsStyles = {
   },
 
   tableHeadCellName: {
-    width: "32%",
-    maxWidth: 406,
+    width: "36%",
     minWidth: 0,
   },
 
@@ -364,10 +390,23 @@ export const cvsStyles = {
 
   tableDataRow: {
     "& td": {
-      borderBottom: "1px solid var(--app-divider)",
+      borderBottom: 0,
       verticalAlign: "middle",
-      py: 1.5,
+      pt: 2.5,
+      pb: 1,
     },
+  },
+
+  tableDescriptionRow: {
+    "& td": {
+      borderBottom: "1px solid var(--app-divider)",
+      pt: 0,
+      pb: 2.5,
+    },
+  },
+
+  tableDescriptionCell: {
+    px: 2,
   },
 
   tableNameStack: {
@@ -396,13 +435,8 @@ export const cvsStyles = {
   tableNameDescription: {
     m: 0,
     color: "var(--app-text-muted)",
-    fontSize: 13,
+    fontSize: 16,
     lineHeight: 1.5,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    display: "-webkit-box",
-    WebkitLineClamp: 2,
-    WebkitBoxOrient: "vertical",
   },
 
   tableEmployeeText: {
@@ -1103,11 +1137,13 @@ export const cvsStyles = {
     mt: 3,
     width: "100%",
     justifyContent: "flex-end",
-    gap: 1.5,
+    gap: 3,
     "& > .MuiButton-root": {
       width: "auto",
-      minWidth: { xs: 180, sm: 210 },
-      maxWidth: { sm: 300 },
+      minWidth: { xs: 0, sm: 160 },
+      maxWidth: { sm: 220 },
+      height: 48,
+      minHeight: 48,
       flex: "0 0 auto",
       mt: 0,
     },
@@ -1719,9 +1755,9 @@ export const cvsStyles = {
     ...pillButtonBase,
     width: { xs: "100%", sm: "auto" },
     minWidth: { sm: 160 },
-    height: { xs: 40, sm: 48 },
-    minHeight: { xs: 40, sm: 48 },
-    fontSize: { xs: 11, sm: 12 },
+    height: 48,
+    minHeight: 48,
+    fontSize: 14,
     px: { xs: 3, sm: 4 },
     borderColor: "var(--color-primary)",
     color: "var(--color-primary)",

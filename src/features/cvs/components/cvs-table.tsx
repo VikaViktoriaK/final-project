@@ -16,7 +16,7 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NextLink from "next/link";
 import { TableSortArrowIcon } from "@/components/app-arrow";
-import type { MouseEvent } from "react";
+import { Fragment, type MouseEvent } from "react";
 import type { Cv } from "../types";
 import type { CvSortField, SortDirection } from "../utils/cv-list";
 import { cvsStyles } from "../styles/cvs.styles";
@@ -110,10 +110,23 @@ function CvNameCell({ cv }: CvNameCellProps) {
       >
         {cv.name}
       </Box>
-      <Typography component="p" sx={cvsStyles.tableNameDescription}>
-        {cv.description}
-      </Typography>
     </Box>
+  );
+}
+
+function CvDescriptionRow({ cv }: CvNameCellProps) {
+  if (!cv.description?.trim()) {
+    return null;
+  }
+
+  return (
+    <TableRow sx={cvsStyles.tableDescriptionRow}>
+      <TableCell colSpan={4} sx={cvsStyles.tableDescriptionCell}>
+        <Typography component="p" sx={cvsStyles.tableNameDescription}>
+          {cv.description}
+        </Typography>
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -179,26 +192,29 @@ function CvsTable({
               const employee = cv.user?.email ?? "Unassigned";
 
               return (
-                <TableRow key={cv.id} sx={cvsStyles.tableDataRow}>
-                  <TableCell sx={cvsStyles.tableColName}>
-                    <CvNameCell cv={cv} />
-                  </TableCell>
-                  <TableCell sx={cvsStyles.tableColEducation}>
-                    {cv.education ?? "—"}
-                  </TableCell>
-                  <TableCell sx={cvsStyles.tableColEmployee}>
-                    <Typography sx={cvsStyles.tableEmployeeText}>
-                      {employee}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right" sx={cvsStyles.tableColActions}>
-                    <CvRowMenu
-                      cv={cv}
-                      showMenu={canManageCv(cv)}
-                      onOpenMenu={onOpenMenu}
-                    />
-                  </TableCell>
-                </TableRow>
+                <Fragment key={cv.id}>
+                  <TableRow sx={cvsStyles.tableDataRow}>
+                    <TableCell sx={cvsStyles.tableColName}>
+                      <CvNameCell cv={cv} />
+                    </TableCell>
+                    <TableCell sx={cvsStyles.tableColEducation}>
+                      {cv.education ?? "—"}
+                    </TableCell>
+                    <TableCell sx={cvsStyles.tableColEmployee}>
+                      <Typography sx={cvsStyles.tableEmployeeText}>
+                        {employee}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right" sx={cvsStyles.tableColActions}>
+                      <CvRowMenu
+                        cv={cv}
+                        showMenu={canManageCv(cv)}
+                        onOpenMenu={onOpenMenu}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <CvDescriptionRow cv={cv} />
+                </Fragment>
               );
             })}
           </TableBody>

@@ -25,13 +25,14 @@ function AddUserLanguageDialogContent({
   onCompleted,
 }: Omit<AddUserLanguageDialogProps, "open">) {
   const {
-    languageName,
+    selectedLanguageName,
     setLanguageName,
     proficiency,
     setProficiency,
     submitError,
     catalogLoading,
     addable,
+    canSubmit,
     saving,
     handleSubmit,
   } = useAddUserLanguageDialog({
@@ -74,7 +75,7 @@ function AddUserLanguageDialogContent({
               select
               variant="outlined"
               label={ADD_LANGUAGE_DIALOG_LABELS.languageField}
-              value={languageName}
+              value={selectedLanguageName}
               onChange={(e) => setLanguageName(e.target.value)}
               fullWidth
               sx={formDialogSx.dialogField}
@@ -125,7 +126,7 @@ function AddUserLanguageDialogContent({
           variant="contained"
           disableElevation
           onClick={() => void handleSubmit()}
-          disabled={saving || !languageName || addable.length === 0}
+          disabled={saving || !canSubmit || addable.length === 0}
           sx={formDialogSx.dialogConfirmBtn}
         >
           {ADD_LANGUAGE_DIALOG_LABELS.confirm}

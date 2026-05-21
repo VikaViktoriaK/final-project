@@ -32,6 +32,8 @@ export function UserEditDialogForm({
     submitError,
     departments,
     positions,
+    selectedDepartmentId,
+    selectedPositionId,
     loading,
     mutationError,
     handleFieldChange,
@@ -75,13 +77,14 @@ export function UserEditDialogForm({
           <TextField
             select
             label="Department"
-            value={form.departmentId}
+            value={selectedDepartmentId}
             onChange={handleFieldChange("departmentId")}
             fullWidth
             sx={editDialogSx.editDialogField}
             slotProps={{ select: { MenuProps: SELECT_MENU_PROPS } }}
             disabled={!isAdmin}
           >
+            <MenuItem value="">Unassigned</MenuItem>
             {departments.map((department) => (
               <MenuItem key={department.id} value={department.id}>
                 {department.name}
@@ -91,13 +94,14 @@ export function UserEditDialogForm({
           <TextField
             select
             label="Position"
-            value={form.positionId}
+            value={selectedPositionId}
             onChange={handleFieldChange("positionId")}
             fullWidth
             sx={editDialogSx.editDialogField}
             slotProps={{ select: { MenuProps: SELECT_MENU_PROPS } }}
             disabled={!isAdmin}
           >
+            <MenuItem value="">Unassigned</MenuItem>
             {positions.map((position) => (
               <MenuItem key={position.id} value={position.id}>
                 {position.name}

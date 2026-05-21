@@ -45,11 +45,13 @@ export const catalogPageSx = {
   },
   createButton: {
     borderRadius: 999,
-    height: 36,
-    px: 1.25,
+    height: 48,
+    minHeight: 48,
+    minWidth: 160,
+    px: 4,
     textTransform: "uppercase",
-    letterSpacing: 0.3,
-    fontSize: 12,
+    letterSpacing: 0.6,
+    fontSize: 14,
     fontWeight: 700,
     color: "#df4d4d",
     "&:hover": {

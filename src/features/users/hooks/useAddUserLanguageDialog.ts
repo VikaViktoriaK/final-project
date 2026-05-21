@@ -32,10 +32,16 @@ export function useAddUserLanguageDialog({
   const addable = catalog.filter((item) =>
     languageNotOnProfile(item.name, currentLanguages),
   );
+  const selectedLanguageName = addable.some(
+    (item) => item.name === languageName,
+  )
+    ? languageName
+    : "";
+  const canSubmit = Boolean(selectedLanguageName);
 
   const handleSubmit = React.useCallback(async () => {
     setSubmitError(null);
-    if (!languageName.trim()) {
+    if (!selectedLanguageName.trim()) {
       setSubmitError("Select a language.");
       return;
     }
@@ -44,7 +50,7 @@ export function useAddUserLanguageDialog({
         variables: {
           language: {
             userId,
-            name: languageName.trim(),
+            name: selectedLanguageName.trim(),
             proficiency,
           },
         },
@@ -54,16 +60,25 @@ export function useAddUserLanguageDialog({
     } catch (err) {
       setSubmitError(formatMutationError(err));
     }
-  }, [addLanguage, languageName, onClose, onCompleted, proficiency, userId]);
+  }, [
+    addLanguage,
+    onClose,
+    onCompleted,
+    proficiency,
+    selectedLanguageName,
+    userId,
+  ]);
 
   return {
     languageName,
+    selectedLanguageName,
     setLanguageName,
     proficiency,
     setProficiency,
     submitError,
     catalogLoading,
     addable,
+    canSubmit,
     saving,
     handleSubmit,
   };

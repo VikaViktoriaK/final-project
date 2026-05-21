@@ -3,10 +3,11 @@
 import {
   Alert,
   Box,
+  Button,
   CircularProgress,
-  IconButton,
   Typography,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import useAuthErrorRedirect from "@/features/auth/hooks/use-auth-error-redirect";
 import ConfirmDialog from "@/components/confirm-dialog";
 import ConfirmHighlight from "@/components/confirm-highlight";
@@ -48,19 +49,14 @@ function CvsPage() {
               onChange={page.handleSearchChange}
             />
             {showCreateButton && (
-              <IconButton
+              <Button
                 type="button"
                 onClick={page.openCreateDialog}
-                aria-label="Create CV"
-                sx={cvsStyles.createIconButton}
+                startIcon={<AddIcon />}
+                sx={cvsStyles.createCvButton}
               >
-                <Typography
-                  component="span"
-                  sx={cvsStyles.createIconButtonGlyph}
-                >
-                  +
-                </Typography>
-              </IconButton>
+                Create CV
+              </Button>
             )}
           </Box>
         </Box>

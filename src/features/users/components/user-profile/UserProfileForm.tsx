@@ -33,6 +33,8 @@ export function UserProfileForm({
     canSubmit,
     departmentOptions,
     positionOptions,
+    selectedDepartmentId,
+    selectedPositionId,
     handleFieldChange,
     handleSubmit,
   } = useUserProfileForm({ user, canEditProfile, avatarUpload, onUpdated });
@@ -64,10 +66,11 @@ export function UserProfileForm({
           <TextField
             select
             label={USER_PROFILE_FORM_LABELS.department}
-            value={form.departmentId}
+            value={selectedDepartmentId}
             onChange={handleFieldChange("departmentId")}
             sx={userProfileSx.field}
           >
+            <MenuItem value="">Unassigned</MenuItem>
             {departmentOptions.map((option) => (
               <MenuItem key={option.id} value={option.id}>
                 {option.name}
@@ -86,10 +89,11 @@ export function UserProfileForm({
           <TextField
             select
             label={USER_PROFILE_FORM_LABELS.position}
-            value={form.positionId}
+            value={selectedPositionId}
             onChange={handleFieldChange("positionId")}
             sx={userProfileSx.field}
           >
+            <MenuItem value="">Unassigned</MenuItem>
             {positionOptions.map((option) => (
               <MenuItem key={option.id} value={option.id}>
                 {option.name}

@@ -6,6 +6,7 @@ type SearchFieldProps = {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   compact?: boolean;
+  placeholder?: string;
 };
 
 type ConfirmDialogProps = {

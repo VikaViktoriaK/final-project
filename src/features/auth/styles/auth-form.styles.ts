@@ -244,10 +244,10 @@ export const authFormStyles = {
     bgcolor: "var(--color-primary)",
     color: "#ffffff",
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: 700,
     lineHeight: "17.5px",
     textTransform: "uppercase",
-    letterSpacing: "0.4px",
+    letterSpacing: "0.6px",
     boxShadow: "none",
     transition: "background-color 0.2s, transform 0.1s",
     "@media (hover: hover)": {

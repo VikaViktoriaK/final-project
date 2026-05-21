@@ -1,3 +1,17 @@
+const modalActionButtonBase = {
+  borderRadius: 999,
+  minWidth: 160,
+  height: 48,
+  minHeight: 48,
+  px: 4,
+  py: 0,
+  textTransform: "uppercase",
+  fontSize: 14,
+  fontWeight: 700,
+  letterSpacing: 0.6,
+  boxShadow: "none",
+} as const;
+
 export const formDialogSx = {
   languageDialog: {
     "& .MuiDialog-paper": {
@@ -116,14 +130,7 @@ export const formDialogSx = {
     pt: 1,
   },
   dialogCancelBtn: {
-    borderRadius: 999,
-    px: 4,
-    py: 1.5,
-    minWidth: 160,
-    textTransform: "uppercase",
-    fontSize: 14,
-    fontWeight: 700,
-    letterSpacing: 0.6,
+    ...modalActionButtonBase,
     color: "var(--app-text-muted)",
     borderColor: "var(--app-control-border)",
     "&:hover": {
@@ -132,17 +139,9 @@ export const formDialogSx = {
     },
   },
   dialogConfirmBtn: {
-    borderRadius: 999,
-    px: 4,
-    py: 1.5,
-    minWidth: 160,
-    textTransform: "uppercase",
-    fontSize: 14,
-    fontWeight: 700,
-    letterSpacing: 0.6,
+    ...modalActionButtonBase,
     bgcolor: "#df4d4d",
     color: "#fff",
-    boxShadow: "none",
     "&:hover": {
       bgcolor: "#cf3d3d",
       boxShadow: "none",
@@ -176,17 +175,9 @@ export const formDialogSx = {
     lineHeight: 1,
   },
   bulkDeleteToolbarBtn: {
-    borderRadius: 999,
-    px: 4,
-    py: 1.5,
-    minWidth: 160,
-    textTransform: "uppercase",
-    fontSize: 14,
-    fontWeight: 700,
-    letterSpacing: 0.6,
+    ...modalActionButtonBase,
     bgcolor: "#df4d4d",
     color: "#fff",
-    boxShadow: "none",
     gap: 1.25,
     "&:hover": {
       bgcolor: "#cf3d3d",
@@ -203,17 +194,9 @@ export const formDialogSx = {
     },
   },
   dialogRemoveConfirmBtn: {
-    borderRadius: 999,
-    px: 4,
-    py: 1.5,
-    minWidth: 160,
-    textTransform: "uppercase",
-    fontSize: 14,
-    fontWeight: 700,
-    letterSpacing: 0.6,
+    ...modalActionButtonBase,
     bgcolor: "#df4d4d",
     color: "#fff",
-    boxShadow: "none",
     "&:hover": {
       bgcolor: "#cf3d3d",
       boxShadow: "none",

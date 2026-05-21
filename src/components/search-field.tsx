@@ -5,10 +5,15 @@ import AppSearchIcon from "@/components/app-search-icon";
 import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
 import type { SearchFieldProps } from "./types";
 
-function SearchField({ value, onChange, compact = false }: SearchFieldProps) {
+function SearchField({
+  value,
+  onChange,
+  compact = false,
+  placeholder = "",
+}: SearchFieldProps) {
   return (
     <TextField
-      placeholder="Search"
+      placeholder={placeholder}
       value={value}
       onChange={onChange}
       sx={[cvsStyles.searchField, compact && cvsStyles.searchFieldCompact]}

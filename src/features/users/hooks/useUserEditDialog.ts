@@ -36,6 +36,18 @@ export function useUserEditDialog({
   ] = useUpdateProfileMutation();
   const { data: optionsData, loading: loadingOptions } =
     useUserEditOptionsQuery();
+  const departments = optionsData?.departments ?? [];
+  const positions = optionsData?.positions ?? [];
+  const selectedDepartmentId = departments.some(
+    (department) => department.id === form.departmentId,
+  )
+    ? form.departmentId
+    : "";
+  const selectedPositionId = positions.some(
+    (position) => position.id === form.positionId,
+  )
+    ? form.positionId
+    : "";
 
   const { role } = useAuthSnapshot();
   const isAdmin = role === "Admin";
@@ -60,8 +72,8 @@ export function useUserEditDialog({
         positionId?: string;
       } = {
         userId: user.id,
-        ...(form.departmentId ? { departmentId: form.departmentId } : {}),
-        ...(form.positionId ? { positionId: form.positionId } : {}),
+        ...(selectedDepartmentId ? { departmentId: selectedDepartmentId } : {}),
+        ...(selectedPositionId ? { positionId: selectedPositionId } : {}),
         role: form.role,
       };
 
@@ -93,10 +105,8 @@ export function useUserEditDialog({
     onSaved();
     onClose();
   }, [
-    form.departmentId,
     form.firstName,
     form.lastName,
-    form.positionId,
     form.role,
     isAdmin,
     onClose,
@@ -106,14 +116,18 @@ export function useUserEditDialog({
     user.firstName,
     user.id,
     user.lastName,
+    selectedDepartmentId,
+    selectedPositionId,
   ]);
 
   return {
     form,
+    selectedDepartmentId,
+    selectedPositionId,
     isAdmin,
     submitError,
-    departments: optionsData?.departments ?? [],
-    positions: optionsData?.positions ?? [],
+    departments,
+    positions,
     loading: updatingUser || updatingProfile || loadingOptions,
     mutationError: updateUserError ?? updateProfileError,
     handleFieldChange,

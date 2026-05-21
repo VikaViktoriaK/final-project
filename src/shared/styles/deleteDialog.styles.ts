@@ -1,3 +1,17 @@
+const deleteDialogActionButtonBase = {
+  borderRadius: 999,
+  minWidth: 160,
+  height: 48,
+  minHeight: 48,
+  px: 4,
+  py: 0,
+  textTransform: "uppercase",
+  fontSize: 14,
+  fontWeight: 700,
+  letterSpacing: 0.6,
+  boxShadow: "none",
+} as const;
+
 export const deleteDialogSx = {
   deleteDialogRoot: {
     "& .MuiPaper-root": {
@@ -11,22 +25,18 @@ export const deleteDialogSx = {
     px: 3,
     pb: 3,
     pt: 1,
-    gap: 1,
+    gap: 3,
     justifyContent: "flex-end",
   },
   deleteDialogCancelBtn: {
+    ...deleteDialogActionButtonBase,
     color: "#fff",
     border: "1px solid rgba(255,255,255,0.35)",
-    borderRadius: 999,
-    minWidth: 190,
-    height: 42,
   },
   deleteDialogDeleteBtn: {
+    ...deleteDialogActionButtonBase,
     backgroundColor: "rgba(255, 80, 80, 0.35)",
     color: "#fff",
-    borderRadius: 999,
-    minWidth: 190,
-    height: 42,
     "&:hover": {
       backgroundColor: "rgba(255, 80, 80, 0.48)",
     },

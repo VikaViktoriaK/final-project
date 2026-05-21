@@ -40,12 +40,24 @@ export function useUserProfileForm({
     useUploadAvatarMutation();
   const [updateUser, { loading: isUpdatingUser }] = useUpdateUserMutation();
   const { data: optionsData } = useUserEditOptionsQuery();
+  const departmentOptions = optionsData?.departments ?? [];
+  const positionOptions = optionsData?.positions ?? [];
+  const selectedDepartmentId = departmentOptions.some(
+    (option) => option.id === form.departmentId,
+  )
+    ? form.departmentId
+    : "";
+  const selectedPositionId = positionOptions.some(
+    (option) => option.id === form.positionId,
+  )
+    ? form.positionId
+    : "";
 
   const isDirty =
     form.firstName !== initialForm.firstName ||
     form.lastName !== initialForm.lastName ||
-    form.departmentId !== initialForm.departmentId ||
-    form.positionId !== initialForm.positionId ||
+    selectedDepartmentId !== initialForm.departmentId ||
+    selectedPositionId !== initialForm.positionId ||
     Boolean(avatarUpload && avatarUpload.previewUrl !== user.avatarUrl);
 
   const isSubmitting = isUpdatingProfile || isUpdatingUser || isUploadingAvatar;
@@ -67,8 +79,8 @@ export function useUserProfileForm({
         trimmedFirstName !== initialForm.firstName.trim() ||
         trimmedLastName !== initialForm.lastName.trim();
       const adminPartChanged =
-        form.departmentId !== initialForm.departmentId ||
-        form.positionId !== initialForm.positionId;
+        selectedDepartmentId !== initialForm.departmentId ||
+        selectedPositionId !== initialForm.positionId;
       const avatarChanged = Boolean(
         avatarUpload && avatarUpload.previewUrl !== user.avatarUrl,
       );
@@ -112,8 +124,8 @@ export function useUserProfileForm({
           variables: {
             user: {
               userId: user.id,
-              departmentId: form.departmentId || undefined,
-              positionId: form.positionId || undefined,
+              departmentId: selectedDepartmentId || undefined,
+              positionId: selectedPositionId || undefined,
             },
           },
         });
@@ -127,10 +139,8 @@ export function useUserProfileForm({
     avatarUpload,
     canEditProfile,
     canSubmit,
-    form.departmentId,
     form.firstName,
     form.lastName,
-    form.positionId,
     initialForm.departmentId,
     initialForm.firstName,
     initialForm.lastName,
@@ -143,15 +153,19 @@ export function useUserProfileForm({
     user.firstName,
     user.id,
     user.lastName,
+    selectedDepartmentId,
+    selectedPositionId,
   ]);
 
   return {
     form,
+    selectedDepartmentId,
+    selectedPositionId,
     submitError,
     canSubmit,
     isSubmitting,
-    departmentOptions: optionsData?.departments ?? [],
-    positionOptions: optionsData?.positions ?? [],
+    departmentOptions,
+    positionOptions,
     handleFieldChange,
     handleSubmit,
   };

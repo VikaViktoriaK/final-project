@@ -215,10 +215,14 @@ export const userProfileSx = {
   },
   updateBtn: {
     width: "100%",
-    height: 56,
+    height: 48,
+    minHeight: 48,
     minWidth: 0,
     borderRadius: 999,
     fontWeight: 700,
+    textTransform: "uppercase",
+    fontSize: 14,
+    letterSpacing: 0.6,
   },
   updateBtnDisabled: {
     backgroundColor: "rgba(255,255,255,0.12)",
