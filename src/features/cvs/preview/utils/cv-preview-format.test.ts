@@ -1,4 +1,3 @@
-import { mockCv, mockCvProject } from "../../test-utils/fixtures";
 import {
   buildSkillTableRows,
   formatCvPeriod,
@@ -9,56 +8,82 @@ import {
   getCvPreviewDomains,
   masteryToExperienceYears,
 } from "./cv-preview-format";
-import { groupSkillsByCategory } from "../../shared/utils/group-skills";
+import type { Cv } from "../../shared/types";
 
-describe("cv-preview-format", () => {
-  it("maps mastery levels to experience years", () => {
-    expect(masteryToExperienceYears("Novice")).toBe(1);
-    expect(masteryToExperienceYears("Expert")).toBe(5);
-  });
+const cv: Cv = {
+  id: "cv-1",
+  created_at: "2024-01-01",
+  name: "Frontend CV",
+  education: null,
+  description: "",
+  user: null,
+  skills: [],
+  languages: [],
+  projects: [
+    {
+      id: "1",
+      name: "HRM App",
+      internal_name: "hrm",
+      description: "",
+      domain: "HR",
+      start_date: "2024-01-01",
+      end_date: null,
+      environment: ["React"],
+      roles: ["Developer"],
+      responsibilities: [],
+      project: null,
+    },
+    {
+      id: "2",
+      name: "Billing",
+      internal_name: "billing",
+      description: "",
+      domain: "Finance",
+      start_date: "2023-01-01",
+      end_date: null,
+      environment: [],
+      roles: [],
+      responsibilities: [],
+      project: null,
+    },
+  ],
+};
 
-  it("formats CV period with open end date", () => {
-    expect(formatCvPeriod("2022-06-01", null)).toBe("06.2022 – Till now");
-  });
-
-  it("formats language line", () => {
+describe("CV preview format utils", () => {
+  it("formats periods, language, environment, and roles", () => {
+    expect(formatCvPeriod(undefined, undefined)).toBe("—");
+    expect(formatCvPeriod("2024-01-01", undefined)).toBe("01.2024 – Till now");
+    expect(formatCvPeriod("bad-date", "2024-02-01")).toBe("bad-date – 02.2024");
     expect(formatLanguageLine("English", "C1")).toBe("English — C1");
-  });
-
-  it("formats project metadata helpers", () => {
-    expect(formatProjectEnvironment(["React", "Node"])).toBe("React, Node");
+    expect(formatProjectEnvironment(["React", "GraphQL"])).toBe(
+      "React, GraphQL",
+    );
+    expect(formatProjectEnvironment([])).toBe("—");
+    expect(formatProjectRoles(["Developer"])).toBe("Developer");
     expect(formatProjectRoles([])).toBe("—");
   });
 
-  it("builds preview subtitle from first project role", () => {
-    const cv = {
-      ...mockCv,
-      projects: [{ ...mockCvProject, roles: ["Senior Developer"] }],
-    };
-    expect(formatCvPreviewSubtitle(cv)).toBe("SENIOR DEVELOPER");
+  it("maps mastery to experience years and skill table rows", () => {
+    expect(masteryToExperienceYears("Expert")).toBe(5);
+    expect(
+      buildSkillTableRows([
+        {
+          categoryLabel: "Frontend",
+          skills: [{ name: "React", categoryId: "1", mastery: "Advanced" }],
+        },
+      ]),
+    ).toEqual([
+      {
+        categoryLabel: "Frontend",
+        skillName: "React",
+        experienceYears: 2,
+        lastUsed: String(new Date().getFullYear()),
+      },
+    ]);
   });
 
-  it("collects unique project domains", () => {
-    const cv = {
-      ...mockCv,
-      projects: [
-        { ...mockCvProject, domain: "FinTech" },
-        { ...mockCvProject, id: "p2", domain: "FinTech" },
-        { ...mockCvProject, id: "p3", domain: "Health" },
-      ],
-    };
-    expect(getCvPreviewDomains(cv)).toBe("FinTech, Health");
-  });
-
-  it("builds skill table rows from grouped skills", () => {
-    const grouped = groupSkillsByCategory(mockCv.skills, []);
-    const rows = buildSkillTableRows(grouped);
-
-    expect(rows).toHaveLength(2);
-    expect(rows[0]).toMatchObject({
-      skillName: expect.any(String),
-      experienceYears: expect.any(Number),
-      lastUsed: String(new Date().getFullYear()),
-    });
+  it("builds preview subtitle and unique domain list", () => {
+    expect(formatCvPreviewSubtitle(cv)).toBe("DEVELOPER");
+    expect(getCvPreviewDomains(cv)).toBe("HR, Finance");
   });
 });

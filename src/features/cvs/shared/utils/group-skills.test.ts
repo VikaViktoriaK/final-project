@@ -1,35 +1,38 @@
 import { groupSkillsByCategory } from "./group-skills";
-import { mockSkill, mockSkillCategories } from "../../test-utils/fixtures";
+import type { SkillCategory, SkillMastery } from "../types";
+
+const categories: SkillCategory[] = [
+  {
+    id: "frontend",
+    name: "Frontend",
+    order: 1,
+    parent: null,
+    children: [{ id: "react-category", name: "React" }],
+  },
+  {
+    id: "backend",
+    name: "Backend",
+    order: 2,
+    parent: null,
+    children: [],
+  },
+];
+
+const skills: SkillMastery[] = [
+  { name: "React", categoryId: "react-category", mastery: "Advanced" },
+  { name: "Node", categoryId: "backend", mastery: "Competent" },
+  { name: "Unknown", categoryId: "missing", mastery: "Novice" },
+  { name: "", categoryId: "frontend", mastery: "Novice" },
+];
 
 describe("groupSkillsByCategory", () => {
-  it("groups skills under parent category label", () => {
-    const grouped = groupSkillsByCategory(
-      [mockSkill, { name: "HTML", categoryId: "cat-1", mastery: "Novice" }],
-      mockSkillCategories,
-    );
+  it("groups skills by parent category labels and skips nameless skills", () => {
+    const grouped = groupSkillsByCategory(skills, categories);
 
     expect(grouped).toEqual([
-      {
-        categoryLabel: "Frontend",
-        skills: [
-          { name: "React", categoryId: "cat-2", mastery: "Advanced" },
-          { name: "HTML", categoryId: "cat-1", mastery: "Novice" },
-        ],
-      },
-    ]);
-  });
-
-  it("places skills without category under Other", () => {
-    const grouped = groupSkillsByCategory(
-      [{ name: "Docker", categoryId: null, mastery: "Competent" }],
-      [],
-    );
-
-    expect(grouped).toEqual([
-      {
-        categoryLabel: "Other",
-        skills: [{ name: "Docker", categoryId: null, mastery: "Competent" }],
-      },
+      { categoryLabel: "Frontend", skills: [skills[0]] },
+      { categoryLabel: "Backend", skills: [skills[1]] },
+      { categoryLabel: "Other", skills: [skills[2]] },
     ]);
   });
 });

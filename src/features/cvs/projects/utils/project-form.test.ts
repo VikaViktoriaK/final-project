@@ -1,16 +1,41 @@
-import { mockCvProject } from "../../test-utils/fixtures";
 import {
   getProjectFormDefaults,
   toInputDate,
   toProjectMutationInput,
 } from "./project-form";
+import type { CvProject } from "../../shared/types";
 
-describe("project-form utils", () => {
-  it("maps ISO dates to input format", () => {
-    expect(toInputDate("2023-05-10T12:00:00.000Z")).toBe("2023-05-10");
+const cvProject: CvProject = {
+  id: "cv-project-1",
+  name: "HRM App",
+  internal_name: "hrm",
+  description: "Employee management",
+  domain: "Human Resources",
+  start_date: "2024-01-01T00:00:00.000Z",
+  end_date: null,
+  environment: ["React"],
+  roles: ["Developer"],
+  responsibilities: ["Build UI", "Write tests"],
+  project: {
+    id: "project-1",
+    name: "HRM App",
+    internal_name: "hrm",
+    domain: "Human Resources",
+    description: "Employee management",
+    start_date: "2024-01-01",
+    end_date: null,
+    environment: ["React"],
+  },
+};
+
+describe("CV project form utils", () => {
+  it("converts dates to input format", () => {
+    expect(toInputDate("2024-01-02T10:00:00.000Z")).toBe("2024-01-02");
+    expect(toInputDate("not-a-date-value")).toBe("not-a-date");
+    expect(toInputDate(null)).toBe("");
   });
 
-  it("returns empty defaults for add mode", () => {
+  it("returns add and update defaults", () => {
     expect(getProjectFormDefaults("add")).toEqual({
       projectId: "",
       startDate: "",
@@ -18,33 +43,31 @@ describe("project-form utils", () => {
       role: "Developer",
       responsibilities: "",
     });
-  });
 
-  it("maps CV project to update defaults", () => {
-    expect(getProjectFormDefaults("update", mockCvProject)).toEqual({
-      projectId: "",
-      startDate: "2022-06-01",
-      endDate: "2023-12-01",
+    expect(getProjectFormDefaults("update", cvProject)).toEqual({
+      projectId: "project-1",
+      startDate: "2024-01-01",
+      endDate: "",
       role: "Developer",
-      responsibilities: "Implemented API layer",
+      responsibilities: "Build UI\nWrite tests",
     });
   });
 
-  it("builds mutation input from form values", () => {
+  it("maps form values to mutation input", () => {
     expect(
       toProjectMutationInput({
-        projectId: "p1",
-        startDate: "2022-01-01",
-        endDate: "",
+        projectId: "project-1",
+        startDate: "2024-01-01",
+        endDate: " ",
         role: " Lead ",
-        responsibilities: " Line one \n\n Line two ",
+        responsibilities: " Build UI \n\n Write tests ",
       }),
     ).toEqual({
-      projectId: "p1",
-      start_date: "2022-01-01",
+      projectId: "project-1",
+      start_date: "2024-01-01",
       end_date: undefined,
       roles: ["Lead"],
-      responsibilities: ["Line one", "Line two"],
+      responsibilities: ["Build UI", "Write tests"],
     });
   });
 });
