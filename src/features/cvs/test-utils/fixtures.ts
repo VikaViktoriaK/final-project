@@ -39,6 +39,11 @@ export const mockCvProject: CvProject = {
   project: null,
 };
 
+export const mockCvWithProjects: Cv = {
+  ...mockCv,
+  projects: [mockCvProject],
+};
+
 export const mockSkillCategories: SkillCategory[] = [
   {
     id: "cat-1",
