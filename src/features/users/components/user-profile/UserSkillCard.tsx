@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
+import type { KeyboardEventHandler } from "react";
 import {
   masteryToProgressColor,
   masteryToProgressPercent,
@@ -14,6 +15,8 @@ type UserSkillCardProps = {
   disabled?: boolean;
   selected?: boolean;
   onClick?: () => void;
+  onKeyDown?: KeyboardEventHandler<HTMLButtonElement>;
+  ariaLabel?: string;
 };
 
 export function UserSkillCard({
@@ -21,6 +24,8 @@ export function UserSkillCard({
   disabled = false,
   selected = false,
   onClick,
+  onKeyDown,
+  ariaLabel,
 }: UserSkillCardProps) {
   const progressValue = masteryToProgressPercent(skill.mastery);
   const progressColor = masteryToProgressColor(progressValue);
@@ -33,9 +38,12 @@ export function UserSkillCard({
       disabled={disabled}
       focusRipple
       onClick={onClick}
+      onKeyDown={onKeyDown}
       aria-pressed={selected ? true : undefined}
       aria-valuenow={progressValue}
-      aria-label={`${skill.name}, ${skill.mastery}, ${progressValue}%`}
+      aria-label={
+        ariaLabel ?? `${skill.name}, ${skill.mastery}, ${progressValue}%`
+      }
       sx={[
         profileRemoveModeSx.chip,
         selected ? profileRemoveModeSx.chipSelected : null,

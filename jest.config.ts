@@ -10,6 +10,9 @@ const config: Config = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testMatch: ["**/*.(test|spec).(ts|tsx)"],
   modulePathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
+  testEnvironmentOptions: {
+    customExportConditions: [""],
+  },
 };
 
 export default createJestConfig(config);

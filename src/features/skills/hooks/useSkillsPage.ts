@@ -18,19 +18,39 @@ import type { SkillRow, SkillsSortField } from "../types";
 
 export type { SkillFormValues };
 
-export function useSkillsPage() {
+type SkillsPageMutationHandlers = {
+  createSkill: (values: SkillFormValues) => Promise<void>;
+  updateSkill: (skill: SkillRow, values: SkillFormValues) => Promise<void>;
+  deleteSkill: (skill: SkillRow) => Promise<void>;
+};
+
+type UseSkillsPageTemplateParams = {
+  skills: SkillRow[];
+  categories: ReturnType<typeof useSkillsCatalogQuery>["categories"];
+  loading: boolean;
+  error: ReturnType<typeof useSkillsCatalogQuery>["error"];
+  saving: boolean;
+  deleting: boolean;
+  mutations: SkillsPageMutationHandlers;
+  afterMutation: () => Promise<void>;
+};
+
+function useSkillsPageTemplate({
+  skills,
+  categories,
+  loading,
+  error,
+  saving,
+  deleting,
+  mutations,
+  afterMutation,
+}: UseSkillsPageTemplateParams) {
   const [query, setQuery] = React.useState("");
   const [orderBy, setOrderBy] = React.useState<SkillsSortField>("name");
   const [order, setOrder] = React.useState<SortOrder>("asc");
 
   const { role } = useAuthSnapshot();
   const isAdmin = role === "Admin";
-
-  const { skills, categories, loading, error, refetch } =
-    useSkillsCatalogQuery();
-  const [createSkill, { loading: creating }] = useCreateSkillMutation();
-  const [updateSkill, { loading: updating }] = useUpdateSkillMutation();
-  const [deleteSkill, { loading: deleting }] = useDeleteSkillMutation();
 
   const form = useCrudFormDialog<SkillRow>();
   const deleteDialog = useDeleteConfirm<SkillRow>();
@@ -71,32 +91,22 @@ export function useSkillsPage() {
   const handleFormSubmit = React.useCallback(
     async (values: SkillFormValues) => {
       if (form.mode === "create") {
-        await createSkill({ variables: { skill: values } });
+        await mutations.createSkill(values);
       } else if (form.item) {
-        await updateSkill({
-          variables: {
-            skill: {
-              skillId: form.item.id,
-              name: values.name,
-              categoryId: values.categoryId,
-            },
-          },
-        });
+        await mutations.updateSkill(form.item, values);
       }
-      await refetch();
+      await afterMutation();
     },
-    [createSkill, form.item, form.mode, refetch, updateSkill],
+    [afterMutation, form.item, form.mode, mutations],
   );
 
   const handleDeleteConfirm = React.useCallback(async () => {
     if (!deleteDialog.target) return;
-    await deleteSkill({
-      variables: { skill: { skillId: deleteDialog.target.id } },
-    });
+    await mutations.deleteSkill(deleteDialog.target);
     deleteDialog.close();
     deleteDialog.clearTarget();
-    await refetch();
-  }, [deleteDialog, deleteSkill, refetch]);
+    await afterMutation();
+  }, [afterMutation, deleteDialog, mutations]);
 
   return {
     isAdmin,
@@ -113,9 +123,53 @@ export function useSkillsPage() {
     deleteDialog,
     categories,
     processedSkills,
-    saving: creating || updating,
+    saving,
     deleting,
     handleFormSubmit,
     handleDeleteConfirm,
   };
+}
+
+export function useSkillsPage() {
+  const { skills, categories, loading, error, refetch } =
+    useSkillsCatalogQuery();
+  const [createSkill, { loading: creating }] = useCreateSkillMutation();
+  const [updateSkill, { loading: updating }] = useUpdateSkillMutation();
+  const [deleteSkill, { loading: deleting }] = useDeleteSkillMutation();
+
+  const mutations = React.useMemo<SkillsPageMutationHandlers>(
+    () => ({
+      createSkill: async (values) => {
+        await createSkill({ variables: { skill: values } });
+      },
+      updateSkill: async (skill, values) => {
+        await updateSkill({
+          variables: {
+            skill: {
+              skillId: skill.id,
+              name: values.name,
+              categoryId: values.categoryId,
+            },
+          },
+        });
+      },
+      deleteSkill: async (skill) => {
+        await deleteSkill({
+          variables: { skill: { skillId: skill.id } },
+        });
+      },
+    }),
+    [createSkill, deleteSkill, updateSkill],
+  );
+
+  return useSkillsPageTemplate({
+    skills,
+    categories,
+    loading,
+    error,
+    saving: creating || updating,
+    deleting,
+    mutations,
+    afterMutation: refetch,
+  });
 }

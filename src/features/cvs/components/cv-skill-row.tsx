@@ -1,10 +1,8 @@
 "use client";
 
-import { Box } from "@mui/material";
 import type { KeyboardEvent } from "react";
-import SkillMasteryBar from "./skill-mastery-bar";
+import { UserSkillCard } from "@/features/users/components/user-profile/UserSkillCard";
 import type { SkillMastery } from "../types";
-import { cvsStyles } from "../styles/cvs.styles";
 
 type CvSkillRowProps = {
   skill: SkillMastery;
@@ -42,35 +40,30 @@ function CvSkillRow({
   };
 
   const isInteractive = removeMode || editable;
+  const userSkill = {
+    id: skill.name.trim().toLowerCase(),
+    name: skill.name,
+    categoryId: skill.categoryId ?? "other",
+    categoryName: "",
+    mastery: skill.mastery,
+    progressColor: "",
+  };
 
   return (
-    <Box
+    <UserSkillCard
+      skill={userSkill}
+      disabled={!isInteractive}
+      selected={removeMode && selected}
       onClick={handleClick}
       onKeyDown={isInteractive ? handleKeyDown : undefined}
-      role={isInteractive ? "button" : undefined}
-      tabIndex={isInteractive ? 0 : undefined}
-      aria-pressed={removeMode ? selected : undefined}
-      aria-label={
+      ariaLabel={
         removeMode
           ? `${skill.name}, ${selected ? "selected for removal" : "tap to remove"}`
           : editable
             ? `${skill.name}, tap to edit mastery`
             : undefined
       }
-      sx={[
-        cvsStyles.skillRow,
-        removeMode && cvsStyles.skillRowRemovable,
-        removeMode && selected && cvsStyles.skillRowSelected,
-        editable && !removeMode && cvsStyles.skillRowEditable,
-      ]}
-    >
-      <SkillMasteryBar
-        name={skill.name}
-        mastery={skill.mastery}
-        draining={removeMode && selected}
-        dimmed={removeMode && selected}
-      />
-    </Box>
+    />
   );
 }
 

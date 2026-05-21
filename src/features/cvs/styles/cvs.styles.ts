@@ -217,7 +217,7 @@ export const cvsStyles = {
   /** Centered Figma-width column with even side gutters on wide viewports. */
   cvContentFrame: {
     width: "100%",
-    maxWidth: 1190,
+    maxWidth: 1440,
     mx: "auto",
     px: { xs: 0, sm: 2, md: 3 },
     boxSizing: "border-box",
@@ -226,7 +226,7 @@ export const cvsStyles = {
   /** @deprecated Use `cvContentFrame` — kept for existing imports. */
   cvContentWidth: {
     width: "100%",
-    maxWidth: 1190,
+    maxWidth: 1440,
     mx: "auto",
     px: { xs: 0, sm: 2, md: 3 },
     boxSizing: "border-box",
@@ -587,6 +587,17 @@ export const cvsStyles = {
     },
   },
 
+  skillDialogActions: {
+    justifyContent: "flex-end",
+    gap: 3,
+    "& > *": {
+      flex: "0 0 auto",
+      minWidth: 160,
+      maxWidth: 220,
+      m: 0,
+    },
+  },
+
   dialogMessage: {
     color: "var(--app-text-muted)",
     fontSize: 14,
@@ -625,6 +636,32 @@ export const cvsStyles = {
     },
   },
 
+  skillDialogCancelButton: {
+    ...pillButtonBase,
+    width: "auto",
+    minWidth: 160,
+    height: 48,
+    minHeight: 48,
+    px: 4,
+    py: 1.5,
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: 0.6,
+    bgcolor: "transparent",
+    backgroundColor: "transparent",
+    color: "var(--app-text-muted)",
+    border: "1px solid var(--app-control-border)",
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "transparent",
+        backgroundColor: "transparent",
+        borderColor: "var(--app-overlay-25)",
+        color: "var(--app-text)",
+        boxShadow: "none",
+      },
+    },
+  },
+
   primaryButton: {
     ...pillButtonBase,
     width: "100%",
@@ -639,6 +676,52 @@ export const cvsStyles = {
         bgcolor: "var(--color-primary-hover)",
         boxShadow: "none",
       },
+    },
+  },
+
+  skillDialogPrimaryButton: {
+    ...pillButtonBase,
+    width: "auto",
+    minWidth: 160,
+    height: 48,
+    minHeight: 48,
+    px: 4,
+    py: 1.5,
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: 0.6,
+    bgcolor: "var(--color-primary)",
+    color: "var(--app-on-primary)",
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "var(--color-primary-hover)",
+        boxShadow: "none",
+      },
+    },
+  },
+
+  skillDialogPrimaryButtonMuted: {
+    ...pillButtonBase,
+    width: "auto",
+    minWidth: 160,
+    height: 48,
+    minHeight: 48,
+    px: 4,
+    py: 1.5,
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: 0.6,
+    bgcolor: "var(--app-overlay-25)",
+    color: "var(--app-text-muted)",
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "var(--app-overlay-25)",
+        boxShadow: "none",
+      },
+    },
+    "&.Mui-disabled": {
+      bgcolor: "var(--app-overlay-25)",
+      color: "var(--app-text-muted)",
     },
   },
 
@@ -926,50 +1009,49 @@ export const cvsStyles = {
   },
 
   breadcrumbActive: {
-    color: "var(--color-primary)",
+    color: "#df4d4d",
   },
 
   tabs: {
     width: "100%",
-    borderBottom: "1px solid var(--app-divider)",
-    mb: 0,
-    minHeight: 56,
-    height: 56,
+    mb: 5,
+    minHeight: 40,
+    height: 40,
     "& .MuiTabs-flexContainer": {
-      height: 56,
-      gap: 1,
+      height: 40,
+      gap: 0,
     },
     "& .MuiTabs-scroller": {
-      height: 56,
+      height: 40,
     },
     "& .MuiTab-root": {
-      color: "var(--app-text)",
-      fontSize: 14,
-      lineHeight: "24px",
-      fontWeight: 500,
-      letterSpacing: "0.15px",
+      color: "var(--app-text-muted)",
+      fontSize: 13,
+      lineHeight: "20px",
+      fontWeight: 600,
+      letterSpacing: 0,
       textTransform: "uppercase",
-      minHeight: 56,
-      height: 56,
+      minHeight: 40,
+      height: 40,
       minWidth: "auto",
-      px: 2.5,
+      px: 2,
       py: 0,
       opacity: 1,
       textDecoration: "none",
       "@media (hover: hover)": {
         "&:hover": {
-          color: "var(--color-primary)",
+          color: "#df4d4d",
         },
       },
     },
     "& .MuiTab-root.Mui-selected": {
-      color: "var(--color-primary)",
+      color: "#df4d4d",
     },
     "& .MuiTab-root.Mui-selected:hover": {
-      color: "var(--color-primary)",
+      color: "#df4d4d",
     },
     "& .MuiTabs-indicator": {
-      backgroundColor: "var(--color-primary)",
+      backgroundColor: "#df4d4d",
       height: 2,
       borderRadius: 0,
     },
@@ -977,7 +1059,7 @@ export const cvsStyles = {
 
   tabContent: {
     width: "100%",
-    pt: 3,
+    pt: 0,
   },
 
   // ---------------------------------------------------------------------------
@@ -1104,12 +1186,11 @@ export const cvsStyles = {
   skillsSection: {
     display: "flex",
     flexDirection: "column",
+    minHeight: 280,
   },
 
   skillsSectionRemove: {
-    flexDirection: { xs: "column", md: "row" },
-    alignItems: { xs: "stretch", md: "flex-start" },
-    gap: { xs: 3, md: 4 },
+    flexDirection: "column",
   },
 
   skillsSectionEmpty: {
@@ -1142,17 +1223,23 @@ export const cvsStyles = {
   skillsList: {
     flex: "1 1 auto",
     minWidth: 0,
+    display: "flex",
+    flexDirection: "column",
+    gap: 4,
+  },
+
+  skillCategoryBlock: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
   },
 
   skillCategoryTitle: {
     fontSize: 16,
     fontWeight: 400,
     color: "var(--app-text)",
-    mb: 1.5,
-    mt: 0,
-    "&:not(:first-of-type)": {
-      mt: 5,
-    },
+    lineHeight: 1.4,
+    m: 0,
   },
 
   skillsGrid: {
@@ -1162,21 +1249,37 @@ export const cvsStyles = {
       sm: "repeat(2, minmax(0, 1fr))",
       lg: "repeat(3, minmax(0, 1fr))",
     },
-    columnGap: { xs: 3, md: 5, lg: 6 },
-    rowGap: 1.5,
+    gap: 2,
+    alignItems: "center",
+  },
+
+  skillListItem: {
+    minWidth: 0,
+    display: "flex",
+    justifyContent: "flex-start",
   },
 
   skillRow: {
-    display: "flex",
+    display: "inline-flex",
     alignItems: "center",
+    width: "fit-content",
+    maxWidth: "100%",
     minWidth: 0,
-    minHeight: 28,
+    height: 48,
+    minHeight: 48,
+    px: 1.5,
+    py: 1,
+    border: "2px solid transparent",
+    borderRadius: 999,
+    boxSizing: "border-box",
+    transition: "background-color 200ms, color 200ms, border-color 0.2s ease",
   },
 
   skillRowRemovable: {
     cursor: "pointer",
     "@media (hover: hover)": {
       "&:hover": {
+        bgcolor: "rgba(255, 255, 255, 0.06)",
         "& .MuiTypography-root": {
           color: "var(--app-text)",
         },
@@ -1188,6 +1291,7 @@ export const cvsStyles = {
     cursor: "pointer",
     "@media (hover: hover)": {
       "&:hover": {
+        bgcolor: "rgba(255, 255, 255, 0.06)",
         "& .MuiTypography-root": {
           color: "var(--app-text)",
         },
@@ -1197,29 +1301,38 @@ export const cvsStyles = {
 
   skillRowSelected: {
     pointerEvents: "auto",
+    borderColor: "#df4d4d",
+    bgcolor: "rgba(223, 77, 77, 0.12)",
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "rgba(223, 77, 77, 0.16)",
+      },
+    },
   },
 
   skillBarGroup: {
-    display: "inline-flex",
+    display: "inline-grid",
+    gridTemplateColumns: "120px auto",
     alignItems: "center",
-    gap: 2,
+    gap: "12px",
     minWidth: 0,
-    width: "100%",
-    minHeight: 24,
+    width: "fit-content",
+    maxWidth: "100%",
   },
 
   skillBarTrack: {
-    width: 160,
-    height: 4,
-    borderRadius: 999,
+    width: "100%",
+    minWidth: 120,
+    height: 6,
+    borderRadius: 3,
     flexShrink: 0,
-    bgcolor: "var(--color-skill-bar-track)",
+    bgcolor: "rgba(255, 255, 255, 0.1)",
     overflow: "hidden",
   },
 
   skillBarFill: {
     height: "100%",
-    borderRadius: 999,
+    borderRadius: 3,
     transition: "width 0.45s ease-in-out",
   },
 
@@ -1229,8 +1342,10 @@ export const cvsStyles = {
     color: "var(--app-text-muted)",
     lineHeight: 1.5,
     transition: "color 0.35s ease, opacity 0.35s ease",
-    flex: "1 1 auto",
     minWidth: 0,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
 
   skillNameDimmed: {
@@ -1239,20 +1354,30 @@ export const cvsStyles = {
 
   skillRemoveActions: {
     display: "flex",
-    flexDirection: "column",
-    gap: 1.5,
+    flexDirection: "row",
+    justifyContent: { xs: "center", sm: "flex-end" },
+    alignItems: "center",
+    gap: 3,
+    flexWrap: "wrap",
     flexShrink: 0,
-    width: { xs: "100%", md: 220 },
-    maxWidth: { xs: "100%", md: 280 },
-    pt: { xs: 0, md: 1 },
+    width: "100%",
+    mt: "auto",
+    pt: 3,
+    pr: { xs: 0, sm: 2 },
+    pl: 0,
   },
 
   skillRemoveCancelButton: {
     ...pillButtonBase,
-    width: "100%",
-    height: { xs: 40, sm: 48 },
-    minHeight: { xs: 40, sm: 48 },
-    fontSize: { xs: 11, sm: 12 },
+    width: "auto",
+    minWidth: 160,
+    height: 48,
+    minHeight: 48,
+    px: 4,
+    py: 1.5,
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: 0.6,
     bgcolor: "transparent",
     color: "var(--app-text-muted)",
     border: "1px solid var(--app-control-border)",
@@ -1268,10 +1393,16 @@ export const cvsStyles = {
 
   skillRemoveDeleteButton: {
     ...pillButtonBase,
-    width: "100%",
-    height: { xs: 40, sm: 48 },
-    minHeight: { xs: 40, sm: 48 },
-    fontSize: { xs: 11, sm: 12 },
+    width: "auto",
+    minWidth: 160,
+    maxWidth: 220,
+    height: 48,
+    minHeight: 48,
+    px: 4,
+    py: 1.5,
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: 0.6,
     bgcolor: "var(--app-overlay-25)",
     color: "var(--app-text-muted)",
     "@media (hover: hover)": {
@@ -1308,23 +1439,26 @@ export const cvsStyles = {
     alignItems: "center",
     justifyContent: "center",
     gap: 1.25,
-    width: "100%",
     minHeight: 22,
+    width: "100%",
   },
 
   skillRemoveDeleteBadge: {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
+    boxSizing: "border-box",
     flexShrink: 0,
-    minWidth: 22,
-    height: 22,
-    px: 0.75,
-    borderRadius: 999,
+    width: 32,
+    minWidth: 32,
+    maxWidth: 32,
+    height: 32,
+    p: 0,
+    borderRadius: "50%",
     bgcolor: "var(--app-on-primary)",
     color: "var(--color-primary)",
-    fontSize: 11,
-    fontWeight: 500,
+    fontSize: 12,
+    fontWeight: 800,
     lineHeight: 1,
     letterSpacing: 0,
   },
@@ -1338,10 +1472,12 @@ export const cvsStyles = {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: { xs: "center", sm: "flex-end" },
     width: "100%",
-    mt: 3,
-    gap: 2,
+    mt: "auto",
+    pt: 3,
+    pr: { xs: 0, sm: 2 },
+    gap: 3,
     flexWrap: "wrap",
   },
 
@@ -1372,31 +1508,46 @@ export const cvsStyles = {
     color: "var(--app-text)",
     textTransform: "uppercase",
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: 700,
+    letterSpacing: 0.5,
+    px: 0,
     minWidth: 0,
     "& .MuiButton-startIcon": {
       color: "inherit",
     },
     "@media (hover: hover)": {
       "&:hover": {
-        bgcolor: "var(--app-overlay-06)",
+        bgcolor: "transparent",
       },
     },
   },
 
   textActionPrimary: {
-    color: "var(--color-primary)",
+    color: "#df4d4d",
     textTransform: "uppercase",
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: 700,
+    letterSpacing: 0.5,
+    px: 0,
     minWidth: 0,
+    "& .MuiButton-startIcon": {
+      color: "inherit",
+    },
+    "@media (hover: hover)": {
+      "&:hover": {
+        bgcolor: "transparent",
+        color: "#ef6d6d",
+      },
+    },
   },
 
   textActionDanger: {
     color: "var(--color-action-danger)",
     textTransform: "uppercase",
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: 700,
+    letterSpacing: 0.5,
+    px: 0,
     minWidth: 0,
     "& .MuiButton-startIcon": {
       color: "inherit",
