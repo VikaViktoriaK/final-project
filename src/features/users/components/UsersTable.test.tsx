@@ -14,6 +14,9 @@ describe("UsersTable", () => {
     render(
       <UsersTable
         users={[]}
+        orderBy="firstName"
+        order="asc"
+        onSort={jest.fn()}
         onEditUser={jest.fn()}
         onViewUser={jest.fn()}
         onDeleteUser={jest.fn()}
@@ -36,6 +39,9 @@ describe("UsersTable", () => {
             position: "Developer",
           },
         ]}
+        orderBy="firstName"
+        order="asc"
+        onSort={jest.fn()}
         onEditUser={jest.fn()}
         onViewUser={jest.fn()}
         onDeleteUser={jest.fn()}

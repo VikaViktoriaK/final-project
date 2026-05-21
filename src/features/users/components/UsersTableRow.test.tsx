@@ -14,11 +14,6 @@ const user: UserRow = {
 };
 
 describe("UsersTableRow", () => {
-  beforeEach(() => {
-    const payload = btoa(JSON.stringify({ role: "Admin", id: "admin-1" }));
-    localStorage.setItem("hrm_access_token", `header.${payload}.signature`);
-  });
-
   it("navigates to profile and opens admin menu actions", () => {
     const onView = jest.fn();
     const onEdit = jest.fn();
@@ -29,6 +24,8 @@ describe("UsersTableRow", () => {
         <TableBody>
           <UsersTableRow
             user={user}
+            isAdmin
+            canEdit
             onView={onView}
             onEdit={onEdit}
             onDelete={onDelete}

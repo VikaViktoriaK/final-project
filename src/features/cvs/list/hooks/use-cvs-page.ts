@@ -28,7 +28,11 @@ import type { Cv } from "../../shared/types";
 
 function useCvsPage() {
   const router = useRouter();
-  const { query: search, onChange: handleSearchChange } = useSearch();
+  const {
+    query: search,
+    setQuery: setSearch,
+    onChange: handleSearchChange,
+  } = useSearch();
   const createDialog = useDialog();
   const deleteDialog = useDialog<Cv>();
   const tableMenu = useAnchoredMenu<Cv>();
@@ -131,6 +135,7 @@ function useCvsPage() {
     loading,
     error,
     search,
+    setSearch,
     sortField,
     sortDirection,
     isEmpty,

@@ -5,7 +5,6 @@ import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { UserCreateDialog } from "@/features/users/components/UserCreateDialog";
 import { UserEditDialog } from "@/features/users/components/UserEditDialog";
-import { UsersFilter } from "@/features/users/components/UsersFilter";
 import { UsersTable } from "@/features/users/components/UsersTable";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import {
@@ -23,9 +22,8 @@ export function UsersPage() {
     query,
     setQuery,
     order,
-    setOrder,
     orderBy,
-    setOrderBy,
+    handleSort,
     deleteDialog,
     processedUsers,
     editingUser,
@@ -48,14 +46,6 @@ export function UsersPage() {
         title={USERS_PAGE_TITLE}
         searchQuery={query}
         onSearchChange={setQuery}
-        filter={
-          <UsersFilter
-            order={order}
-            orderBy={orderBy}
-            onOrderChange={setOrder}
-            onOrderByChange={setOrderBy}
-          />
-        }
         action={
           isAdmin ? (
             <Button
@@ -72,6 +62,9 @@ export function UsersPage() {
       >
         <UsersTable
           users={processedUsers}
+          orderBy={orderBy}
+          order={order}
+          onSort={handleSort}
           onEditUser={openEdit}
           onViewUser={viewUser}
           onDeleteUser={requestDeleteUser}

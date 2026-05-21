@@ -57,6 +57,34 @@ describe("useUsersPage", () => {
     );
   });
 
+  it("toggles sort direction when sorting the same column", () => {
+    const { result } = renderHook(() => useUsersPage());
+
+    act(() => {
+      result.current.handleSort("firstName");
+    });
+
+    expect(result.current.order).toBe("desc");
+    expect(result.current.processedUsers.map((user) => user.firstName)).toEqual(
+      ["Grace", "Ada"],
+    );
+  });
+
+  it("sorts by a new column in ascending order", () => {
+    const { result } = renderHook(() => useUsersPage());
+
+    act(() => {
+      result.current.handleSort("email");
+    });
+
+    expect(result.current.orderBy).toBe("email");
+    expect(result.current.order).toBe("asc");
+    expect(result.current.processedUsers.map((user) => user.email)).toEqual([
+      "ada@example.com",
+      "grace@example.com",
+    ]);
+  });
+
   it("navigates to user profile on view", () => {
     const { result } = renderHook(() => useUsersPage());
 

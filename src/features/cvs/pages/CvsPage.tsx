@@ -1,22 +1,19 @@
 "use client";
 
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Typography,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import useAuthErrorRedirect from "@/features/auth/hooks/use-auth-error-redirect";
+import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import ConfirmDialog from "@/components/confirm-dialog";
 import ConfirmHighlight from "@/components/confirm-highlight";
-import SearchField from "@/components/search-field";
 import CvsTable from "../components/list/CvsTable";
 import CreateCvDialog from "../components/list/CreateCvDialog";
 import useCvsPage from "../list/hooks/use-cvs-page";
 import { canCreateCv, canManageCv } from "../shared/utils/cv-permissions";
-import { cvsStyles } from "../styles/cvs.styles";
+
+const CVS_PAGE_TITLE = "CVs";
 
 function CvsPage() {
   const page = useCvsPage();
@@ -24,58 +21,38 @@ function CvsPage() {
 
   useAuthErrorRedirect(page.error);
 
-  if (page.loading) {
-    return (
-      <Box sx={cvsStyles.loadingWrap}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (page.error) {
-    return <Alert severity="error">{page.error.message}</Alert>;
-  }
-
   return (
     <>
-      <Box sx={cvsStyles.cvContentFrame}>
-        <Box sx={cvsStyles.pageTopBar}>
-          <Typography component="h2" sx={cvsStyles.pageTitle}>
-            CVs
-          </Typography>
-          <Box sx={cvsStyles.pageToolbar}>
-            <Box sx={cvsStyles.pageToolbarSearch}>
-              <SearchField
-                value={page.search}
-                onChange={page.handleSearchChange}
-              />
-            </Box>
-            {showCreateButton ? (
-              <Box sx={cvsStyles.pageToolbarActions}>
-                <Button
-                  type="button"
-                  variant="text"
-                  onClick={page.openCreateDialog}
-                  sx={catalogPageSx.createButton}
-                >
-                  + CREATE CV
-                </Button>
-              </Box>
-            ) : null}
-          </Box>
-        </Box>
+      <CatalogPageShell
+        title={CVS_PAGE_TITLE}
+        searchQuery={page.search}
+        onSearchChange={page.setSearch}
+        action={
+          showCreateButton ? (
+            <Button
+              type="button"
+              variant="text"
+              onClick={page.openCreateDialog}
+              sx={catalogPageSx.createButton}
+            >
+              + CREATE CV
+            </Button>
+          ) : null
+        }
+        errorMessage={page.error?.message}
+        loading={page.loading}
+      >
+        {page.isEmpty ? (
+          <Typography sx={catalogTableSx.emptyState}>No CVs found.</Typography>
+        ) : null}
 
-        {page.isEmpty && (
-          <Typography sx={cvsStyles.emptyState}>No CVs found.</Typography>
-        )}
-
-        {page.isSearchEmpty && (
-          <Typography sx={cvsStyles.emptyState}>
+        {page.isSearchEmpty ? (
+          <Typography sx={catalogTableSx.emptyState}>
             No CVs match your search.
           </Typography>
-        )}
+        ) : null}
 
-        {page.cvs.length > 0 && (
+        {page.cvs.length > 0 ? (
           <CvsTable
             cvs={page.cvs}
             canManageCv={canManageCv}
@@ -88,38 +65,38 @@ function CvsPage() {
             onCloseMenu={page.tableMenu.close}
             onDelete={page.handleMenuDelete}
           />
-        )}
+        ) : null}
+      </CatalogPageShell>
 
-        <CreateCvDialog
-          open={page.createDialog.isOpen}
-          onClose={page.closeCreateDialog}
-          register={page.createForm.register}
-          errors={page.createErrors}
-          isPending={page.isCreatePending}
-          hasChanges={page.hasCreateChanges}
-          canCreate={page.canCreate}
-          errorMessage={page.createError ?? undefined}
-          onSubmit={page.submitCreateCv}
-        />
+      <CreateCvDialog
+        open={page.createDialog.isOpen}
+        onClose={page.closeCreateDialog}
+        register={page.createForm.register}
+        errors={page.createErrors}
+        isPending={page.isCreatePending}
+        hasChanges={page.hasCreateChanges}
+        canCreate={page.canCreate}
+        errorMessage={page.createError ?? undefined}
+        onSubmit={page.submitCreateCv}
+      />
 
-        <ConfirmDialog
-          open={page.deleteDialog.isOpen}
-          title="Delete CV"
-          message={
-            <>
-              Are you sure you want to delete CV{" "}
-              <ConfirmHighlight>
-                {page.deleteDialog.payload?.name}
-              </ConfirmHighlight>
-              ?
-            </>
-          }
-          confirmLabel="Confirm"
-          loading={page.deleting}
-          onClose={page.deleteDialog.close}
-          onConfirm={page.confirmDeleteCv}
-        />
-      </Box>
+      <ConfirmDialog
+        open={page.deleteDialog.isOpen}
+        title="Delete CV"
+        message={
+          <>
+            Are you sure you want to delete CV{" "}
+            <ConfirmHighlight>
+              {page.deleteDialog.payload?.name}
+            </ConfirmHighlight>
+            ?
+          </>
+        }
+        confirmLabel="Confirm"
+        loading={page.deleting}
+        onClose={page.deleteDialog.close}
+        onConfirm={page.confirmDeleteCv}
+      />
       {page.FeedbackSnackbar}
     </>
   );
