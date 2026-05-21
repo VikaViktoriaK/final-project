@@ -5,7 +5,19 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
+// --- NEW MENU IMPORTS ---
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
+import SettingsOutlined from "@mui/icons-material/SettingsOutlined";
+import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
+import useLogout from "@/features/auth/hooks/use-logout";
+// ------------------------
+
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { useUserQuery } from "@/features/users/api/getUser";
 import { SidebarNavItem } from "./SidebarNavItem";
@@ -22,6 +34,7 @@ import "./sidebar-nav.css";
 
 export function AppSidebar() {
   const pathname = usePathname() ?? "";
+  const router = useRouter();
   const { collapsed, toggle } = useSidebarCollapse();
   const { userId, role } = useAuthSnapshot();
   const isAdmin = role === "Admin";
@@ -34,6 +47,25 @@ export function AppSidebar() {
   const initial = getInitial(displayName, user?.email);
   const profileHref = userId ? `/users/${userId}/profile` : "/users";
   const profileActive = isProfileActive(pathname, userId);
+
+  const { logoutUser } = useLogout();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    handleMenuClose();
+    logoutUser();
+  };
 
   return (
     <Box
@@ -62,26 +94,89 @@ export function AppSidebar() {
           </React.Fragment>
         ))}
         <Box className="sidebar-nav-item--mobile-only">
+          <Box onClickCapture={handleMenuOpen} sx={{ cursor: "pointer" }}>
+            <SidebarProfileLink
+              profileHref={profileHref}
+              profileActive={profileActive}
+              displayName={displayName}
+              initial={initial}
+              avatarUrl={user?.avatarUrl}
+              collapsed={false}
+            />
+          </Box>
+        </Box>
+      </Box>
+
+      <Box className="sidebar-nav-footer" sx={sidebarSx.footer}>
+        <Box
+          onClickCapture={handleMenuOpen}
+          sx={{ cursor: "pointer", width: "100%" }}
+        >
           <SidebarProfileLink
             profileHref={profileHref}
             profileActive={profileActive}
             displayName={displayName}
             initial={initial}
             avatarUrl={user?.avatarUrl}
-            collapsed={false}
+            collapsed={collapsed}
           />
         </Box>
-      </Box>
 
-      <Box className="sidebar-nav-footer" sx={sidebarSx.footer}>
-        <SidebarProfileLink
-          profileHref={profileHref}
-          profileActive={profileActive}
-          displayName={displayName}
-          initial={initial}
-          avatarUrl={user?.avatarUrl}
-          collapsed={collapsed}
-        />
+        <Menu
+          anchorEl={anchorEl}
+          open={openMenu}
+          onClose={handleMenuClose}
+          anchorOrigin={{ horizontal: "center", vertical: "top" }}
+          transformOrigin={{ horizontal: "center", vertical: "bottom" }}
+          sx={{
+            "& .MuiPaper-root": {
+              bgcolor: "var(--app-surface)",
+              color: "var(--app-text)",
+              minWidth: 180,
+              mb: 1,
+              borderRadius: 2,
+              border: "1px solid var(--app-control-border)",
+              boxShadow: "0px 4px 20px rgba(0,0,0,0.5)",
+            },
+            "& .MuiMenuItem-root": {
+              py: 1.5,
+              px: 2,
+              "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
+            },
+            "& .MuiListItemIcon-root": {
+              color: "var(--app-text)",
+              minWidth: 36,
+            },
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              router.push(profileHref);
+            }}
+          >
+            <ListItemIcon>
+              <AccountCircleOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </MenuItem>
+
+          <MenuItem onClick={handleMenuClose}>
+            <ListItemIcon>
+              <SettingsOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+          </MenuItem>
+
+          <Divider sx={{ borderColor: "var(--app-control-border)", my: 0.5 }} />
+
+          <MenuItem onClick={handleLogout}>
+            <ListItemIcon>
+              <LogoutOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </MenuItem>
+        </Menu>
 
         <Tooltip
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
