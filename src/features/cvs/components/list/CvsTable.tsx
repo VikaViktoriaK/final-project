@@ -16,10 +16,11 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NextLink from "next/link";
 import { TableSortArrowIcon } from "@/components/app-arrow";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import { Fragment, type MouseEvent } from "react";
 import type { Cv } from "../../shared/types";
 import type { CvSortField, SortDirection } from "../../list/utils/cv-list";
-import { cvsStyles } from "../../styles/cvs.styles";
+import { cvsStyles } from "@/features/cvs/styles";
 
 type CvsTableProps = {
   cvs: Cv[];
@@ -55,9 +56,9 @@ function CvRowMenu({ cv, showMenu, onOpenMenu }: CvRowMenuProps) {
       size="small"
       aria-label="CV actions"
       onClick={handleOpenMenu}
-      sx={cvsStyles.menuIconButton}
+      sx={catalogTableSx.catalogActionsMenuButton}
     >
-      <MoreVertIcon />
+      <MoreVertIcon fontSize="small" />
     </IconButton>
   );
 }
@@ -225,22 +226,13 @@ function CvsTable({
         anchorEl={menuAnchor}
         open={Boolean(menuAnchor)}
         onClose={onCloseMenu}
-        slotProps={{ paper: { sx: cvsStyles.contextMenuPaper } }}
+        sx={catalogTableSx.rowMenu}
       >
-        <MenuItem
-          component={NextLink}
-          href={editHref}
-          onClick={onCloseMenu}
-          sx={cvsStyles.contextMenuItem}
-        >
+        <MenuItem component={NextLink} href={editHref} onClick={onCloseMenu}>
           Details
         </MenuItem>
-        <MenuItem
-          divider
-          onClick={onDelete}
-          sx={[cvsStyles.contextMenuItem, cvsStyles.menuItemDanger]}
-        >
-          Delete CV
+        <MenuItem onClick={onDelete} sx={catalogTableSx.rowMenuDeleteItem}>
+          Delete
         </MenuItem>
       </Menu>
     </>

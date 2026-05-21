@@ -16,6 +16,8 @@ import SortableProjectsHeader from "@/components/sortable-projects-header";
 import useAuthErrorRedirect from "@/features/auth/hooks/use-auth-error-redirect";
 import { canManageProjects } from "@/features/auth/utils/permissions";
 import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import CatalogProjectFormDialog from "./catalog-project-form-dialog";
 import ProjectCard from "./project-card";
 import useProjectsPage from "../hooks/use-projects-page";
@@ -48,18 +50,23 @@ function ProjectsPage() {
             Projects
           </Typography>
           <Box sx={cvsStyles.pageToolbar}>
-            <SearchField
-              value={page.search}
-              onChange={page.handleSearchChange}
-            />
+            <Box sx={cvsStyles.pageToolbarSearch}>
+              <SearchField
+                value={page.search}
+                onChange={page.handleSearchChange}
+              />
+            </Box>
             {canManage ? (
-              <Button
-                type="button"
-                onClick={page.openCreateDialog}
-                sx={cvsStyles.createButton}
-              >
-                + Create project
-              </Button>
+              <Box sx={cvsStyles.pageToolbarActions}>
+                <Button
+                  type="button"
+                  variant="text"
+                  onClick={page.openCreateDialog}
+                  sx={catalogPageSx.createButton}
+                >
+                  + CREATE PROJECT
+                </Button>
+              </Box>
             ) : null}
           </Box>
         </Box>
@@ -100,18 +107,12 @@ function ProjectsPage() {
           anchorEl={page.projectMenu.anchorEl}
           open={page.projectMenu.isOpen}
           onClose={page.projectMenu.close}
-          slotProps={{ paper: { sx: cvsStyles.contextMenuPaper } }}
+          sx={catalogTableSx.rowMenu}
         >
+          <MenuItem onClick={page.openUpdateDialog}>Edit</MenuItem>
           <MenuItem
-            onClick={page.openUpdateDialog}
-            sx={cvsStyles.contextMenuItem}
-          >
-            Update
-          </MenuItem>
-          <MenuItem
-            divider
             onClick={page.openDeleteDialog}
-            sx={[cvsStyles.contextMenuItem, cvsStyles.menuItemDanger]}
+            sx={catalogTableSx.rowMenuDeleteItem}
           >
             Delete
           </MenuItem>

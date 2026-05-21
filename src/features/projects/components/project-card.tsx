@@ -4,6 +4,7 @@ import { Box, Chip, IconButton, Typography } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import formatDisplayDate from "@/lib/format-display-date";
 import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import type { MouseEvent } from "react";
 import type { ProjectCardProps } from "../types";
 
@@ -34,9 +35,9 @@ function ProjectCard({ project, canManage, onOpenMenu }: ProjectCardProps) {
               size="small"
               aria-label="Project actions"
               onClick={handleOpenMenu}
-              sx={cvsStyles.menuIconButton}
+              sx={catalogTableSx.catalogActionsMenuButton}
             >
-              <MoreVertIcon />
+              <MoreVertIcon fontSize="small" />
             </IconButton>
           ) : null}
         </Box>

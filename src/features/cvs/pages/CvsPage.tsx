@@ -7,8 +7,8 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import useAuthErrorRedirect from "@/features/auth/hooks/use-auth-error-redirect";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import ConfirmDialog from "@/components/confirm-dialog";
 import ConfirmHighlight from "@/components/confirm-highlight";
 import SearchField from "@/components/search-field";
@@ -44,20 +44,24 @@ function CvsPage() {
             CVs
           </Typography>
           <Box sx={cvsStyles.pageToolbar}>
-            <SearchField
-              value={page.search}
-              onChange={page.handleSearchChange}
-            />
-            {showCreateButton && (
-              <Button
-                type="button"
-                onClick={page.openCreateDialog}
-                startIcon={<AddIcon />}
-                sx={cvsStyles.createCvButton}
-              >
-                Create CV
-              </Button>
-            )}
+            <Box sx={cvsStyles.pageToolbarSearch}>
+              <SearchField
+                value={page.search}
+                onChange={page.handleSearchChange}
+              />
+            </Box>
+            {showCreateButton ? (
+              <Box sx={cvsStyles.pageToolbarActions}>
+                <Button
+                  type="button"
+                  variant="text"
+                  onClick={page.openCreateDialog}
+                  sx={catalogPageSx.createButton}
+                >
+                  + CREATE CV
+                </Button>
+              </Box>
+            ) : null}
           </Box>
         </Box>
 
