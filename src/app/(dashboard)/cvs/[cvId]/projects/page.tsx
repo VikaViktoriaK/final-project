@@ -1,4 +1,4 @@
-import CvProjectsPage from "@/features/cvs/components/cv-projects-page";
+import CvProjectsPage from "@/features/cvs/pages/CvProjectsPage";
 
 function Page() {
   return <CvProjectsPage />;

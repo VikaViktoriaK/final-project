@@ -1,4 +1,4 @@
-import CvPreviewPage from "@/features/cvs/components/cv-preview-page";
+import CvPreviewPage from "@/features/cvs/pages/CvPreviewPage";
 
 function Page() {
   return <CvPreviewPage />;

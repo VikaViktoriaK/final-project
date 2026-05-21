@@ -64,7 +64,7 @@ export function useLanguagesPage() {
     });
 
     return result;
-  }, [languages, order, orderBy, query]);
+  }, [languages, order, query]);
 
   return {
     isAdmin,

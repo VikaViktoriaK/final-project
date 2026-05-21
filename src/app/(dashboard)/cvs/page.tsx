@@ -1,4 +1,4 @@
-import CvsPage from "@/features/cvs/components/cvs-page";
+import CvsPage from "@/features/cvs/pages/CvsPage";
 
 function Page() {
   return <CvsPage />;

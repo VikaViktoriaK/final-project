@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   getProjectMaxDate,
   PROJECT_MIN_DATE,
-} from "@/features/cvs/utils/project-form-dates";
+} from "@/features/cvs/projects/utils/project-form-dates";
 import { CATALOG_PROJECT_LIMITS } from "../constants";
 import type { CatalogProjectFormDialogProps } from "../types";
 import ProjectEnvironmentField from "./project-environment-field";

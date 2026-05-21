@@ -1,4 +1,4 @@
-import CvShell from "@/features/cvs/components/cv-shell";
+import CvShell from "@/features/cvs/components/shell/CvShell";
 
 type LayoutProps = {
   children: React.ReactNode;

@@ -1,0 +1,37 @@
+import { cvsStyles } from "./cvs.styles";
+
+const cvPreviewStyles = {
+  previewToolbar: cvsStyles.previewToolbar,
+  exportButton: cvsStyles.exportButton,
+  previewPaper: cvsStyles.previewPaper,
+  previewDocument: cvsStyles.previewDocument,
+  previewHero: cvsStyles.previewHero,
+  previewHeroName: cvsStyles.previewHeroName,
+  previewHeroSubtitle: cvsStyles.previewHeroSubtitle,
+  previewTableScroll: cvsStyles.previewTableScroll,
+  previewSplitGrid: cvsStyles.previewSplitGrid,
+  previewSidebar: cvsStyles.previewSidebar,
+  previewMainColumn: cvsStyles.previewMainColumn,
+  previewSummaryHeadline: cvsStyles.previewSummaryHeadline,
+  previewBlockTitle: cvsStyles.previewBlockTitle,
+  previewBodyText: cvsStyles.previewBodyText,
+  previewSkillBlock: cvsStyles.previewSkillBlock,
+  previewSkillLine: cvsStyles.previewSkillLine,
+  previewSectionHeading: cvsStyles.previewSectionHeading,
+  previewSkillsTableSection: cvsStyles.previewSkillsTableSection,
+  previewSkillsTable: cvsStyles.previewSkillsTable,
+  previewSkillCategory: cvsStyles.previewSkillCategory,
+  previewProjectsSection: cvsStyles.previewProjectsSection,
+  previewProjectBlock: cvsStyles.previewProjectBlock,
+  previewProjectGrid: cvsStyles.previewProjectGrid,
+  previewProjectSidebar: cvsStyles.previewProjectSidebar,
+  previewProjectRight: cvsStyles.previewProjectRight,
+  previewProjectName: cvsStyles.previewProjectName,
+  previewProjectDescription: cvsStyles.previewProjectDescription,
+  previewMetaBlock: cvsStyles.previewMetaBlock,
+  previewMetaLabel: cvsStyles.previewMetaLabel,
+  previewMetaValue: cvsStyles.previewMetaValue,
+  previewResponsibilityList: cvsStyles.previewResponsibilityList,
+};
+
+export { cvPreviewStyles };

@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useQuery } from "@apollo/client/react";
-import { SKILLS_QUERY } from "@/features/cvs/graphql/skills.query";
+import { SKILLS_QUERY } from "@/features/cvs/skills/graphql/skills.query";
 import type { Skill } from "@/features/cvs/types";
 
 function useSkillCatalog() {

@@ -4,7 +4,7 @@ import {
   getProjectMaxDate,
   isProjectDateInput,
   PROJECT_MIN_DATE,
-} from "@/features/cvs/utils/project-form-dates";
+} from "@/features/cvs/projects/utils/project-form-dates";
 
 export const catalogProjectSchema = z
   .object({

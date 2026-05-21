@@ -1,4 +1,4 @@
-import CvSkillsPage from "@/features/cvs/components/cv-skills-page";
+import CvSkillsPage from "@/features/cvs/pages/CvSkillsPage";
 
 function Page() {
   return <CvSkillsPage />;
