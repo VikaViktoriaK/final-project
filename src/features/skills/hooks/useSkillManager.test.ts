@@ -10,6 +10,8 @@ jest.mock("../../../hooks/use-action-feedback", () => ({
   }),
 }));
 
+type TestMastery = "Novice" | "Advanced";
+
 describe("useSkillManager", () => {
   const categories = [
     {
@@ -49,7 +51,7 @@ describe("useSkillManager", () => {
 
   it("groups current skills and filters available catalog skills", () => {
     const { result } = renderHook(() =>
-      useSkillManager({
+      useSkillManager<TestMastery>({
         currentSkills: [
           { name: "React", categoryId: "react", mastery: "Advanced" },
         ],
@@ -75,7 +77,7 @@ describe("useSkillManager", () => {
 
   it("adds selected skill and closes dialog on success", async () => {
     const { result } = renderHook(() =>
-      useSkillManager({
+      useSkillManager<TestMastery>({
         currentSkills: [],
         catalogSkills,
         categories,
@@ -103,7 +105,7 @@ describe("useSkillManager", () => {
 
   it("toggles remove mode selection and removes skills", async () => {
     const { result } = renderHook(() =>
-      useSkillManager({
+      useSkillManager<TestMastery>({
         currentSkills: [
           { name: "React", categoryId: "react", mastery: "Advanced" },
           { name: "Node", categoryId: "backend", mastery: "Novice" },

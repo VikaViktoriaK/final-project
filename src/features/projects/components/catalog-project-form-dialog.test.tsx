@@ -2,12 +2,18 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { useForm } from "react-hook-form";
 import CatalogProjectFormDialog from "./catalog-project-form-dialog";
 import type { CatalogProjectFormValues } from "../schemas";
+import type { ProjectFormMode } from "../types";
 
 function TestHarness({
-  mode = "create" as const,
+  mode = "create",
   canSubmit = true,
   onClose = jest.fn(),
   onSubmit = jest.fn(),
+}: {
+  mode?: ProjectFormMode;
+  canSubmit?: boolean;
+  onClose?: () => void;
+  onSubmit?: jest.Mock;
 }) {
   const { control, register, handleSubmit } = useForm<CatalogProjectFormValues>(
     {

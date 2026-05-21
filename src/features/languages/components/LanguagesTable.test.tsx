@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { LanguagesTable } from "./LanguagesTable";
 
 describe("LanguagesTable", () => {
@@ -9,6 +9,7 @@ describe("LanguagesTable", () => {
           { id: "1", name: "English", nativeName: "English", iso2: "EN" },
         ]}
         order="asc"
+        orderBy="name"
         onSort={jest.fn()}
         onEdit={jest.fn()}
         onDelete={jest.fn()}
@@ -22,6 +23,7 @@ describe("LanguagesTable", () => {
       <LanguagesTable
         languages={[]}
         order="asc"
+        orderBy="name"
         onSort={jest.fn()}
         onEdit={jest.fn()}
         onDelete={jest.fn()}
