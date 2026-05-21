@@ -41,7 +41,7 @@ export function PositionsTableRow({
           <>
             <IconButton
               size="small"
-              sx={catalogTableSx.actionsBtn}
+              sx={catalogTableSx.catalogActionsMenuButton}
               onClick={handleMenuOpen}
               aria-label={`Actions for ${position.name}`}
             >

@@ -37,7 +37,7 @@ export function DepartmentsTable({
       <Table sx={catalogTableSx.table} aria-label="departments table">
         <colgroup>
           <col />
-          <col style={{ width: 48 }} />
+          <col style={{ width: catalogTableSx.catalogActionsColWidth }} />
         </colgroup>
         <TableHead>
           <TableRow>

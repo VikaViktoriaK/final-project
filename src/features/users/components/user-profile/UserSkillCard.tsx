@@ -6,7 +6,7 @@ import {
   masteryToProgressPercent,
 } from "@/features/users/constants/userSkills.mastery";
 import type { UserSkill } from "@/features/users/types/userSkills.types";
-import { profileSelectionSx } from "./profileSelection.styles";
+import { profileRemoveModeSx } from "./profileRemoveMode.styles";
 import "./user-skills.css";
 
 type UserSkillCardProps = {
@@ -24,11 +24,12 @@ export function UserSkillCard({
 }: UserSkillCardProps) {
   const progressValue = masteryToProgressPercent(skill.mastery);
   const progressColor = masteryToProgressColor(progressValue);
+  const fillWidth = selected ? 0 : progressValue;
 
   return (
     <ButtonBase
       type="button"
-      className="user-skill-card"
+      className={`user-skill-card${selected ? " user-skill-card--selected" : ""}`}
       disabled={disabled}
       focusRipple
       onClick={onClick}
@@ -36,8 +37,8 @@ export function UserSkillCard({
       aria-valuenow={progressValue}
       aria-label={`${skill.name}, ${skill.mastery}, ${progressValue}%`}
       sx={[
-        profileSelectionSx.chip,
-        selected ? profileSelectionSx.chipSelected : null,
+        profileRemoveModeSx.chip,
+        selected ? profileRemoveModeSx.chipSelected : null,
       ]}
     >
       <Box
@@ -52,9 +53,9 @@ export function UserSkillCard({
           component="span"
           className="user-skill-card__progress-fill"
           sx={{
-            width: `${progressValue}%`,
+            width: `${fillWidth}%`,
             bgcolor: progressColor,
-            minWidth: progressValue > 0 ? 6 : 0,
+            minWidth: fillWidth > 0 ? 6 : 0,
           }}
         />
       </Box>

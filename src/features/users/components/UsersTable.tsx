@@ -61,7 +61,7 @@ export function UsersTable({
               </Box>
             </TableCell>
             <TableCell sx={catalogTableSx.headPositionCell}>Position</TableCell>
-            <TableCell sx={catalogTableSx.headCell} />
+            <TableCell sx={catalogTableSx.catalogActionsHeadCell} />
           </TableRow>
         </TableHead>
         <TableBody>

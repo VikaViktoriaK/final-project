@@ -41,7 +41,7 @@ export function LanguagesTable({
           <col style={{ width: "30%" }} />
           <col style={{ width: "42%" }} />
           <col style={{ width: 72 }} />
-          <col style={{ width: 56 }} />
+          <col style={{ width: catalogTableSx.catalogActionsColWidth }} />
         </colgroup>
         <TableHead>
           <TableRow>

@@ -40,17 +40,6 @@ export const languagesTableSx = {
     pl: 1,
     whiteSpace: "nowrap",
   },
-  actionsHeadCell: {
-    ...catalogTableSx.headCell,
-    width: 56,
-    minWidth: 56,
-    textAlign: "center",
-    pl: 2,
-  },
-  actionsCell: {
-    ...catalogTableSx.actionsCell,
-    width: 56,
-    minWidth: 56,
-    pl: 2,
-  },
+  actionsHeadCell: catalogTableSx.catalogActionsHeadCell,
+  actionsCell: catalogTableSx.catalogActionsCell,
 } as const;

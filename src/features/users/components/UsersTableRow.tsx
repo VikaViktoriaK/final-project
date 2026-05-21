@@ -91,7 +91,7 @@ export function UsersTableRow({
       <TableCell sx={catalogTableSx.positionCell}>
         <Typography variant="body2">{user.position}</Typography>
       </TableCell>
-      <TableCell sx={catalogTableSx.actionsCell}>
+      <TableCell sx={catalogTableSx.catalogActionsCell}>
         <IconButton
           size="small"
           sx={catalogTableSx.actionsBtnChevron}
@@ -101,7 +101,7 @@ export function UsersTableRow({
         </IconButton>
         <IconButton
           size="small"
-          sx={catalogTableSx.actionsBtn}
+          sx={catalogTableSx.catalogActionsMenuButton}
           onClick={handleMenuOpen}
         >
           <MoreVertIcon fontSize="small" />

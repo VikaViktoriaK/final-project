@@ -37,7 +37,7 @@ export function PositionsTable({
       <Table sx={catalogTableSx.table} aria-label="positions table">
         <colgroup>
           <col />
-          <col style={{ width: 48 }} />
+          <col style={{ width: catalogTableSx.catalogActionsColWidth }} />
         </colgroup>
         <TableHead>
           <TableRow>

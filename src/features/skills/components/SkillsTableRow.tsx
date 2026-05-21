@@ -39,7 +39,7 @@ export function SkillsTableRow({
           <>
             <IconButton
               size="small"
-              sx={catalogTableSx.actionsBtn}
+              sx={catalogTableSx.catalogActionsMenuButton}
               onClick={(e) => setAnchorEl(e.currentTarget)}
               aria-label={`Actions for ${skill.name}`}
             >

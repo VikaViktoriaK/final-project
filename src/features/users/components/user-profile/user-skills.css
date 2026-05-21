@@ -11,7 +11,7 @@
   min-width: 0;
   height: 48px;
   padding: 8px 12px;
-  border: 0;
+  border: 2px solid transparent;
   border-radius: 999px;
   box-sizing: border-box;
   font-family: Roboto, Helvetica, Arial, sans-serif;
@@ -23,13 +23,34 @@
   cursor: pointer;
   transition:
     background-color 200ms,
-    color 200ms;
+    color 200ms,
+    border-color 0.2s ease;
+}
+
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected {
+  border-color: #df4d4d;
+  background-color: rgba(223, 77, 77, 0.12);
+}
+
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected:hover:not(
+    :disabled
+  ) {
+  background-color: rgba(223, 77, 77, 0.16);
 }
 
 .user-skill-card:hover:not(:disabled),
 .user-skill-card:focus-visible:not(:disabled) {
   border-radius: 999px;
   background-color: rgba(255, 255, 255, 0.06);
+  color: var(--app-text);
+}
+
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected:hover:not(
+    :disabled
+  ),
+.user-skill-card.MuiButtonBase-root.user-skill-card--selected:focus-visible:not(
+    :disabled
+  ) {
   color: var(--app-text);
 }
 
@@ -65,8 +86,9 @@
   height: 100%;
   min-width: 0;
   border-radius: 3px;
+  transform-origin: left center;
   transition:
-    width 300ms ease,
+    width 400ms cubic-bezier(0.4, 0, 0.2, 1),
     background-color 200ms ease;
 }
 

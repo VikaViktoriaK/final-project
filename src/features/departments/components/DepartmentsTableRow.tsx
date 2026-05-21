@@ -41,7 +41,7 @@ export function DepartmentsTableRow({
           <>
             <IconButton
               size="small"
-              sx={catalogTableSx.actionsBtn}
+              sx={catalogTableSx.catalogActionsMenuButton}
               onClick={handleMenuOpen}
               aria-label={`Actions for ${department.name}`}
             >

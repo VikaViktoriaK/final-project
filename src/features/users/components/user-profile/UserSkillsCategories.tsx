@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { UserSkillCard } from "@/features/users/components/user-profile/UserSkillCard";
-import { formDialogSx } from "@/shared/styles/formDialog.styles";
+import { profileRemoveModeSx } from "@/features/users/components/user-profile/profileRemoveMode.styles";
 import { userSkillsSx } from "@/features/users/components/user-profile/userSkills.styles";
 import {
   CONFIRM_BULK_REMOVE_SKILLS_LABELS,
@@ -96,14 +96,14 @@ export function UserSkillsCategories({
         )}
       </Box>
       {canManage ? (
-        <Box sx={userSkillsSx.actionsRow}>
+        <Box sx={profileRemoveModeSx.toolbarActionsRow}>
           {removeMode ? (
             <>
               <Button
                 type="button"
                 variant="outlined"
                 onClick={onExitRemove}
-                sx={formDialogSx.dialogCancelBtn}
+                sx={profileRemoveModeSx.toolbarCancelBtn}
               >
                 {CONFIRM_BULK_REMOVE_SKILLS_LABELS.cancel}
               </Button>
@@ -113,7 +113,7 @@ export function UserSkillsCategories({
                 disableElevation
                 disabled={selectedCount === 0}
                 onClick={onOpenBulkConfirm}
-                sx={userSkillsSx.bulkDeleteToolbarBtn}
+                sx={profileRemoveModeSx.toolbarDeleteBtn}
               >
                 <Box
                   component="span"
@@ -126,7 +126,10 @@ export function UserSkillsCategories({
                   <Box component="span">
                     {CONFIRM_BULK_REMOVE_SKILLS_LABELS.delete}
                   </Box>
-                  <Box component="span" sx={userSkillsSx.bulkDeleteCountBadge}>
+                  <Box
+                    component="span"
+                    sx={profileRemoveModeSx.toolbarCountBadge}
+                  >
                     {selectedCount}
                   </Box>
                 </Box>

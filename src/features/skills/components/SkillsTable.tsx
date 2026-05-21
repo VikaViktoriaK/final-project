@@ -40,7 +40,7 @@ export function SkillsTable({
         <colgroup>
           <col style={{ width: "50%" }} />
           <col />
-          <col style={{ width: 56 }} />
+          <col style={{ width: catalogTableSx.catalogActionsColWidth }} />
         </colgroup>
         <TableHead>
           <TableRow>

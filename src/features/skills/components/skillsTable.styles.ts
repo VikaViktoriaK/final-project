@@ -15,15 +15,6 @@ export const skillsTableSx = {
   categoryCell: {
     color: "var(--app-text-muted)",
   },
-  actionsHeadCell: {
-    ...catalogTableSx.headCell,
-    width: 56,
-    minWidth: 56,
-    textAlign: "center",
-  },
-  actionsCell: {
-    ...catalogTableSx.actionsCell,
-    width: 56,
-    minWidth: 56,
-  },
+  actionsHeadCell: catalogTableSx.catalogActionsHeadCell,
+  actionsCell: catalogTableSx.catalogActionsCell,
 } as const;

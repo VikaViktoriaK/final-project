@@ -8,7 +8,7 @@ import {
   isNativeProficiency,
   languageRowKey,
 } from "@/features/users/components/user-profile/userLanguages.utils";
-import { profileSelectionSx } from "./profileSelection.styles";
+import { profileRemoveModeSx } from "./profileRemoveMode.styles";
 import { userLanguagesSx } from "./userLanguages.styles";
 import {
   CONFIRM_BULK_REMOVE_LANGUAGES_LABELS,
@@ -69,13 +69,11 @@ export function UserLanguagesList({
                   type="button"
                   focusRipple
                   sx={[
-                    profileSelectionSx.chip,
+                    profileRemoveModeSx.chip,
+                    profileRemoveModeSx.chipEntry,
                     userLanguagesSx.languageEntryClickable,
                     removeMode && selectedKeys.has(languageRowKey(lang))
-                      ? {
-                          ...profileSelectionSx.chipSelected,
-                          ...userLanguagesSx.languageEntryClickableSelected,
-                        }
+                      ? profileRemoveModeSx.chipSelected
                       : null,
                   ]}
                   aria-pressed={
@@ -97,14 +95,14 @@ export function UserLanguagesList({
         </Box>
       )}
       {canManage ? (
-        <Box sx={userLanguagesSx.actionsRow}>
+        <Box sx={profileRemoveModeSx.toolbarActionsRow}>
           {removeMode ? (
             <>
               <Button
                 type="button"
                 variant="outlined"
                 onClick={onExitRemove}
-                sx={userLanguagesSx.dialogCancelBtn}
+                sx={profileRemoveModeSx.toolbarCancelBtn}
               >
                 {CONFIRM_BULK_REMOVE_LANGUAGES_LABELS.cancel}
               </Button>
@@ -114,7 +112,7 @@ export function UserLanguagesList({
                 disableElevation
                 disabled={selectedCount === 0}
                 onClick={onOpenBulkConfirm}
-                sx={userLanguagesSx.bulkDeleteToolbarBtn}
+                sx={profileRemoveModeSx.toolbarDeleteBtn}
               >
                 <Box
                   component="span"
@@ -129,7 +127,7 @@ export function UserLanguagesList({
                   </Box>
                   <Box
                     component="span"
-                    sx={userLanguagesSx.bulkDeleteCountBadge}
+                    sx={profileRemoveModeSx.toolbarCountBadge}
                   >
                     {selectedCount}
                   </Box>
