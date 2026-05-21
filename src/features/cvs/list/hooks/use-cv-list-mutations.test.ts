@@ -1,7 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { useRouter } from "next/navigation";
 import { getAuthUser } from "../../../auth/lib/auth-storage";
-import { runMutation } from "../../../../lib/mutation-result";
 import {
   useCreateCvMutation,
   useDeleteCvMutation,
@@ -31,7 +29,6 @@ const { useMutation } = jest.requireMock("@apollo/client/react") as {
   useMutation: jest.Mock;
 };
 const getAuthUserMock = jest.mocked(getAuthUser);
-const runMutationMock = jest.mocked(runMutation);
 
 describe("use-cv-list-mutations", () => {
   beforeEach(() => {
@@ -40,6 +37,10 @@ describe("use-cv-list-mutations", () => {
       id: "user-1",
       email: "dev@example.com",
       role: "Employee",
+      profile: {
+        full_name: "Dev User",
+        avatar: null,
+      },
     });
   });
 
