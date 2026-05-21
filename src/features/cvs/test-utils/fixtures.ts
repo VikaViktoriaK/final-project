@@ -1,3 +1,4 @@
+import type { Project } from "@/features/projects/types";
 import type {
   Cv,
   CvProject,
@@ -44,13 +45,24 @@ export const mockCvWithProjects: Cv = {
   projects: [mockCvProject],
 };
 
+export const mockCatalogProject: Project = {
+  id: "catalog-1",
+  name: "Catalog Project",
+  internal_name: "catalog",
+  domain: "FinTech",
+  description: "Catalog project for CV assignment",
+  start_date: "2020-01-01",
+  end_date: null,
+  environment: ["React"],
+};
+
 export const mockSkillCategories: SkillCategory[] = [
   {
     id: "cat-1",
     name: "Frontend",
     order: 1,
     parent: null,
-    children: [{ id: "cat-2", name: "React", order: 1 }],
+    children: [{ id: "cat-2", name: "React" }],
   },
 ];
 

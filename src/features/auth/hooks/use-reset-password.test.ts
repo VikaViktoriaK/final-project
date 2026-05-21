@@ -49,7 +49,7 @@ describe("useResetPassword", () => {
   it("does not call mutation when token is missing", async () => {
     useSearchParamsMock.mockReturnValue({
       get: () => null,
-    } as ReturnType<typeof useSearchParams>);
+    } as unknown as ReturnType<typeof useSearchParams>);
 
     const { result } = renderHook(() => useResetPassword());
 

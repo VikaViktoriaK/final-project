@@ -1,7 +1,29 @@
 import { getAuthUser } from "../../../auth/lib/auth-storage";
+import type { AuthUser } from "../../../auth/types/auth.types";
 import { isAdmin } from "../../../auth/utils/permissions";
 import { mockCv } from "../../test-utils/fixtures";
 import { canCreateCv, canManageCv } from "./cv-permissions";
+
+const mockEmployeeUser: AuthUser = {
+  id: "user-1",
+  email: "dev@example.com",
+  role: "Employee",
+  profile: { full_name: "Dev User", avatar: null },
+};
+
+const mockAdminUser: AuthUser = {
+  id: "admin-1",
+  email: "admin@example.com",
+  role: "Admin",
+  profile: { full_name: "Admin User", avatar: null },
+};
+
+const mockOtherUser: AuthUser = {
+  id: "other-user",
+  email: "other@example.com",
+  role: "Employee",
+  profile: { full_name: "Other User", avatar: null },
+};
 
 jest.mock("../../../auth/lib/auth-storage", () => ({
   getAuthUser: jest.fn(),
@@ -26,11 +48,7 @@ describe("cv-permissions", () => {
     });
 
     it("returns true when user is authenticated", () => {
-      getAuthUserMock.mockReturnValue({
-        id: "user-1",
-        email: "dev@example.com",
-        role: "Employee",
-      });
+      getAuthUserMock.mockReturnValue(mockEmployeeUser);
       expect(canCreateCv()).toBe(true);
     });
   });
@@ -42,33 +60,21 @@ describe("cv-permissions", () => {
     });
 
     it("returns true for admin", () => {
-      getAuthUserMock.mockReturnValue({
-        id: "admin-1",
-        email: "admin@example.com",
-        role: "Admin",
-      });
+      getAuthUserMock.mockReturnValue(mockAdminUser);
       isAdminMock.mockReturnValue(true);
 
       expect(canManageCv(mockCv)).toBe(true);
     });
 
     it("returns true when user owns the CV", () => {
-      getAuthUserMock.mockReturnValue({
-        id: "user-1",
-        email: "dev@example.com",
-        role: "Employee",
-      });
+      getAuthUserMock.mockReturnValue(mockEmployeeUser);
       isAdminMock.mockReturnValue(false);
 
       expect(canManageCv(mockCv)).toBe(true);
     });
 
     it("returns false when user does not own the CV", () => {
-      getAuthUserMock.mockReturnValue({
-        id: "other-user",
-        email: "other@example.com",
-        role: "Employee",
-      });
+      getAuthUserMock.mockReturnValue(mockOtherUser);
       isAdminMock.mockReturnValue(false);
 
       expect(canManageCv(mockCv)).toBe(false);

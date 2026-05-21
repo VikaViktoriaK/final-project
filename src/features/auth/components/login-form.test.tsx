@@ -31,7 +31,7 @@ describe("LoginForm", () => {
     mockLoginUser.mockClear();
     useLoginMock.mockReturnValue({
       loading: false,
-      error: null,
+      error: undefined,
       loginUser: mockLoginUser,
     });
   });
@@ -82,7 +82,7 @@ describe("LoginForm", () => {
   it("shows server error from hook", () => {
     useLoginMock.mockReturnValue({
       loading: false,
-      error: { message: "Invalid credentials" },
+      error: { name: "Error", message: "Invalid credentials" },
       loginUser: mockLoginUser,
     });
 
@@ -94,7 +94,7 @@ describe("LoginForm", () => {
   it("disables submit button while loading", () => {
     useLoginMock.mockReturnValue({
       loading: true,
-      error: null,
+      error: undefined,
       loginUser: mockLoginUser,
     });
 

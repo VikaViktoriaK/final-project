@@ -1,5 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
-import { mockCv, mockCvProject } from "../../test-utils/fixtures";
+import {
+  mockCatalogProject,
+  mockCv,
+  mockCvProject,
+} from "../../test-utils/fixtures";
 import { createMockCvContextValue } from "../../test-utils/mock-cv-context";
 import { useCvContext } from "../../shared/context/cv-context";
 import { useCvProjectMutations } from "./use-cv-project-mutations";
@@ -78,7 +82,7 @@ describe("useCvProjectsPage", () => {
       }),
     );
     useCvProjectMutationsMock.mockReturnValue({
-      catalogProjects: [{ id: "catalog-1", name: "Catalog Project" }],
+      catalogProjects: [mockCatalogProject],
       addCvProject: mockAddCvProject,
       updateCvProject: mockUpdateCvProject,
       removeCvProject: mockRemoveCvProject,
