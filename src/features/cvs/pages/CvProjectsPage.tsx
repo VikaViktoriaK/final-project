@@ -7,12 +7,14 @@ import ConfirmDialog from "@/components/confirm-dialog";
 import ConfirmHighlight from "@/components/confirm-highlight";
 import CvProjectCard from "../components/projects/CvProjectCard";
 import ProjectFormDialog from "../components/projects/ProjectFormDialog";
+import { useTranslation } from "@/i18n/use-translation";
 import useCvProjectsPage from "../projects/hooks/use-cv-projects-page";
 import { cvsStyles } from "../styles/cvs.styles";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 function CvProjectsPage() {
+  const { t } = useTranslation();
   const page = useCvProjectsPage();
   const form = page.formDialog;
 
@@ -73,12 +75,12 @@ function CvProjectsPage() {
           onClose={page.projectMenu.close}
           sx={catalogTableSx.rowMenu}
         >
-          <MenuItem onClick={page.openUpdateForm}>Edit</MenuItem>
+          <MenuItem onClick={page.openUpdateForm}>{t("common.edit")}</MenuItem>
           <MenuItem
             onClick={page.openRemoveConfirm}
             sx={catalogTableSx.rowMenuDeleteItem}
           >
-            Delete
+            {t("common.delete")}
           </MenuItem>
         </Menu>
 

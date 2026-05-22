@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { PositionsTable } from "./PositionsTable";
 
 describe("PositionsTable", () => {
   it("renders positions and supports sort clicks", () => {
     const onSort = jest.fn();
-    render(
+    renderWithTheme(
       <PositionsTable
         positions={[{ id: "1", name: "Developer" }]}
         order="asc"

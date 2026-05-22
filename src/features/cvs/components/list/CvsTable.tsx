@@ -20,6 +20,7 @@ import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import { Fragment, type MouseEvent } from "react";
 import type { Cv } from "../../shared/types";
 import type { CvSortField, SortDirection } from "../../list/utils/cv-list";
+import { useTranslation } from "@/i18n/use-translation";
 import { cvsStyles } from "@/features/cvs/styles";
 
 type CvsTableProps = {
@@ -143,6 +144,8 @@ function CvsTable({
   onCloseMenu,
   onDelete,
 }: CvsTableProps) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Box sx={cvsStyles.tableContainer}>
@@ -153,7 +156,7 @@ function CvsTable({
                 sx={[cvsStyles.tableHeadCell, cvsStyles.tableHeadCellName]}
               >
                 <SortHeader
-                  label="Name"
+                  label={t("common.name")}
                   field="name"
                   sortField={sortField}
                   sortDirection={sortDirection}
@@ -164,7 +167,7 @@ function CvsTable({
                 sx={[cvsStyles.tableHeadCell, cvsStyles.tableColEducation]}
               >
                 <SortHeader
-                  label="Education"
+                  label={t("table.education")}
                   field="education"
                   sortField={sortField}
                   sortDirection={sortDirection}
@@ -175,7 +178,7 @@ function CvsTable({
                 sx={[cvsStyles.tableHeadCell, cvsStyles.tableColEmployee]}
               >
                 <SortHeader
-                  label="Employee"
+                  label={t("table.employee")}
                   field="employee"
                   sortField={sortField}
                   sortDirection={sortDirection}

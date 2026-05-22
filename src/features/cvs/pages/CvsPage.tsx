@@ -10,12 +10,12 @@ import ConfirmDialog from "@/components/confirm-dialog";
 import ConfirmHighlight from "@/components/confirm-highlight";
 import CvsTable from "../components/list/CvsTable";
 import CreateCvDialog from "../components/list/CreateCvDialog";
+import { useTranslation } from "@/i18n/use-translation";
 import useCvsPage from "../list/hooks/use-cvs-page";
 import { canCreateCv, canManageCv } from "../shared/utils/cv-permissions";
 
-const CVS_PAGE_TITLE = "CVs";
-
 function CvsPage() {
+  const { t } = useTranslation();
   const page = useCvsPage();
   const showCreateButton = canCreateCv();
 
@@ -24,7 +24,7 @@ function CvsPage() {
   return (
     <>
       <CatalogPageShell
-        title={CVS_PAGE_TITLE}
+        title={t("nav.cvs")}
         searchQuery={page.search}
         onSearchChange={page.setSearch}
         action={
@@ -35,7 +35,7 @@ function CvsPage() {
               onClick={page.openCreateDialog}
               sx={catalogPageSx.createButton}
             >
-              + CREATE CV
+              {t("cvs.createButton")}
             </Button>
           ) : null
         }
@@ -43,12 +43,14 @@ function CvsPage() {
         loading={page.loading}
       >
         {page.isEmpty ? (
-          <Typography sx={catalogTableSx.emptyState}>No CVs found.</Typography>
+          <Typography sx={catalogTableSx.emptyState}>
+            {t("cvs.empty")}
+          </Typography>
         ) : null}
 
         {page.isSearchEmpty ? (
           <Typography sx={catalogTableSx.emptyState}>
-            No CVs match your search.
+            {t("cvs.searchEmpty")}
           </Typography>
         ) : null}
 
@@ -82,17 +84,17 @@ function CvsPage() {
 
       <ConfirmDialog
         open={page.deleteDialog.isOpen}
-        title="Delete CV"
+        title={t("cvs.dialog.deleteTitle")}
         message={
           <>
-            Are you sure you want to delete CV{" "}
+            {t("cvs.deleteConfirm")}{" "}
             <ConfirmHighlight>
               {page.deleteDialog.payload?.name}
             </ConfirmHighlight>
             ?
           </>
         }
-        confirmLabel="Confirm"
+        confirmLabel={t("common.confirm")}
         loading={page.deleting}
         onClose={page.deleteDialog.close}
         onConfirm={page.confirmDeleteCv}

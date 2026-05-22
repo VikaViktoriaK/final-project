@@ -16,12 +16,12 @@ import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
 import CatalogProjectFormDialog from "./catalog-project-form-dialog";
 import ProjectCard from "./project-card";
+import { useTranslation } from "@/i18n/use-translation";
 import useProjectsPage from "../hooks/use-projects-page";
 import useSkillCatalog from "../hooks/use-skill-catalog";
 
-const PROJECTS_PAGE_TITLE = "Projects";
-
 function ProjectsPage() {
+  const { t } = useTranslation();
   const page = useProjectsPage();
   const { skills: catalogSkills } = useSkillCatalog();
   const canManage = canManageProjects();
@@ -31,7 +31,7 @@ function ProjectsPage() {
   return (
     <>
       <CatalogPageShell
-        title={PROJECTS_PAGE_TITLE}
+        title={t("nav.projects")}
         searchQuery={page.search}
         onSearchChange={page.setSearch}
         action={
@@ -42,7 +42,7 @@ function ProjectsPage() {
               onClick={page.openCreateDialog}
               sx={catalogPageSx.createButton}
             >
-              + CREATE PROJECT
+              {t("projects.createButton")}
             </Button>
           ) : null
         }
@@ -88,12 +88,12 @@ function ProjectsPage() {
         onClose={page.projectMenu.close}
         sx={catalogTableSx.rowMenu}
       >
-        <MenuItem onClick={page.openUpdateDialog}>Edit</MenuItem>
+        <MenuItem onClick={page.openUpdateDialog}>{t("common.edit")}</MenuItem>
         <MenuItem
           onClick={page.openDeleteDialog}
           sx={catalogTableSx.rowMenuDeleteItem}
         >
-          Delete
+          {t("common.delete")}
         </MenuItem>
       </Menu>
 
@@ -112,17 +112,17 @@ function ProjectsPage() {
 
       <ConfirmDialog
         open={page.deleteDialog.isOpen}
-        title="Delete project"
+        title={t("projects.dialog.deleteTitle")}
         message={
           <>
-            Are you sure you want to delete project{" "}
+            {t("projects.deleteConfirm")}{" "}
             <ConfirmHighlight>
               {page.deleteDialog.payload?.name}
             </ConfirmHighlight>
             ?
           </>
         }
-        confirmLabel="Confirm"
+        confirmLabel={t("common.confirm")}
         loading={page.deleteDialog.loading}
         onClose={page.deleteDialog.close}
         onConfirm={page.deleteDialog.confirm}

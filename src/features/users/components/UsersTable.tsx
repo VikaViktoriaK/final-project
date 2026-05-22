@@ -6,6 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useTranslation } from "@/i18n/use-translation";
 import { SortableTableHeader } from "@/shared/ui/catalog/SortableTableHeader";
 import { catalogTableSx } from "@/shared/styles";
 import type { SortOrder } from "@/lib/search";
@@ -32,6 +33,7 @@ export function UsersTable({
   onViewUser,
   onDeleteUser,
 }: UsersTableProps) {
+  const { t } = useTranslation();
   const { userId: currentUserId, role } = useAuthSnapshot();
   const isAdmin = role === "Admin";
 
@@ -47,7 +49,7 @@ export function UsersTable({
             <TableCell sx={catalogTableSx.headAvatarCell} />
             <TableCell sx={catalogTableSx.headFirstNameCell}>
               <SortableTableHeader
-                label="First Name"
+                label={t("table.firstName")}
                 field="firstName"
                 sortField={orderBy}
                 sortDirection={order}
@@ -61,7 +63,7 @@ export function UsersTable({
               }}
             >
               <SortableTableHeader
-                label="Last Name"
+                label={t("table.lastName")}
                 field="lastName"
                 sortField={orderBy}
                 sortDirection={order}
@@ -75,7 +77,7 @@ export function UsersTable({
               }}
             >
               <SortableTableHeader
-                label="Email"
+                label={t("table.email")}
                 field="email"
                 sortField={orderBy}
                 sortDirection={order}
@@ -84,7 +86,7 @@ export function UsersTable({
             </TableCell>
             <TableCell sx={catalogTableSx.headDepartmentCell}>
               <SortableTableHeader
-                label="Department"
+                label={t("table.department")}
                 field="department"
                 sortField={orderBy}
                 sortDirection={order}
@@ -93,7 +95,7 @@ export function UsersTable({
             </TableCell>
             <TableCell sx={catalogTableSx.headPositionCell}>
               <SortableTableHeader
-                label="Position"
+                label={t("table.position")}
                 field="position"
                 sortField={orderBy}
                 sortDirection={order}
@@ -107,7 +109,7 @@ export function UsersTable({
           {users.length === 0 ? (
             <TableRow>
               <TableCell colSpan={7} sx={catalogTableSx.emptyState}>
-                Users not found
+                {t("table.usersNotFound")}
               </TableCell>
             </TableRow>
           ) : (

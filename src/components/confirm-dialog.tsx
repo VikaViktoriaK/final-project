@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "@/i18n/use-translation";
 import { cvsStyles } from "@/features/cvs/styles/cvs.styles";
 import type { ConfirmDialogProps } from "./types";
 
@@ -18,11 +19,14 @@ function ConfirmDialog({
   open,
   title,
   message,
-  confirmLabel = "Confirm",
+  confirmLabel,
   loading = false,
   onClose,
   onConfirm,
 }: ConfirmDialogProps) {
+  const { t } = useTranslation();
+  const resolvedConfirmLabel = confirmLabel ?? t("common.confirm");
+
   return (
     <Dialog open={open} onClose={onClose} sx={cvsStyles.dialog}>
       <DialogTitle sx={cvsStyles.dialogTitle}>
@@ -30,7 +34,7 @@ function ConfirmDialog({
         <IconButton
           type="button"
           onClick={onClose}
-          aria-label="Close"
+          aria-label={t("common.close")}
           size="small"
         >
           <CloseIcon />
@@ -46,7 +50,7 @@ function ConfirmDialog({
           sx={cvsStyles.cancelButton}
           disabled={loading}
         >
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button
           type="button"
@@ -57,7 +61,7 @@ function ConfirmDialog({
           {loading ? (
             <CircularProgress size={18} color="inherit" />
           ) : (
-            confirmLabel
+            resolvedConfirmLabel
           )}
         </Button>
       </DialogActions>

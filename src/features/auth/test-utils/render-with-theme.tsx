@@ -1,11 +1,10 @@
 import { render, type RenderOptions } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import type { ReactElement, ReactNode } from "react";
+import { PreferencesProvider } from "@/lib/preferences/PreferencesProvider";
 
 function ThemeWrapper({ children }: { children: ReactNode }) {
-  const theme = createTheme({ palette: { mode: "dark" } });
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return <PreferencesProvider>{children}</PreferencesProvider>;
 }
 
 export function renderWithTheme(

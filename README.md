@@ -144,6 +144,7 @@ Each feature typically includes `api/` or `graphql/`, hooks, components, pages, 
 | `/cvs`, `/cvs/[id]/details`, `…/skills`, `…/projects`, `…/preview` | CVs              |
 | `/projects`                                                        | Projects catalog |
 | `/departments`, `/positions`, `/skills`, `/languages`              | Admin catalogs   |
+| `/settings`                                                        | Theme & language |
 
 ## Authentication
 

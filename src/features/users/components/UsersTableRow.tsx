@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { useTranslation } from "@/i18n/use-translation";
 import type { UserRow } from "@/features/users/types";
 import { catalogTableSx } from "@/shared/styles";
 
@@ -35,6 +36,7 @@ function UsersTableRow({
   onView,
   onDelete,
 }: UsersTableRowProps) {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -118,14 +120,16 @@ function UsersTableRow({
           onClose={handleMenuClose}
           sx={catalogTableSx.rowMenu}
         >
-          <MenuItem onClick={handleView}>View profile</MenuItem>
-          {canEdit ? <MenuItem onClick={handleEdit}>Edit</MenuItem> : null}
+          <MenuItem onClick={handleView}>{t("users.viewProfile")}</MenuItem>
+          {canEdit ? (
+            <MenuItem onClick={handleEdit}>{t("common.edit")}</MenuItem>
+          ) : null}
           {isAdmin ? (
             <MenuItem
               onClick={handleDelete}
               sx={catalogTableSx.rowMenuDeleteItem}
             >
-              Delete
+              {t("common.delete")}
             </MenuItem>
           ) : null}
         </Menu>

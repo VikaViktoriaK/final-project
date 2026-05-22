@@ -1,11 +1,10 @@
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { CatalogRowActionsMenu } from "@/shared/ui/catalog/CatalogRowActionsMenu";
 import type { PositionRow } from "../types";
 import { positionsTableSx } from "./positionsTable.styles";
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
@@ -47,30 +46,13 @@ export function PositionsTableRow({
             >
               <MoreVertIcon fontSize="small" />
             </IconButton>
-            <Menu
+            <CatalogRowActionsMenu
               anchorEl={anchorEl}
               open={menuOpen}
               onClose={handleMenuClose}
-              sx={catalogTableSx.rowMenu}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose();
-                  onEdit(position);
-                }}
-              >
-                Edit
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose();
-                  onDelete(position);
-                }}
-                sx={catalogTableSx.rowMenuDeleteItem}
-              >
-                Delete
-              </MenuItem>
-            </Menu>
+              onEdit={() => onEdit(position)}
+              onDelete={() => onDelete(position)}
+            />
           </>
         ) : null}
       </TableCell>

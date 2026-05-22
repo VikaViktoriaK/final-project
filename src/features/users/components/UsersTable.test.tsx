@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { UsersTable } from "./UsersTable";
 
 jest.mock("./UsersTableRow", () => ({
@@ -11,7 +12,7 @@ jest.mock("./UsersTableRow", () => ({
 
 describe("UsersTable", () => {
   it("renders empty state when there are no users", () => {
-    render(
+    renderWithTheme(
       <UsersTable
         users={[]}
         orderBy="firstName"
@@ -27,7 +28,7 @@ describe("UsersTable", () => {
   });
 
   it("renders user rows", () => {
-    render(
+    renderWithTheme(
       <UsersTable
         users={[
           {

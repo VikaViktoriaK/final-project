@@ -1,4 +1,5 @@
 import type { SvgIconComponent } from "@mui/icons-material";
+import type { MessageKey } from "@/i18n/messages";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CorporateFareOutlinedIcon from "@mui/icons-material/CorporateFareOutlined";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
@@ -23,7 +24,7 @@ export const SIDEBAR_BOTTOM_BAR_HEIGHT = 80;
 
 export type SidebarNavItem = {
   id: string;
-  label: string;
+  labelKey: MessageKey;
   icon: SvgIconComponent;
   href: string | ((userId: string | null) => string);
   /** Active only for the signed-in user's own section, not when viewing another user. */
@@ -49,7 +50,7 @@ export type SidebarNavSection = {
 
 const employeesNavItem: SidebarNavItem = {
   id: "employees",
-  label: "Employees",
+  labelKey: "nav.employees",
   icon: PeopleOutlinedIcon,
   href: "/users",
   isActive: (pathname) => pathname === "/users",
@@ -63,7 +64,7 @@ function isSkillsCatalogPath(pathname: string): boolean {
 /** Signed-in user's profile skills */
 const userSkillsNavItem: SidebarNavItem = {
   id: "user-skills",
-  label: "Skills",
+  labelKey: "nav.skills",
   icon: TrendingUpIcon,
   href: (userId) => (userId ? `/users/${userId}/skills` : "/users"),
   isActive: (pathname, currentUserId) =>
@@ -74,7 +75,7 @@ const userSkillsNavItem: SidebarNavItem = {
 /** Admin skills catalog */
 const skillsCatalogNavItem: SidebarNavItem = {
   id: "skills",
-  label: "Skills",
+  labelKey: "nav.skills",
   icon: TrendingUpIcon,
   href: "/skills",
   isActive: (pathname) => isSkillsCatalogPath(pathname),
@@ -89,7 +90,7 @@ function isLanguagesCatalogPath(pathname: string): boolean {
 /** Signed-in user's profile languages */
 const userLanguagesNavItem: SidebarNavItem = {
   id: "user-languages",
-  label: "Languages",
+  labelKey: "nav.languages",
   icon: TranslateIcon,
   href: (userId) => (userId ? `/users/${userId}/languages` : "/users"),
   isActive: (pathname, currentUserId) =>
@@ -100,7 +101,7 @@ const userLanguagesNavItem: SidebarNavItem = {
 /** Admin languages catalog */
 const languagesCatalogNavItem: SidebarNavItem = {
   id: "languages",
-  label: "Languages",
+  labelKey: "nav.languages",
   icon: TranslateIcon,
   href: "/languages",
   isActive: (pathname) => isLanguagesCatalogPath(pathname),
@@ -115,7 +116,7 @@ export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   userLanguagesNavItem,
   {
     id: "cvs",
-    label: "CVs",
+    labelKey: "nav.cvs",
     icon: ArticleOutlinedIcon,
     href: "/cvs",
     isActive: (pathname) => pathname.startsWith("/cvs"),
@@ -131,7 +132,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
       employeesNavItem,
       {
         id: "projects",
-        label: "Projects",
+        labelKey: "nav.projects",
         icon: FolderOutlinedIcon,
         href: "/projects",
         isActive: (pathname) => pathname.startsWith("/projects"),
@@ -140,7 +141,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
       },
       {
         id: "cvs",
-        label: "CVs",
+        labelKey: "nav.cvs",
         icon: ArticleOutlinedIcon,
         href: "/cvs",
         isActive: (pathname) => pathname.startsWith("/cvs"),
@@ -153,7 +154,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
     items: [
       {
         id: "departments",
-        label: "Departments",
+        labelKey: "nav.departments",
         icon: CorporateFareOutlinedIcon,
         href: "/departments",
         isActive: (pathname) => pathname.startsWith("/departments"),
@@ -162,7 +163,7 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarNavSection[] = [
       },
       {
         id: "positions",
-        label: "Positions",
+        labelKey: "nav.positions",
         icon: WorkOutlineOutlinedIcon,
         href: "/positions",
         isActive: (pathname) => pathname.startsWith("/positions"),

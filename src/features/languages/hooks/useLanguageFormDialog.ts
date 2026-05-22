@@ -1,8 +1,6 @@
 import * as React from "react";
-import {
-  LANGUAGE_CREATE_DIALOG,
-  LANGUAGE_EDIT_DIALOG,
-} from "@/features/languages/constants/languages.constants";
+import { useLanguageDialogLabels } from "@/i18n/hooks/use-language-dialog-labels";
+import { useTranslation } from "@/i18n/use-translation";
 import type { LanguageRow } from "@/features/languages/types";
 import type {
   LanguageFormMode,
@@ -23,8 +21,9 @@ export function useLanguageFormDialog({
   onClose,
   onSubmit,
 }: UseLanguageFormDialogParams) {
-  const labels =
-    mode === "create" ? LANGUAGE_CREATE_DIALOG : LANGUAGE_EDIT_DIALOG;
+  const { t } = useTranslation();
+  const dialogLabels = useLanguageDialogLabels();
+  const labels = mode === "create" ? dialogLabels.create : dialogLabels.edit;
 
   const [name, setName] = React.useState(() =>
     mode === "edit" && language ? language.name : "",
@@ -51,19 +50,19 @@ export function useLanguageFormDialog({
     const trimmedIso2 = iso2.trim().toUpperCase();
 
     if (!trimmedName) {
-      setSubmitError("Enter a language name.");
+      setSubmitError(t("languages.validation.enterName"));
       return;
     }
     if (!trimmedNative) {
-      setSubmitError("Enter a native name.");
+      setSubmitError(t("languages.validation.enterNativeName"));
       return;
     }
     if (!trimmedIso2) {
-      setSubmitError("Enter an ISO2 code.");
+      setSubmitError(t("languages.validation.enterIso2"));
       return;
     }
     if (trimmedIso2.length !== 2) {
-      setSubmitError("ISO2 code must be exactly 2 characters.");
+      setSubmitError(t("languages.validation.iso2Length"));
       return;
     }
 
@@ -83,7 +82,7 @@ export function useLanguageFormDialog({
     } catch (err) {
       setSubmitError(formatMutationError(err));
     }
-  }, [iso2, name, nativeName, onClose, onSubmit, unchanged]);
+  }, [iso2, name, nativeName, onClose, onSubmit, t, unchanged]);
 
   return {
     labels,

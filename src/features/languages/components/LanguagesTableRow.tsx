@@ -1,8 +1,7 @@
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import TableCell from "@mui/material/TableCell";
+import { CatalogRowActionsMenu } from "@/shared/ui/catalog/CatalogRowActionsMenu";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -48,30 +47,13 @@ export function LanguagesTableRow({
             >
               <MoreVertIcon fontSize="small" />
             </IconButton>
-            <Menu
+            <CatalogRowActionsMenu
               anchorEl={anchorEl}
               open={menuOpen}
               onClose={() => setAnchorEl(null)}
-              sx={catalogTableSx.rowMenu}
-            >
-              <MenuItem
-                onClick={() => {
-                  setAnchorEl(null);
-                  onEdit(language);
-                }}
-              >
-                Edit
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setAnchorEl(null);
-                  onDelete(language);
-                }}
-                sx={catalogTableSx.rowMenuDeleteItem}
-              >
-                Delete
-              </MenuItem>
-            </Menu>
+              onEdit={() => onEdit(language)}
+              onDelete={() => onDelete(language)}
+            />
           </>
         ) : null}
       </TableCell>

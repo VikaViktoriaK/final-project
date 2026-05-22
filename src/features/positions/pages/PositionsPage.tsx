@@ -3,17 +3,14 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
+import { useTranslation } from "@/i18n/use-translation";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { PositionFormDialog } from "../components/PositionFormDialog";
 import { PositionsTable } from "../components/PositionsTable";
-import {
-  POSITIONS_CREATE_LABEL,
-  POSITIONS_PAGE_TITLE,
-  POSITION_DELETE_DIALOG,
-} from "../constants/positions.constants";
 import { usePositionsPage } from "../hooks/usePositionsPage";
 
 export function PositionsPage() {
+  const { t } = useTranslation();
   const {
     isAdmin,
     loading,
@@ -31,7 +28,7 @@ export function PositionsPage() {
   return (
     <>
       <CatalogPageShell
-        title={POSITIONS_PAGE_TITLE}
+        title={t("nav.positions")}
         searchQuery={search.query}
         onSearchChange={search.setQuery}
         action={
@@ -41,7 +38,7 @@ export function PositionsPage() {
               sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
-              {POSITIONS_CREATE_LABEL}
+              {t("positions.createButton")}
             </Button>
           ) : null
         }
@@ -69,15 +66,15 @@ export function PositionsPage() {
 
       <ConfirmDeleteDialog
         open={deleteDialog.open}
-        title={POSITION_DELETE_DIALOG.title}
-        cancelLabel={POSITION_DELETE_DIALOG.cancel}
-        confirmLabel={POSITION_DELETE_DIALOG.confirm}
+        title={t("positions.dialog.deleteTitle")}
+        cancelLabel={t("common.cancel")}
+        confirmLabel={t("common.delete")}
         deleting={deleting}
         canConfirm={Boolean(deleteDialog.target)}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
       >
-        Are you sure you want to delete position{" "}
+        {t("positions.deleteConfirm")}{" "}
         <strong>{deleteDialog.target?.name}</strong>?
       </ConfirmDeleteDialog>
     </>

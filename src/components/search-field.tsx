@@ -2,6 +2,7 @@
 
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useTranslation } from "@/i18n/use-translation";
 import { searchFieldSx } from "@/shared/styles/searchField.styles";
 import type { SearchFieldProps } from "./types";
 
@@ -9,11 +10,13 @@ function SearchField({
   value,
   onChange,
   compact = false,
-  placeholder = "Search",
+  placeholder,
 }: SearchFieldProps) {
+  const { t } = useTranslation();
+
   return (
     <TextField
-      placeholder={placeholder}
+      placeholder={placeholder ?? t("common.search")}
       value={value}
       onChange={onChange}
       variant="outlined"

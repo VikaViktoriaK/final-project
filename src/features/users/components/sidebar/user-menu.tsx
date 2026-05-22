@@ -17,10 +17,12 @@ import {
   LogoutOutlined,
 } from "@mui/icons-material";
 import useLogout from "@/features/auth/hooks/use-logout";
+import { usePreferences } from "@/lib/preferences/PreferencesProvider";
 
 export default function UserMenu() {
   const router = useRouter();
   const { logoutUser } = useLogout();
+  const { t } = usePreferences();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -88,23 +90,28 @@ export default function UserMenu() {
           <ListItemIcon>
             <AccountCircleOutlined fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Profile" />
+          <ListItemText primary={t("nav.profile")} />
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            router.push("/settings");
+          }}
+        >
           <ListItemIcon>
             <SettingsOutlined fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText primary={t("nav.settings")} />
         </MenuItem>
 
-        <Divider sx={{ borderColor: "rgba(255,255,255,0.1)", my: 0.5 }} />
+        <Divider sx={{ borderColor: "var(--app-control-border)", my: 0.5 }} />
 
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <LogoutOutlined fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Logout" />
+          <ListItemText primary={t("nav.logout")} />
         </MenuItem>
       </Menu>
     </>

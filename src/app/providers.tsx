@@ -1,19 +1,14 @@
 "use client";
 
-import { useMemo } from "react";
 import { ApolloProvider } from "@apollo/client/react";
-import { CssBaseline, ThemeProvider } from "@mui/material";
 import client from "@/lib/apollo/client";
-import { createAppTheme } from "@/theme/app-theme";
+import { PreferencesProvider } from "@/lib/preferences/PreferencesProvider";
 
 function Providers({ children }: { children: React.ReactNode }) {
-  const theme = useMemo(() => createAppTheme(), []);
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <PreferencesProvider>
       <ApolloProvider client={client}>{children}</ApolloProvider>
-    </ThemeProvider>
+    </PreferencesProvider>
   );
 }
 

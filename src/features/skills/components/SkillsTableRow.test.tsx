@@ -1,6 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { SkillsTableRow } from "./SkillsTableRow";
 
 describe("SkillsTableRow", () => {
@@ -13,7 +14,7 @@ describe("SkillsTableRow", () => {
 
   it("renders skill data and delete action", () => {
     const onDelete = jest.fn();
-    render(
+    renderWithTheme(
       <Table>
         <TableBody>
           <SkillsTableRow

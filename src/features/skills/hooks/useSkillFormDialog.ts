@@ -1,8 +1,6 @@
 import * as React from "react";
-import {
-  SKILL_CREATE_DIALOG,
-  SKILL_EDIT_DIALOG,
-} from "@/features/skills/constants/skills.constants";
+import { useSkillDialogLabels } from "@/i18n/hooks/use-skill-dialog-labels";
+import { useTranslation } from "@/i18n/use-translation";
 import type { SkillCategoryOption, SkillRow } from "@/features/skills/types";
 import type { SkillFormMode } from "@/features/skills/types/skillForm.types";
 import { formatMutationError } from "@/shared/utils/formatMutationError";
@@ -22,7 +20,9 @@ export function useSkillFormDialog({
   onClose,
   onSubmit,
 }: UseSkillFormDialogParams) {
-  const labels = mode === "create" ? SKILL_CREATE_DIALOG : SKILL_EDIT_DIALOG;
+  const { t } = useTranslation();
+  const dialogLabels = useSkillDialogLabels();
+  const labels = mode === "create" ? dialogLabels.create : dialogLabels.edit;
 
   const [name, setName] = React.useState(() =>
     mode === "edit" && skill ? skill.name : "",
@@ -45,11 +45,11 @@ export function useSkillFormDialog({
 
   const handleSubmit = React.useCallback(async () => {
     if (!trimmedName) {
-      setSubmitError("Enter a skill name.");
+      setSubmitError(t("skills.validation.enterName"));
       return;
     }
     if (!categoryId) {
-      setSubmitError("Select a category.");
+      setSubmitError(t("skills.validation.selectCategory"));
       return;
     }
     if (unchanged) {
@@ -63,7 +63,7 @@ export function useSkillFormDialog({
     } catch (err) {
       setSubmitError(formatMutationError(err));
     }
-  }, [categoryId, onClose, onSubmit, trimmedName, unchanged]);
+  }, [categoryId, onClose, onSubmit, t, trimmedName, unchanged]);
 
   return {
     labels,

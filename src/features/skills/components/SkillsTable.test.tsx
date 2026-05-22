@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { SkillsTable } from "./SkillsTable";
 
 describe("SkillsTable", () => {
   it("renders skills table and empty state", () => {
-    const { rerender } = render(
+    const { rerender } = renderWithTheme(
       <SkillsTable
         skills={[
           {

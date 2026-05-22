@@ -5,6 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useTranslation } from "@/i18n/use-translation";
 import { SortableTableHeader } from "@/shared/ui/catalog/SortableTableHeader";
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import type { LanguageRow, LanguagesSortField } from "../types";
@@ -30,6 +31,8 @@ export function LanguagesTable({
   onDelete,
   canManage,
 }: LanguagesTableProps) {
+  const { t } = useTranslation();
+
   return (
     <TableContainer
       component={Paper}
@@ -47,7 +50,7 @@ export function LanguagesTable({
           <TableRow>
             <TableCell sx={languagesTableSx.nameHeadCell}>
               <SortableTableHeader
-                label="Name"
+                label={t("common.name")}
                 field="name"
                 sortField={orderBy}
                 sortDirection={order}
@@ -55,9 +58,11 @@ export function LanguagesTable({
               />
             </TableCell>
             <TableCell sx={languagesTableSx.nativeNameHeadCell}>
-              Native name
+              {t("languages.field.nativeName")}
             </TableCell>
-            <TableCell sx={languagesTableSx.iso2HeadCell}>ISO2 code</TableCell>
+            <TableCell sx={languagesTableSx.iso2HeadCell}>
+              {t("languages.field.iso2")}
+            </TableCell>
             <TableCell sx={languagesTableSx.actionsHeadCell} />
           </TableRow>
         </TableHead>
@@ -65,7 +70,7 @@ export function LanguagesTable({
           {languages.length === 0 ? (
             <TableRow>
               <TableCell colSpan={4} sx={catalogTableSx.emptyState}>
-                Languages not found
+                {t("table.languagesNotFound")}
               </TableCell>
             </TableRow>
           ) : (

@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { LanguagesTable } from "./LanguagesTable";
 
 describe("LanguagesTable", () => {
   it("renders languages and empty state", () => {
-    const { rerender } = render(
+    const { rerender } = renderWithTheme(
       <LanguagesTable
         languages={[
           { id: "1", name: "English", nativeName: "English", iso2: "EN" },

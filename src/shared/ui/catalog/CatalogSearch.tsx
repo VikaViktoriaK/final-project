@@ -2,6 +2,7 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import { useTranslation } from "@/i18n/use-translation";
 import { searchFieldSx } from "@/shared/styles/searchField.styles";
 
 export type CatalogSearchProps = {
@@ -10,11 +11,13 @@ export type CatalogSearchProps = {
 };
 
 export function CatalogSearch({ value, onChange }: CatalogSearchProps) {
+  const { t } = useTranslation();
+
   return (
     <TextField
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      placeholder="Search"
+      placeholder={t("common.search")}
       variant="outlined"
       size="small"
       fullWidth
