@@ -3,10 +3,10 @@
 import { useMemo, useState } from "react";
 import useActionFeedback from "@/hooks/use-action-feedback";
 import useDialog from "@/hooks/use-dialog";
+import { groupSkillsByCategory } from "@/utils/skills";
 import type {
   SkillManagerCatalogSkill,
   SkillManagerCategory,
-  SkillManagerGroup,
   SkillManagerItem,
   SkillManagerMutations,
 } from "../types/skillManager.types";
@@ -28,42 +28,6 @@ type UseSkillManagerParams<TMastery extends string> = {
   mutations: SkillManagerMutations<TMastery>;
   messages?: SkillManagerMessages;
 };
-
-function groupSkillsByCategory<TMastery extends string>(
-  skills: SkillManagerItem<TMastery>[],
-  categories: SkillManagerCategory[],
-): SkillManagerGroup<TMastery>[] {
-  const categoryMap = new Map<string, string>();
-  for (const category of categories) {
-    if (!category?.id) {
-      continue;
-    }
-    const categoryLabel = category.parent?.name ?? category.name ?? "Other";
-    categoryMap.set(category.id, categoryLabel);
-    for (const child of category.children ?? []) {
-      if (!child?.id) {
-        continue;
-      }
-      categoryMap.set(child.id, category.name ?? categoryLabel);
-    }
-  }
-
-  const groups = new Map<string, SkillManagerItem<TMastery>[]>();
-  for (const skill of skills) {
-    if (!skill?.name) {
-      continue;
-    }
-    const label = skill.categoryId
-      ? (categoryMap.get(skill.categoryId) ?? "Other")
-      : "Other";
-    groups.set(label, [...(groups.get(label) ?? []), skill]);
-  }
-
-  return Array.from(groups.entries()).map(([categoryLabel, items]) => ({
-    categoryLabel,
-    skills: items,
-  }));
-}
 
 function useSkillManager<TMastery extends string>({
   currentSkills,

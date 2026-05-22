@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client/react";
 import { runMutation, type MutationResult } from "@/lib/mutation-result";
 import { useCvSkillCatalog } from "../../skills/hooks/use-cv-skill-mutations";
 import type { Cv } from "../../shared/types";
-import { groupSkillsByCategory } from "../../shared/utils/group-skills";
+import { groupSkillsByCategory } from "@/utils/skills";
 import { EXPORT_PDF_MUTATION } from "../graphql/export-pdf.mutation";
 import buildCvPreviewHtml from "../utils/build-cv-preview-html";
 import {

@@ -1,5 +1,6 @@
 import type { Cv } from "../../shared/types";
-import type { GroupedSkills } from "../../shared/utils/group-skills";
+import type { SkillMastery } from "../../shared/types";
+import type { GroupedSkills } from "@/utils/skills";
 import escapeHtml from "./escape-html";
 import CV_PREVIEW_EXPORT_CSS from "./cv-preview-export.css";
 import {
@@ -12,7 +13,7 @@ import {
   getCvPreviewDomains,
 } from "./cv-preview-format";
 
-function buildSkillsTableHtml(grouped: GroupedSkills[]): string {
+function buildSkillsTableHtml(grouped: GroupedSkills<SkillMastery>[]): string {
   const rows = buildSkillTableRows(grouped);
   if (!rows.length) {
     return "";
@@ -45,7 +46,7 @@ function buildSkillsTableHtml(grouped: GroupedSkills[]): string {
     </section>`;
 }
 
-function buildTopSkillsHtml(grouped: GroupedSkills[]): string {
+function buildTopSkillsHtml(grouped: GroupedSkills<SkillMastery>[]): string {
   if (!grouped.length) {
     return "";
   }
@@ -109,7 +110,10 @@ function buildProjectsHtml(cv: Cv): string {
     </section>`;
 }
 
-function buildCvPreviewHtml(cv: Cv, grouped: GroupedSkills[]): string {
+function buildCvPreviewHtml(
+  cv: Cv,
+  grouped: GroupedSkills<SkillMastery>[],
+): string {
   const cvName = escapeHtml(cv.name);
   const education = escapeHtml(cv.education ?? "—");
   const description = escapeHtml(cv.description);

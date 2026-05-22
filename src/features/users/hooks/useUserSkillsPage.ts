@@ -9,10 +9,15 @@ import {
 } from "@/features/users/api/userSkills";
 import { formatMutationError } from "@/shared/utils/formatMutationError";
 import {
-  groupSkillsByCategory,
+  enrichProfileSkill,
+  resolveSkillCategoryId,
   skillRowKey,
 } from "@/features/users/components/user-profile/userSkills.utils";
-import type { UserSkill } from "@/features/users/types/userSkills.types";
+import { groupSkillsByCategory } from "@/utils/skills";
+import type {
+  UserSkill,
+  UserSkillCategory,
+} from "@/features/users/types/userSkills.types";
 import { useBulkSelection } from "@/lib/hooks/useBulkSelection";
 
 export function useUserSkillsPage() {
@@ -49,8 +54,13 @@ export function useUserSkillsPage() {
     [skillsData?.profile?.skills],
   );
 
-  const categories = React.useMemo(
-    () => groupSkillsByCategory(profileSkills, skillCategories),
+  const categories = React.useMemo<UserSkillCategory[]>(
+    () =>
+      groupSkillsByCategory(profileSkills, skillCategories, {
+        mode: "catalog",
+        getCategoryId: resolveSkillCategoryId,
+        mapSkill: enrichProfileSkill,
+      }),
     [profileSkills, skillCategories],
   );
 

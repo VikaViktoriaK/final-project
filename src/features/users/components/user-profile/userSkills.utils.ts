@@ -3,7 +3,6 @@ import type {
   ProfileSkillRow,
   SkillCategoryCatalogItem,
   UserSkill,
-  UserSkillCategory,
 } from "@/features/users/types/userSkills.types";
 
 export function skillRowKey(skill: { name: string }): string {
@@ -24,7 +23,7 @@ export function resolveSkillCategoryId(row: ProfileSkillRow): string {
 
 export function resolveSkillCategoryName(
   categoryId: string,
-  categories: SkillCategoryCatalogItem[] = [],
+  categories: ReadonlyArray<SkillCategoryCatalogItem> = [],
 ): string {
   return (
     categories.find((c) => c.id === categoryId)?.name ?? categoryId ?? "Other"
@@ -35,7 +34,7 @@ export { normalizeCatalogItem } from "@/features/users/utils/skillCatalog.utils"
 
 export function enrichProfileSkill(
   row: ProfileSkillRow,
-  categories: SkillCategoryCatalogItem[] = [],
+  categories: ReadonlyArray<SkillCategoryCatalogItem> = [],
 ): UserSkill {
   const categoryId = resolveSkillCategoryId(row);
   return {
@@ -46,46 +45,4 @@ export function enrichProfileSkill(
     mastery: row.mastery,
     progressColor: masteryToProgressColor(row.mastery),
   };
-}
-
-/**
- * Groups profile skills under `skillCategories` from the API (preserves API order).
- */
-export function groupSkillsByCategory(
-  skills: ProfileSkillRow[],
-  categories: SkillCategoryCatalogItem[] = [],
-): UserSkillCategory[] {
-  const byCategoryId = new Map<string, UserSkill[]>();
-
-  for (const row of skills) {
-    const categoryId = resolveSkillCategoryId(row);
-    const list = byCategoryId.get(categoryId) ?? [];
-    list.push(enrichProfileSkill(row, categories));
-    byCategoryId.set(categoryId, list);
-  }
-
-  const result: UserSkillCategory[] = [];
-  const placed = new Set<string>();
-
-  for (const category of categories) {
-    const categorySkills = byCategoryId.get(category.id);
-    if (!categorySkills?.length) continue;
-    result.push({
-      id: category.id,
-      title: category.name,
-      skills: categorySkills,
-    });
-    placed.add(category.id);
-  }
-
-  for (const [categoryId, categorySkills] of byCategoryId) {
-    if (placed.has(categoryId)) continue;
-    result.push({
-      id: categoryId,
-      title: categorySkills[0]?.categoryName ?? categoryId,
-      skills: categorySkills,
-    });
-  }
-
-  return result;
 }

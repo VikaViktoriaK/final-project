@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import type { Ref } from "react";
-import type { Cv } from "../../shared/types";
-import type { GroupedSkills } from "../../shared/utils/group-skills";
+import type { Cv, SkillMastery } from "../../shared/types";
+import type { GroupedSkills } from "@/utils/skills";
 import {
   buildSkillTableRows,
   formatCvPeriod,
@@ -25,7 +25,7 @@ import { cvsStyles } from "../../styles/cvs.styles";
 
 type CvPreviewDocumentProps = {
   cv: Cv;
-  groupedSkills: GroupedSkills[];
+  groupedSkills: GroupedSkills<SkillMastery>[];
   documentRef?: Ref<HTMLDivElement>;
 };
 
