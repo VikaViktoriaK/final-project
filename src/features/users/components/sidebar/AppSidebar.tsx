@@ -16,6 +16,7 @@ import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 import SettingsOutlined from "@mui/icons-material/SettingsOutlined";
 import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
 import useLogout from "@/features/auth/hooks/use-logout";
+import { usePreferences } from "@/lib/preferences/PreferencesProvider";
 // ------------------------
 
 import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
@@ -49,6 +50,7 @@ export function AppSidebar() {
   const profileActive = isProfileActive(pathname, userId);
 
   const { logoutUser } = useLogout();
+  const { t } = usePreferences();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
@@ -159,14 +161,19 @@ export function AppSidebar() {
             <ListItemIcon>
               <AccountCircleOutlined fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Profile" />
+            <ListItemText primary={t("nav.profile")} />
           </MenuItem>
 
-          <MenuItem onClick={handleMenuClose}>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              router.push("/settings");
+            }}
+          >
             <ListItemIcon>
               <SettingsOutlined fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Settings" />
+            <ListItemText primary={t("nav.settings")} />
           </MenuItem>
 
           <Divider sx={{ borderColor: "var(--app-control-border)", my: 0.5 }} />
@@ -175,7 +182,7 @@ export function AppSidebar() {
             <ListItemIcon>
               <LogoutOutlined fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Logout" />
+            <ListItemText primary={t("nav.logout")} />
           </MenuItem>
         </Menu>
 

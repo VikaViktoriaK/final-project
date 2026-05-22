@@ -3,17 +3,14 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
+import { useTranslation } from "@/i18n/use-translation";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { DepartmentFormDialog } from "../components/DepartmentFormDialog";
 import { DepartmentsTable } from "../components/DepartmentsTable";
-import {
-  DEPARTMENTS_CREATE_LABEL,
-  DEPARTMENTS_PAGE_TITLE,
-  DEPARTMENT_DELETE_DIALOG,
-} from "../constants/departments.constants";
 import { useDepartmentsPage } from "../hooks/useDepartmentsPage";
 
 export function DepartmentsPage() {
+  const { t } = useTranslation();
   const {
     isAdmin,
     loading,
@@ -31,7 +28,7 @@ export function DepartmentsPage() {
   return (
     <>
       <CatalogPageShell
-        title={DEPARTMENTS_PAGE_TITLE}
+        title={t("nav.departments")}
         searchQuery={search.query}
         onSearchChange={search.setQuery}
         action={
@@ -41,7 +38,7 @@ export function DepartmentsPage() {
               sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
-              {DEPARTMENTS_CREATE_LABEL}
+              {t("departments.createButton")}
             </Button>
           ) : null
         }
@@ -69,15 +66,15 @@ export function DepartmentsPage() {
 
       <ConfirmDeleteDialog
         open={deleteDialog.open}
-        title={DEPARTMENT_DELETE_DIALOG.title}
-        cancelLabel={DEPARTMENT_DELETE_DIALOG.cancel}
-        confirmLabel={DEPARTMENT_DELETE_DIALOG.confirm}
+        title={t("departments.dialog.deleteTitle")}
+        cancelLabel={t("common.cancel")}
+        confirmLabel={t("common.delete")}
         deleting={deleting}
         canConfirm={Boolean(deleteDialog.target)}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
       >
-        Are you sure you want to delete department{" "}
+        {t("departments.deleteConfirm")}{" "}
         <strong>{deleteDialog.target?.name}</strong>?
       </ConfirmDeleteDialog>
     </>

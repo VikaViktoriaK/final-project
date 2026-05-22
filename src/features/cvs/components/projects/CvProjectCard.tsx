@@ -5,7 +5,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { MouseEvent } from "react";
 import formatDisplayDate from "@/lib/format-display-date";
 import type { CvProject } from "../../shared/types";
-import { cvsStyles } from "../../styles/cvs.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
+import { cvsStyles } from "@/features/cvs/styles";
 
 type CvProjectCardProps = {
   project: CvProject;
@@ -40,9 +41,9 @@ function CvProjectCard({ project, canEdit, onOpenMenu }: CvProjectCardProps) {
               size="small"
               aria-label="Project actions"
               onClick={handleOpenMenu}
-              sx={cvsStyles.menuIconButton}
+              sx={catalogTableSx.catalogActionsMenuButton}
             >
-              <MoreVertIcon />
+              <MoreVertIcon fontSize="small" />
             </IconButton>
           ) : null}
         </Box>

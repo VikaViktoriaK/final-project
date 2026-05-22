@@ -7,10 +7,14 @@ import ConfirmDialog from "@/components/confirm-dialog";
 import ConfirmHighlight from "@/components/confirm-highlight";
 import CvProjectCard from "../components/projects/CvProjectCard";
 import ProjectFormDialog from "../components/projects/ProjectFormDialog";
+import { useTranslation } from "@/i18n/use-translation";
 import useCvProjectsPage from "../projects/hooks/use-cv-projects-page";
 import { cvsStyles } from "../styles/cvs.styles";
+import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
+import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 
 function CvProjectsPage() {
+  const { t } = useTranslation();
   const page = useCvProjectsPage();
   const form = page.formDialog;
 
@@ -22,20 +26,20 @@ function CvProjectsPage() {
             <SearchField
               value={page.search}
               onChange={page.handleSearchChange}
-              compact
             />
           </Box>
-          {page.canEdit && (
+          {page.canEdit ? (
             <Box sx={cvsStyles.projectsToolbarActions}>
               <Button
                 type="button"
+                variant="text"
                 onClick={page.openAddForm}
-                sx={cvsStyles.createButton}
+                sx={catalogPageSx.createButton}
               >
-                + Add project
+                + ADD PROJECT
               </Button>
             </Box>
-          )}
+          ) : null}
         </Stack>
 
         <Box sx={cvsStyles.projectsTableScroll}>
@@ -69,20 +73,14 @@ function CvProjectsPage() {
           anchorEl={page.projectMenu.anchorEl}
           open={page.projectMenu.isOpen}
           onClose={page.projectMenu.close}
-          slotProps={{ paper: { sx: cvsStyles.contextMenuPaper } }}
+          sx={catalogTableSx.rowMenu}
         >
+          <MenuItem onClick={page.openUpdateForm}>{t("common.edit")}</MenuItem>
           <MenuItem
-            onClick={page.openUpdateForm}
-            sx={cvsStyles.contextMenuItem}
-          >
-            Update
-          </MenuItem>
-          <MenuItem
-            divider
             onClick={page.openRemoveConfirm}
-            sx={[cvsStyles.contextMenuItem, cvsStyles.menuItemDanger]}
+            sx={catalogTableSx.rowMenuDeleteItem}
           >
-            Remove
+            {t("common.delete")}
           </MenuItem>
         </Menu>
 

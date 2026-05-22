@@ -5,6 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useTranslation } from "@/i18n/use-translation";
 import { SortableTableHeader } from "@/shared/ui/catalog/SortableTableHeader";
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import type { DepartmentRow } from "../types";
@@ -28,6 +29,8 @@ export function DepartmentsTable({
   onDelete,
   canManage,
 }: DepartmentsTableProps) {
+  const { t } = useTranslation();
+
   return (
     <TableContainer
       component={Paper}
@@ -43,7 +46,7 @@ export function DepartmentsTable({
           <TableRow>
             <TableCell sx={departmentsTableSx.nameHeadCell}>
               <SortableTableHeader
-                label="Name"
+                label={t("common.name")}
                 field="name"
                 sortField="name"
                 sortDirection={order}
@@ -57,7 +60,7 @@ export function DepartmentsTable({
           {departments.length === 0 ? (
             <TableRow>
               <TableCell colSpan={2} sx={catalogTableSx.emptyState}>
-                Departments not found
+                {t("table.departmentsNotFound")}
               </TableCell>
             </TableRow>
           ) : (

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "@/i18n/use-translation";
 import { formatMutationError } from "@/shared/utils/formatMutationError";
 
 type CatalogFormLabels = {
@@ -25,6 +26,7 @@ export function useNameCatalogFormDialog({
   onClose,
   onSubmit,
 }: UseNameCatalogFormDialogParams) {
+  const { t } = useTranslation();
   const labels = mode === "create" ? createLabels : editLabels;
   const [name, setName] = React.useState(() =>
     mode === "edit" ? currentName : "",
@@ -37,7 +39,7 @@ export function useNameCatalogFormDialog({
 
   const handleSubmit = React.useCallback(async () => {
     if (!trimmedName) {
-      setSubmitError("Enter a name.");
+      setSubmitError(t("common.validation.enterName"));
       return;
     }
     if (unchanged) {
@@ -51,7 +53,7 @@ export function useNameCatalogFormDialog({
     } catch (err) {
       setSubmitError(formatMutationError(err));
     }
-  }, [onClose, onSubmit, trimmedName, unchanged]);
+  }, [onClose, onSubmit, t, trimmedName, unchanged]);
 
   return {
     labels,

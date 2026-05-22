@@ -1,20 +1,19 @@
-/**
- * Template for form tests — copy patterns to registration-form.test.tsx etc.
- */
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { screen, waitFor } from "@testing-library/react";
 import LoginForm from "./login-form";
+import useLogin from "../hooks/use-login";
+import {
+  renderWithTheme,
+  typeIntoPlaceholder,
+} from "../test-utils/render-with-theme";
 
 const mockLoginUser = jest.fn();
 
 jest.mock("../hooks/use-login", () => ({
   __esModule: true,
-  default: jest.fn(() => ({
-    loading: false,
-    error: null,
-    loginUser: mockLoginUser,
-  })),
+  default: jest.fn(),
 }));
+
+const useLoginMock = jest.mocked(useLogin);
 
 jest.mock("next/link", () => ({
   __esModule: true,
@@ -27,30 +26,33 @@ jest.mock("next/link", () => ({
   }) => <a href={href}>{children}</a>,
 }));
 
-function renderLoginForm() {
-  const theme = createTheme({ palette: { mode: "dark" } });
-  return render(
-    <ThemeProvider theme={theme}>
-      <LoginForm />
-    </ThemeProvider>,
-  );
-}
-
 describe("LoginForm", () => {
   beforeEach(() => {
     mockLoginUser.mockClear();
+    useLoginMock.mockReturnValue({
+      loading: false,
+      error: undefined,
+      loginUser: mockLoginUser,
+    });
   });
 
-  it("shows email validation error after submit with invalid email", async () => {
-    renderLoginForm();
+  it("renders sign in form", () => {
+    renderWithTheme(<LoginForm />);
 
-    fireEvent.change(screen.getByPlaceholderText("Email"), {
-      target: { value: "not-an-email" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
-      target: { value: "password1" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    expect(
+      screen.getByRole("heading", { name: "Sign in" }),
+    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
+  });
+
+  it("shows email validation error for invalid email", async () => {
+    const { user } = renderWithTheme(<LoginForm />);
+
+    await typeIntoPlaceholder(user, "Email", "not-an-email");
+    await typeIntoPlaceholder(user, "Password", "password1");
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     await waitFor(() => {
       expect(
@@ -59,5 +61,49 @@ describe("LoginForm", () => {
     });
 
     expect(mockLoginUser).not.toHaveBeenCalled();
+  });
+
+  it("shows password validation error for short password", async () => {
+    const { user } = renderWithTheme(<LoginForm />);
+
+    await typeIntoPlaceholder(user, "Email", "user@example.com");
+    await typeIntoPlaceholder(user, "Password", "short");
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Password must be at least 8 characters long."),
+      ).toBeInTheDocument();
+    });
+
+    expect(mockLoginUser).not.toHaveBeenCalled();
+  });
+
+  it("shows server error from hook", () => {
+    useLoginMock.mockReturnValue({
+      loading: false,
+      error: { name: "Error", message: "Invalid credentials" },
+      loginUser: mockLoginUser,
+    });
+
+    renderWithTheme(<LoginForm />);
+
+    expect(screen.getByText("Invalid credentials")).toBeInTheDocument();
+  });
+
+  it("disables submit button while loading", () => {
+    useLoginMock.mockReturnValue({
+      loading: true,
+      error: undefined,
+      loginUser: mockLoginUser,
+    });
+
+    renderWithTheme(<LoginForm />);
+
+    const submitButtons = screen.getAllByRole("button", { hidden: true });
+    const formSubmit = submitButtons.find(
+      (button) => button.getAttribute("type") === "submit",
+    );
+    expect(formSubmit).toBeDisabled();
   });
 });

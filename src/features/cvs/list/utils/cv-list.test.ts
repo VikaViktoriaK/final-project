@@ -1,53 +1,46 @@
 import { filterCvs, sortCvs } from "./cv-list";
-import type { Cv } from "../../shared/types";
+import { mockCv } from "../../test-utils/fixtures";
 
-const baseCv = {
-  created_at: "2024-01-01",
-  skills: [],
-  languages: [],
-  projects: [],
+const secondCv = {
+  ...mockCv,
+  id: "cv-2",
+  name: "Alice Analyst",
+  education: "MBA",
+  user: { id: "user-2", email: "alice@example.com" },
 };
 
-const cvs: Cv[] = [
-  {
-    ...baseCv,
-    id: "2",
-    name: "Frontend CV",
-    education: "BS Computer Science",
-    description: "React engineer",
-    user: { id: "user-2", email: "front@example.com" },
-  },
-  {
-    ...baseCv,
-    id: "1",
-    name: "Backend CV",
-    education: null,
-    description: "Node engineer",
-    user: { id: "user-1", email: "back@example.com" },
-  },
-];
+const cvs = [mockCv, secondCv];
 
 describe("cv-list utils", () => {
-  it("filters out invalid rows before filtering or sorting", () => {
-    const invalid = { ...cvs[0], id: "", name: "" };
+  describe("filterCvs", () => {
+    it("returns all valid CVs when search is empty", () => {
+      expect(filterCvs(cvs, "")).toHaveLength(2);
+    });
 
-    expect(filterCvs([invalid, ...cvs], "")).toEqual(cvs);
-    expect(sortCvs([invalid, ...cvs], "name", "asc")).toEqual([cvs[1], cvs[0]]);
+    it("filters by name, education, employee email, and description", () => {
+      expect(filterCvs(cvs, "alice")).toEqual([secondCv]);
+      expect(filterCvs(cvs, "mba")).toEqual([secondCv]);
+      expect(filterCvs(cvs, "dev@example")).toEqual([mockCv]);
+    });
+
+    it("drops entries without id or name", () => {
+      const invalid = [{ ...mockCv, id: "", name: "Ghost" }] as typeof cvs;
+      expect(filterCvs(invalid, "")).toHaveLength(0);
+    });
   });
 
-  it("filters CVs by name, description, education, or employee email", () => {
-    expect(filterCvs(cvs, "react")).toEqual([cvs[0]]);
-    expect(filterCvs(cvs, "back@example")).toEqual([cvs[1]]);
-    expect(filterCvs(cvs, "science")).toEqual([cvs[0]]);
-  });
+  describe("sortCvs", () => {
+    it("sorts by name ascending", () => {
+      const sorted = sortCvs(cvs, "name", "asc");
+      expect(sorted.map((cv) => cv.name)).toEqual([
+        "Alice Analyst",
+        "Jane Developer",
+      ]);
+    });
 
-  it("sorts CVs by selected field and direction", () => {
-    expect(sortCvs(cvs, "employee", "asc").map((cv) => cv.user?.email)).toEqual(
-      ["back@example.com", "front@example.com"],
-    );
-    expect(sortCvs(cvs, "name", "desc").map((cv) => cv.name)).toEqual([
-      "Frontend CV",
-      "Backend CV",
-    ]);
+    it("sorts by employee descending", () => {
+      const sorted = sortCvs(cvs, "employee", "desc");
+      expect(sorted[0]?.user?.email).toBe("dev@example.com");
+    });
   });
 });

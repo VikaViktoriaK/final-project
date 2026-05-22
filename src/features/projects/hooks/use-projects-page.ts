@@ -28,7 +28,11 @@ import useProjects from "./use-projects";
 import useProjectMutations from "./use-project-mutations";
 
 function useProjectsPage() {
-  const { query: search, onChange: handleSearchChange } = useSearch();
+  const {
+    query: search,
+    setQuery: setSearch,
+    onChange: handleSearchChange,
+  } = useSearch();
   const formDialog = useDialog<ProjectFormMode>();
   const deleteDialog = useDialog<Project>();
   const projectMenu = useAnchoredMenu<Project>();
@@ -158,6 +162,7 @@ function useProjectsPage() {
     loading,
     error,
     search,
+    setSearch,
     handleSearchChange,
     projects,
     isEmpty,

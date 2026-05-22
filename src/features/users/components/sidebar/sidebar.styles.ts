@@ -1,6 +1,5 @@
 import {
   SIDEBAR_BOTTOM_BAR_HEIGHT,
-  SIDEBAR_COLOR_BG,
   SIDEBAR_DESKTOP_MEDIA,
   SIDEBAR_WIDTH_COLLAPSED,
   SIDEBAR_WIDTH_EXPANDED,
@@ -10,7 +9,7 @@ export const sidebarSx = {
   root: (collapsed: boolean) => ({
     position: "fixed",
     zIndex: 1200,
-    bgcolor: SIDEBAR_COLOR_BG,
+    bgcolor: "var(--app-sidebar-bg, #333333)",
     boxSizing: "border-box",
     display: "flex",
     bottom: 0,
@@ -86,7 +85,7 @@ export const sidebarSx = {
       width: 40,
       height: 40,
       "&:hover": {
-        bgcolor: "rgba(255,255,255,0.08)",
+        bgcolor: "var(--app-nav-active-bg)",
         color: "var(--app-text)",
       },
     },

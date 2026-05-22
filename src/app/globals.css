@@ -34,6 +34,28 @@
   --color-bg-primary: #fff;
   --color-bg-secondary: #fafafa;
   --color-border: #f0f0f0;
+  --app-nav-active-bg: rgba(255, 255, 255, 0.08);
+  --app-nav-hover-bg: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="light"] {
+  --app-bg: #ffffff;
+  --app-surface: #ffffff;
+  --app-sidebar-bg: #f0f0f0;
+  --app-dialog-surface: #ffffff;
+  --app-divider: rgba(0, 0, 0, 0.12);
+  --app-text: rgba(0, 0, 0, 0.87);
+  --app-text-muted: rgba(0, 0, 0, 0.6);
+  --app-on-primary: #ffffff;
+  --app-control-bg: rgba(0, 0, 0, 0.04);
+  --app-control-border: rgba(0, 0, 0, 0.23);
+  --app-overlay-06: rgba(0, 0, 0, 0.06);
+  --app-overlay-12: rgba(0, 0, 0, 0.12);
+  --app-overlay-20: rgba(0, 0, 0, 0.2);
+  --app-overlay-25: rgba(0, 0, 0, 0.25);
+  --app-overlay-35: rgba(0, 0, 0, 0.35);
+  --app-nav-active-bg: rgba(0, 0, 0, 0.08);
+  --app-nav-hover-bg: rgba(0, 0, 0, 0.04);
 }
 
 html,
@@ -45,7 +67,6 @@ body {
   margin: 0;
   background-color: var(--app-surface);
   color: var(--app-text);
-  font-family: var(--font-roboto, "Roboto"), "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;

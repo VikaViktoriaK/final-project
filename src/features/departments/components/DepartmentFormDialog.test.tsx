@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { DepartmentFormDialog } from "./DepartmentFormDialog";
 
 describe("DepartmentFormDialog", () => {
@@ -6,7 +7,7 @@ describe("DepartmentFormDialog", () => {
     const onClose = jest.fn();
     const onSubmit = jest.fn().mockResolvedValue(undefined);
 
-    render(
+    renderWithTheme(
       <DepartmentFormDialog
         open
         mode="create"
@@ -27,7 +28,7 @@ describe("DepartmentFormDialog", () => {
   });
 
   it("disables update when edit form is unchanged", () => {
-    render(
+    renderWithTheme(
       <DepartmentFormDialog
         open
         mode="edit"
@@ -42,7 +43,7 @@ describe("DepartmentFormDialog", () => {
   });
 
   it("disables create when the name is empty", () => {
-    render(
+    renderWithTheme(
       <DepartmentFormDialog
         open
         mode="create"

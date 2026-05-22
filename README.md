@@ -1,21 +1,49 @@
 # HR Management System
 
-A modern HRM application built with Next.js, TypeScript, GraphQL, Apollo Client, Redux Toolkit, React Hook Form, Zod, Material UI, and Jest.
+A human resources management frontend built with **Next.js (App Router)**, **TypeScript**, **GraphQL**, **Apollo Client**, **Material UI**, **React Hook Form**, and **Zod**.
 
-## Tech Stack
+This repository contains the **web client only**. Data comes from an external **GraphQL API** (course / local backend). The UI covers authentication, employees, CVs, projects, and reference catalogs (departments, positions, skills, languages).
 
-- Next.js
-- TypeScript
-- GraphQL
-- Apollo Client
-- Redux Toolkit
-- React Hook Form
-- Zod
-- Material UI
-- Jest
-- React Testing Library
+## Tech stack
 
-## Getting Started
+| Layer              | Choice                                                    |
+| ------------------ | --------------------------------------------------------- |
+| Framework          | Next.js 16 (App Router)                                   |
+| Language           | TypeScript                                                |
+| API                | GraphQL via Apollo Client 4                               |
+| UI                 | Material UI 9, Emotion                                    |
+| Forms & validation | React Hook Form, Zod                                      |
+| Client state       | React hooks + Apollo cache + `localStorage` (auth tokens) |
+| Tests              | Jest, React Testing Library                               |
+
+> **Note:** Global UI state is **not** managed with Redux. Server data lives in Apollo; page logic is in feature hooks (`useUsersPage`, `useCvsPage`, etc.).
+
+## Prerequisites
+
+- **Node.js** 20+ (CI uses 22)
+- **pnpm** 10+
+- A running **GraphQL backend** compatible with this app (see your course materials or team docs for how to start it)
+
+## Environment variables
+
+Copy the example file and set the API URL:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable                  | Required | Description                                                                     |
+| ------------------------- | -------- | ------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_GRAPHQL_URL` | **Yes**  | Full HTTP(S) URL of the GraphQL endpoint (e.g. `http://localhost:3001/graphql`) |
+
+The app reads this variable in:
+
+- `src/lib/apollo/client.ts` — Apollo HTTP link
+- `src/features/auth/lib/try-refresh-session.ts` — refresh token mutation
+
+Without it, queries and login will fail at runtime.
+
+## Getting started
 
 ### 1. Install dependencies
 
@@ -23,24 +51,41 @@ A modern HRM application built with Next.js, TypeScript, GraphQL, Apollo Client,
 pnpm install
 ```
 
-### 2. Run the development server
+### 2. Configure environment
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` so `NEXT_PUBLIC_GRAPHQL_URL` matches your GraphQL server (host, port, and path).
+
+### 3. Start the GraphQL backend
+
+Start the **HRM GraphQL server** from your course repository or internal docs. The frontend does not start the API.
+
+Verify the endpoint (browser, curl, or GraphQL Playground), for example:
+
+```bash
+curl -X POST "%NEXT_PUBLIC_GRAPHQL_URL%" ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"{ __typename }\"}"
+```
+
+On macOS/Linux, replace `%NEXT_PUBLIC_GRAPHQL_URL%` with the value from `.env.local`.
+
+### 4. Run the Next.js app
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000). Unauthenticated users are redirected to `/login`.
 
-## Available Scripts
+### 5. Production build (optional)
 
 ```bash
-pnpm dev
 pnpm build
 pnpm start
-pnpm lint
-pnpm typecheck
-pnpm format
-pnpm format:check
 ```
 
 ## End-to-End Tests
@@ -67,10 +112,14 @@ pnpm test:e2e:ui
 pnpm test:e2e:headed
 ```
 
-## Project Status
 
-Initial project setup is complete. Core features and pages are under development.
 
-## Notes
+| Problem                      | What to check                                                                                           |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------- |
+| GraphQL 400 / network errors | Backend running; `NEXT_PUBLIC_GRAPHQL_URL` correct; schema matches queries in `src/features/**/graphql` |
+| Blank data after login       | Token and role from login response; browser Network tab                                                 |
+| Build OK but runtime errors  | `.env.local` present (env vars are not committed)                                                       |
 
-Environment variables and additional setup instructions can be added here later.
+## License
+
+Private / course project — see repository owner for terms.

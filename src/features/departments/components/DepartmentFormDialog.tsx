@@ -7,11 +7,8 @@ import { CatalogFormDialogTitle } from "@/components/catalog-form/CatalogFormDia
 import { FORM_INPUT_LABEL_SLOT_PROPS } from "@/shared/constants/formDialog.constants";
 import { CATALOG_FORM_DIALOG_PAPER_SX } from "@/shared/constants/catalogDialog.constants";
 import { formDialogSx } from "@/shared/styles/formDialog.styles";
+import { useNameCatalogDialogLabels } from "@/i18n/hooks/use-name-catalog-dialog-labels";
 import { useNameCatalogFormDialog } from "@/lib/hooks/useNameCatalogFormDialog";
-import {
-  DEPARTMENT_CREATE_DIALOG,
-  DEPARTMENT_EDIT_DIALOG,
-} from "../constants/departments.constants";
 import type { DepartmentRow } from "../types";
 
 type DepartmentFormDialogProps = {
@@ -30,12 +27,16 @@ function DepartmentFormDialogContent({
   onClose,
   onSubmit,
 }: Omit<DepartmentFormDialogProps, "open">) {
+  const dialogLabels = useNameCatalogDialogLabels(
+    "departments.dialog.createTitle",
+    "departments.dialog.editTitle",
+  );
   const { labels, name, setName, submitError, confirmDisabled, handleSubmit } =
     useNameCatalogFormDialog({
       mode,
       currentName: department?.name,
-      createLabels: DEPARTMENT_CREATE_DIALOG,
-      editLabels: DEPARTMENT_EDIT_DIALOG,
+      createLabels: dialogLabels.create,
+      editLabels: dialogLabels.edit,
       onClose,
       onSubmit,
     });

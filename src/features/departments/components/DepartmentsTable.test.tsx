@@ -1,9 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { DepartmentsTable } from "./DepartmentsTable";
 
 describe("DepartmentsTable", () => {
   it("renders empty state", () => {
-    render(
+    renderWithTheme(
       <DepartmentsTable
         departments={[]}
         order="asc"
@@ -19,7 +20,7 @@ describe("DepartmentsTable", () => {
 
   it("sorts when header is clicked", () => {
     const onSort = jest.fn();
-    render(
+    renderWithTheme(
       <DepartmentsTable
         departments={[{ id: "1", name: "Engineering" }]}
         order="asc"

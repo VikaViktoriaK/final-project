@@ -1,6 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { UsersTableRow } from "./UsersTableRow";
 import type { UserRow } from "../types";
 
@@ -14,21 +15,18 @@ const user: UserRow = {
 };
 
 describe("UsersTableRow", () => {
-  beforeEach(() => {
-    const payload = btoa(JSON.stringify({ role: "Admin", id: "admin-1" }));
-    localStorage.setItem("hrm_access_token", `header.${payload}.signature`);
-  });
-
   it("navigates to profile and opens admin menu actions", () => {
     const onView = jest.fn();
     const onEdit = jest.fn();
     const onDelete = jest.fn();
 
-    render(
+    renderWithTheme(
       <Table>
         <TableBody>
           <UsersTableRow
             user={user}
+            isAdmin
+            canEdit
             onView={onView}
             onEdit={onEdit}
             onDelete={onDelete}

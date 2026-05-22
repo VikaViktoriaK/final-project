@@ -3,17 +3,14 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
+import { useTranslation } from "@/i18n/use-translation";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { SkillFormDialog } from "../components/SkillFormDialog";
 import { SkillsTable } from "../components/SkillsTable";
-import {
-  SKILLS_CREATE_LABEL,
-  SKILLS_PAGE_TITLE,
-  SKILL_DELETE_DIALOG,
-} from "../constants/skills.constants";
 import { useSkillsPage } from "../hooks/useSkillsPage";
 
 export function SkillsPage() {
+  const { t } = useTranslation();
   const {
     isAdmin,
     loading,
@@ -36,7 +33,7 @@ export function SkillsPage() {
   return (
     <>
       <CatalogPageShell
-        title={SKILLS_PAGE_TITLE}
+        title={t("nav.skills")}
         searchQuery={query}
         onSearchChange={setQuery}
         action={
@@ -46,7 +43,7 @@ export function SkillsPage() {
               sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
-              {SKILLS_CREATE_LABEL}
+              {t("skills.createButton")}
             </Button>
           ) : null
         }
@@ -76,16 +73,16 @@ export function SkillsPage() {
 
       <ConfirmDeleteDialog
         open={deleteDialog.open}
-        title={SKILL_DELETE_DIALOG.title}
-        cancelLabel={SKILL_DELETE_DIALOG.cancel}
-        confirmLabel={SKILL_DELETE_DIALOG.confirm}
+        title={t("skills.dialog.deleteTitle")}
+        cancelLabel={t("common.cancel")}
+        confirmLabel={t("common.delete")}
         deleting={deleting}
         canConfirm={Boolean(deleteDialog.target)}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
       >
-        Are you sure you want to delete skill{" "}
-        <strong>{deleteDialog.target?.name}</strong>?
+        {t("skills.deleteConfirm")} <strong>{deleteDialog.target?.name}</strong>
+        ?
       </ConfirmDeleteDialog>
     </>
   );

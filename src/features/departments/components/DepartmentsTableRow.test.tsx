@@ -1,13 +1,19 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import type { ReactElement } from "react";
+import { PreferencesProvider } from "@/lib/preferences/PreferencesProvider";
 import { DepartmentsTableRow } from "./DepartmentsTableRow";
+
+function renderRow(ui: ReactElement) {
+  return render(<PreferencesProvider>{ui}</PreferencesProvider>);
+}
 
 describe("DepartmentsTableRow", () => {
   const department = { id: "1", name: "Engineering" };
 
   it("renders department name without actions for read-only users", () => {
-    render(
+    renderRow(
       <Table>
         <TableBody>
           <DepartmentsTableRow
@@ -30,7 +36,7 @@ describe("DepartmentsTableRow", () => {
     const onEdit = jest.fn();
     const onDelete = jest.fn();
 
-    render(
+    renderRow(
       <Table>
         <TableBody>
           <DepartmentsTableRow

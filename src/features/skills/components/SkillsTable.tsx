@@ -5,6 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useTranslation } from "@/i18n/use-translation";
 import { SortableTableHeader } from "@/shared/ui/catalog/SortableTableHeader";
 import { catalogTableSx } from "@/shared/styles/catalogTable.styles";
 import type { SkillRow, SkillsSortField } from "../types";
@@ -30,6 +31,8 @@ export function SkillsTable({
   onDelete,
   canManage,
 }: SkillsTableProps) {
+  const { t } = useTranslation();
+
   return (
     <TableContainer
       component={Paper}
@@ -46,7 +49,7 @@ export function SkillsTable({
           <TableRow>
             <TableCell sx={skillsTableSx.nameHeadCell}>
               <SortableTableHeader
-                label="Name"
+                label={t("common.name")}
                 field="name"
                 sortField={orderBy}
                 sortDirection={order}
@@ -55,7 +58,7 @@ export function SkillsTable({
             </TableCell>
             <TableCell sx={skillsTableSx.categoryHeadCell}>
               <SortableTableHeader
-                label="Category"
+                label={t("skills.table.category")}
                 field="category"
                 sortField={orderBy}
                 sortDirection={order}
@@ -69,7 +72,7 @@ export function SkillsTable({
           {skills.length === 0 ? (
             <TableRow>
               <TableCell colSpan={3} sx={catalogTableSx.emptyState}>
-                Skills not found
+                {t("table.skillsNotFound")}
               </TableCell>
             </TableRow>
           ) : (
