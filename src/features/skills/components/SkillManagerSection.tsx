@@ -87,6 +87,7 @@ function SkillManagerSection<TSkill extends SkillManagerItem>({
           type="button"
           onClick={onOpenAdd}
           sx={cvsStyles.addSkillEmptyButton}
+          data-testid="add-skill-button"
         >
           + Add skill
         </Button>
@@ -154,6 +155,7 @@ function SkillManagerSection<TSkill extends SkillManagerItem>({
             startIcon={<AddIcon />}
             onClick={onOpenAdd}
             sx={cvsStyles.textActionLight}
+            data-testid="add-skill-button"
           >
             Add skill
           </Button>

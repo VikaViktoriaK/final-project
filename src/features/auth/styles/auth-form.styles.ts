@@ -26,9 +26,20 @@ export const authFormStyles = {
     overflow: "hidden",
   },
 
-  gateContent: {
-    flex: 1,
+  gatePageContainer: {
+    minHeight: "100dvh",
+    height: "100dvh",
     width: "100%",
+    maxWidth: "100vw",
+    bgcolor: "var(--app-surface)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxSizing: "border-box",
+    overflow: "hidden",
+  },
+
+  gateContent: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -217,6 +228,20 @@ export const authFormStyles = {
     "& input::placeholder": {
       color: "var(--app-text)",
       opacity: 0.7,
+    },
+    "& input:-webkit-autofill": {
+      WebkitBoxShadow: "0 0 0 1000px var(--app-surface) inset",
+      WebkitTextFillColor: "var(--app-text)",
+      caretColor: "var(--app-text)",
+      transition: "background-color 5000s ease-in-out 0s",
+    },
+    "& input:-webkit-autofill:hover": {
+      WebkitBoxShadow: "0 0 0 1000px var(--app-surface) inset",
+      WebkitTextFillColor: "var(--app-text)",
+    },
+    "& input:-webkit-autofill:focus": {
+      WebkitBoxShadow: "0 0 0 1000px var(--app-surface) inset",
+      WebkitTextFillColor: "var(--app-text)",
     },
     "& .MuiIconButton-root": {
       color: "var(--app-text)",

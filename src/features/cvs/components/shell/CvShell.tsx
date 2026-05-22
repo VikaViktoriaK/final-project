@@ -63,6 +63,7 @@ function CvShellContent({ cvId, children }: CvShellProps) {
             value={tab.segment}
             component={NextLink}
             href={`/cvs/${cvId}/${tab.segment}`}
+            data-testid={`cv-tab-${tab.segment}`}
           />
         ))}
       </Tabs>

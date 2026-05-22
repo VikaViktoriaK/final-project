@@ -1,5 +1,6 @@
 import type { Cv, MasteryLevel } from "../../shared/types";
-import type { GroupedSkills } from "../../shared/utils/group-skills";
+import type { GroupedSkills } from "@/utils/skills";
+import type { SkillMastery } from "../../shared/types";
 import formatDisplayDate from "@/lib/format-display-date";
 
 const formatCvDate = formatDisplayDate;
@@ -52,7 +53,9 @@ type SkillTableRow = {
   lastUsed: string;
 };
 
-function buildSkillTableRows(grouped: GroupedSkills[]): SkillTableRow[] {
+function buildSkillTableRows(
+  grouped: GroupedSkills<SkillMastery>[],
+): SkillTableRow[] {
   const currentYear = String(new Date().getFullYear());
 
   return grouped.flatMap((group) =>

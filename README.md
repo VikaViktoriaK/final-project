@@ -88,71 +88,31 @@ pnpm build
 pnpm start
 ```
 
-## Available scripts
+## End-to-End Tests
 
-| Command             | Description                          |
-| ------------------- | ------------------------------------ |
-| `pnpm dev`          | Start development server (port 3000) |
-| `pnpm build`        | Production build                     |
-| `pnpm start`        | Run production server after `build`  |
-| `pnpm lint`         | ESLint                               |
-| `pnpm typecheck`    | Next typegen + `tsc --noEmit`        |
-| `pnpm test`         | Run unit tests (Jest)                |
-| `pnpm test:watch`   | Jest in watch mode                   |
-| `pnpm format`       | Prettier write                       |
-| `pnpm format:check` | Prettier check                       |
+Playwright covers the primary user journey: login → users list → CV skills → add skill → logout.
 
-Git hooks (Husky) run `format:check`, `lint`, `typecheck`, and `build` on push.
-
-## Testing
-
-Unit tests use **Jest** and **React Testing Library**:
+1. Copy `.env.example` to `.env.local` and set `E2E_USER_EMAIL`, `E2E_USER_PASSWORD`, and `NEXT_PUBLIC_GRAPHQL_URL`.
+2. Install browsers once:
 
 ```bash
-pnpm test
+pnpm exec playwright install chromium
 ```
 
-Coverage report (optional):
+3. Run E2E tests (starts `pnpm dev` automatically unless a server is already running):
 
 ```bash
-pnpm test -- --coverage
+pnpm test:e2e
 ```
 
-Tests live next to source files (`*.test.ts`, `*.test.tsx`) under `src/`. There are **no E2E tests** in this repo yet.
+Optional:
 
-## Project structure
-
-```
-src/
-  app/              # Next.js routes (thin pages)
-  components/       # Shared UI (search, dialogs, loaders)
-  features/         # Domain modules (auth, users, cvs, projects, …)
-  lib/              # Apollo client, hooks, utilities
-  shared/           # Cross-feature styles and catalog UI
-  theme/            # MUI theme
+```bash
+pnpm test:e2e:ui
+pnpm test:e2e:headed
 ```
 
-Each feature typically includes `api/` or `graphql/`, hooks, components, pages, and schemas.
 
-## Main routes
-
-| Route                                                              | Description      |
-| ------------------------------------------------------------------ | ---------------- |
-| `/login`, `/registration`, `/forgot-password`, `/reset-password`   | Auth             |
-| `/users`                                                           | Employees list   |
-| `/users/[id]/profile`, `…/skills`, `…/languages`                   | User profile     |
-| `/cvs`, `/cvs/[id]/details`, `…/skills`, `…/projects`, `…/preview` | CVs              |
-| `/projects`                                                        | Projects catalog |
-| `/departments`, `/positions`, `/skills`, `/languages`              | Admin catalogs   |
-| `/settings`                                                        | Theme & language |
-
-## Authentication
-
-- JWT **access** and **refresh** tokens are stored in `localStorage`.
-- Apollo sends `Authorization: Bearer <access_token>` on requests.
-- On auth errors, the client attempts `updateToken` refresh; if that fails, tokens are cleared and the user must sign in again.
-
-## Troubleshooting
 
 | Problem                      | What to check                                                                                           |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------- |

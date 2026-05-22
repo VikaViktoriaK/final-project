@@ -5,7 +5,7 @@ import { useCvContext } from "../../shared/context/cv-context";
 import useActionFeedback from "@/hooks/use-action-feedback";
 import { useCvSkillCatalog } from "../../skills/hooks/use-cv-skill-mutations";
 import useExportPdfMutation from "./use-export-pdf-mutation";
-import { groupSkillsByCategory } from "../../shared/utils/group-skills";
+import { groupSkillsByCategory } from "@/utils/skills";
 
 function useCvPreviewPage() {
   const { cv } = useCvContext();

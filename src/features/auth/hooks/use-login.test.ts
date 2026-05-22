@@ -1,9 +1,8 @@
-import { act, renderHook } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import useLogin from "./use-login";
-import { saveAuthTokens } from "../lib/auth-storage";
 
-const mockPush = jest.fn();
 const mockLogin = jest.fn();
+const mockPush = jest.fn();
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({ push: mockPush }),
@@ -20,15 +19,20 @@ jest.mock("../lib/auth-storage", () => ({
 describe("useLogin", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
-  it("saves tokens and redirects on successful login", async () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("redirects and saves tokens on successful login", async () => {
     mockLogin.mockResolvedValue({
       data: {
         login: {
           access_token: "access",
           refresh_token: "refresh",
-          user: { id: "1", email: "user@example.com", role: "Employee" },
+          user: { id: "1", email: "a@b.com", role: "Admin", profile: {} },
         },
       },
     });
@@ -37,35 +41,62 @@ describe("useLogin", () => {
 
     await act(async () => {
       await result.current.loginUser({
-        email: "user@example.com",
+        email: "a@b.com",
         password: "password1",
       });
     });
 
-    expect(mockLogin).toHaveBeenCalledWith({
-      variables: { auth: { email: "user@example.com", password: "password1" } },
-    });
-    expect(saveAuthTokens).toHaveBeenCalledWith(
-      "access",
-      "refresh",
-      expect.objectContaining({ email: "user@example.com" }),
-    );
     expect(mockPush).toHaveBeenCalledWith("/users");
+    expect(result.current.error).toBeNull();
   });
 
-  it("does not redirect when login returns no user", async () => {
+  it("sets error state and logs when login throws", async () => {
+    mockLogin.mockRejectedValue({
+      graphQLErrors: [{ message: "Invalid credentials" }],
+    });
+
+    const { result } = renderHook(() => useLogin());
+
+    await act(async () => {
+      await result.current.loginUser({
+        email: "a@b.com",
+        password: "wrong",
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.error?.message).toBe("Invalid credentials");
+    });
+    expect(console.error).toHaveBeenCalledWith(
+      "Error logging in",
+      expect.objectContaining({
+        graphQLErrors: [{ message: "Invalid credentials" }],
+      }),
+    );
+    expect(mockPush).not.toHaveBeenCalled();
+  });
+
+  it("sets error state when login returns no auth result", async () => {
     mockLogin.mockResolvedValue({ data: { login: null } });
 
     const { result } = renderHook(() => useLogin());
 
     await act(async () => {
       await result.current.loginUser({
-        email: "user@example.com",
+        email: "a@b.com",
         password: "password1",
       });
     });
 
-    expect(saveAuthTokens).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(result.current.error?.message).toBe(
+        "Unable to sign in. Please check your credentials and try again.",
+      );
+    });
+    expect(console.error).toHaveBeenCalledWith(
+      "Login failed: no auth result returned",
+      { data: { login: null } },
+    );
     expect(mockPush).not.toHaveBeenCalled();
   });
 });

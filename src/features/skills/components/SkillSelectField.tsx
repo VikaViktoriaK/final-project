@@ -102,6 +102,7 @@ function SkillSelectField({
         onOpen={handleOpen}
         renderValue={() => selectedName}
         sx={cvsStyles.skillSelectControl}
+        data-testid="add-skill-select"
         MenuProps={{
           autoFocus: false,
           disableAutoFocusItem: true,

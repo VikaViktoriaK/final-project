@@ -43,7 +43,11 @@ export function UsersTable({
       elevation={0}
       sx={catalogTableSx.tableContainer}
     >
-      <Table sx={catalogTableSx.table} aria-label="users table">
+      <Table
+        sx={catalogTableSx.table}
+        aria-label="users table"
+        data-testid="users-table"
+      >
         <TableHead>
           <TableRow>
             <TableCell sx={catalogTableSx.headAvatarCell} />

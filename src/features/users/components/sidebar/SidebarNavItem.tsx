@@ -44,6 +44,7 @@ export function SidebarNavItem({
       href={href}
       className={className}
       aria-current={active ? "page" : undefined}
+      data-testid={`nav-${item.id}`}
     >
       {itemContent}
     </Box>

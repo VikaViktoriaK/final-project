@@ -9,9 +9,9 @@ type AuthGateScreenProps = {
 
 function AuthGateScreen({ message }: AuthGateScreenProps) {
   return (
-    <Box sx={authFormStyles.pageContainer}>
+    <Box sx={authFormStyles.gatePageContainer}>
       <Box sx={authFormStyles.gateContent}>
-        <CircularProgress aria-label={message} />
+        <CircularProgress aria-label={message} color="primary" />
         <Typography sx={authFormStyles.gateMessage}>{message}</Typography>
       </Box>
     </Box>

@@ -63,6 +63,7 @@ function AddSkillDialog<TMastery extends string>({
       sx={[cvsStyles.dialog, cvsStyles.dialogForm]}
       fullWidth
       maxWidth="md"
+      data-testid="add-skill-dialog"
     >
       <DialogTitle sx={cvsStyles.dialogTitle}>
         Add skill
@@ -120,6 +121,7 @@ function AddSkillDialog<TMastery extends string>({
               : cvsStyles.skillDialogPrimaryButtonMuted
           }
           disabled={!submitEnabled}
+          data-testid="add-skill-submit"
         >
           {dialog.loading ? (
             <CircularProgress size={18} color="inherit" />
@@ -238,6 +240,7 @@ function MasteryField<TMastery extends string>({
         label="Skill mastery"
         value={value}
         onChange={(event) => onChange(event.target.value as TMastery)}
+        data-testid="add-skill-mastery"
         MenuProps={{
           slotProps: {
             paper: { sx: cvsStyles.selectMenuPaper },
