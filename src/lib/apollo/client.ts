@@ -4,6 +4,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { CombinedGraphQLErrors } from "@apollo/client/errors";
 import { ErrorLink } from "@apollo/client/link/error";
 import { Observable } from "@apollo/client/utilities";
 import {
@@ -12,6 +13,24 @@ import {
 } from "@/features/auth/lib/auth-storage";
 import isAuthFailure from "@/features/auth/lib/is-auth-failure";
 import tryRefreshSession from "@/features/auth/lib/try-refresh-session";
+
+function getGraphqlUri() {
+  return (
+    process.env.NEXT_PUBLIC_GRAPHQL_URL ??
+    process.env.VITE_GRAPHQL_URL ??
+    "/api/graphql"
+  );
+}
+
+function resolveGraphqlUri(uri: string) {
+  if (uri.startsWith("http://") || uri.startsWith("https://")) {
+    return uri;
+  }
+  if (typeof window !== "undefined") {
+    return new URL(uri, window.location.origin).toString();
+  }
+  return uri;
+}
 
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => {
@@ -28,6 +47,29 @@ const authLink = new ApolloLink((operation, forward) => {
     };
   });
   return forward(operation);
+});
+
+const loggingErrorLink = new ErrorLink(({ error, operation }) => {
+  if (CombinedGraphQLErrors.is(error)) {
+    console.error("GraphQL errors", {
+      operation: operation.operationName,
+      variables: operation.variables,
+      graphQLErrors: error.errors.map((graphQLError) => ({
+        message: graphQLError.message,
+        path: graphQLError.path,
+        extensions: graphQLError.extensions,
+      })),
+    });
+    return;
+  }
+
+  if (error) {
+    console.error("GraphQL network error", {
+      operation: operation.operationName,
+      variables: operation.variables,
+      networkError: error,
+    });
+  }
 });
 
 const authErrorLink = new ErrorLink(({ error, operation, forward }) => {
@@ -62,11 +104,26 @@ const authErrorLink = new ErrorLink(({ error, operation, forward }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
+  uri: resolveGraphqlUri(getGraphqlUri()),
+  fetch: async (input, init) => {
+    const res = await fetch(input, init);
+    if (!res.ok) {
+      try {
+        const text = await res.clone().text();
+        console.error("GraphQL HTTP error", res.status, text);
+      } catch {
+        console.error("GraphQL HTTP error", res.status);
+      }
+    }
+    return res;
+  },
 });
 
 const client = new ApolloClient({
-  link: authErrorLink.concat(authLink).concat(httpLink),
+  link: loggingErrorLink
+    .concat(authErrorLink)
+    .concat(authLink)
+    .concat(httpLink),
   cache: new InMemoryCache(),
 });
 
