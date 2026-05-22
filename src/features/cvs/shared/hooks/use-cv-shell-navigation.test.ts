@@ -31,7 +31,7 @@ describe("useCvShellNavigation", () => {
   });
 
   it("handles null pathname", () => {
-    usePathnameMock.mockReturnValue(null);
+    usePathnameMock.mockReturnValue(null as unknown as string);
 
     const { result } = renderHook(() => useCvShellNavigation("cv-1"));
 

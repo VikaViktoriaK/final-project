@@ -1,5 +1,5 @@
 import { mockCv, mockCvWithProjects } from "../../test-utils/fixtures";
-import { groupSkillsByCategory } from "../../shared/utils/group-skills";
+import { groupSkillsByCategory } from "@/utils/skills";
 import buildCvPreviewHtml from "./build-cv-preview-html";
 
 describe("buildCvPreviewHtml", () => {

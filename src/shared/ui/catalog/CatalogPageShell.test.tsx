@@ -1,12 +1,13 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import Button from "@mui/material/Button";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { CatalogPageShell } from "./CatalogPageShell";
 
 describe("CatalogPageShell", () => {
   it("renders title, search, filter, action, and children", () => {
     const onSearchChange = jest.fn();
 
-    render(
+    renderWithTheme(
       <CatalogPageShell
         title="Departments"
         searchQuery=""
@@ -31,7 +32,7 @@ describe("CatalogPageShell", () => {
   });
 
   it("shows error and loader state", () => {
-    render(
+    renderWithTheme(
       <CatalogPageShell
         title="Languages"
         searchQuery=""

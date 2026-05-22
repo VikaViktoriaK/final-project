@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { SkillFormDialog } from "./SkillFormDialog";
 
 describe("SkillFormDialog", () => {
@@ -11,7 +12,7 @@ describe("SkillFormDialog", () => {
     const onClose = jest.fn();
     const onSubmit = jest.fn().mockResolvedValue(undefined);
 
-    render(
+    renderWithTheme(
       <SkillFormDialog
         open
         mode="create"
@@ -23,7 +24,7 @@ describe("SkillFormDialog", () => {
       />,
     );
 
-    fireEvent.change(screen.getByLabelText("Name"), {
+    fireEvent.change(screen.getByLabelText("Skill name"), {
       target: { value: " React " },
     });
     fireEvent.click(screen.getByRole("button", { name: "Create" }));
@@ -38,7 +39,7 @@ describe("SkillFormDialog", () => {
   });
 
   it("disables submit when there are no categories", () => {
-    render(
+    renderWithTheme(
       <SkillFormDialog
         open
         mode="create"
@@ -54,7 +55,7 @@ describe("SkillFormDialog", () => {
   });
 
   it("disables update when edit form is unchanged", () => {
-    render(
+    renderWithTheme(
       <SkillFormDialog
         open
         mode="edit"

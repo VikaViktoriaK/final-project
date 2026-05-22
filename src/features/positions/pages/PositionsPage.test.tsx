@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { PositionsPage } from "./PositionsPage";
 
 jest.mock("../hooks/usePositionsPage", () => ({
@@ -40,7 +41,7 @@ describe("PositionsPage", () => {
       handleDeleteConfirm: jest.fn(),
     });
 
-    render(<PositionsPage />);
+    renderWithTheme(<PositionsPage />);
     expect(screen.getByText("Positions")).toBeInTheDocument();
     expect(screen.getByText("Developer")).toBeInTheDocument();
   });

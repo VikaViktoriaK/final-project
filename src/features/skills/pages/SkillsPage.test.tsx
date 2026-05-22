@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { SkillsPage } from "./SkillsPage";
 
 jest.mock("../hooks/useSkillsPage", () => ({
@@ -47,7 +48,7 @@ describe("SkillsPage", () => {
       handleDeleteConfirm: jest.fn(),
     });
 
-    render(<SkillsPage />);
+    renderWithTheme(<SkillsPage />);
     expect(screen.getByText("Skills")).toBeInTheDocument();
     expect(screen.getByText("React")).toBeInTheDocument();
     expect(screen.getByText("Frontend")).toBeInTheDocument();

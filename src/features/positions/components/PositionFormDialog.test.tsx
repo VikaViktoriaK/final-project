@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { PositionFormDialog } from "./PositionFormDialog";
 
 describe("PositionFormDialog", () => {
@@ -6,7 +7,7 @@ describe("PositionFormDialog", () => {
     const onClose = jest.fn();
     const onSubmit = jest.fn().mockResolvedValue(undefined);
 
-    render(
+    renderWithTheme(
       <PositionFormDialog
         open
         mode="create"
@@ -27,7 +28,7 @@ describe("PositionFormDialog", () => {
   });
 
   it("disables update when edit form is unchanged", () => {
-    render(
+    renderWithTheme(
       <PositionFormDialog
         open
         mode="edit"

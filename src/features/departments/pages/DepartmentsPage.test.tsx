@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { DepartmentsPage } from "./DepartmentsPage";
 
 jest.mock("../hooks/useDepartmentsPage", () => ({
@@ -41,7 +42,7 @@ describe("DepartmentsPage", () => {
       handleDeleteConfirm: jest.fn(),
     });
 
-    render(<DepartmentsPage />);
+    renderWithTheme(<DepartmentsPage />);
 
     expect(screen.getByText("Departments")).toBeInTheDocument();
     expect(screen.getByText("Engineering")).toBeInTheDocument();

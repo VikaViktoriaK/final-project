@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { LanguageFormDialog } from "./LanguageFormDialog";
 
 describe("LanguageFormDialog", () => {
@@ -6,7 +7,7 @@ describe("LanguageFormDialog", () => {
     const onClose = jest.fn();
     const onSubmit = jest.fn().mockResolvedValue(undefined);
 
-    render(
+    renderWithTheme(
       <LanguageFormDialog
         open
         mode="create"
@@ -39,7 +40,7 @@ describe("LanguageFormDialog", () => {
   });
 
   it("shows validation error for invalid ISO2 code", async () => {
-    render(
+    renderWithTheme(
       <LanguageFormDialog
         open
         mode="create"

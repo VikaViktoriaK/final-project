@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactElement, ReactNode } from "react";
 import { PreferencesProvider } from "@/lib/preferences/PreferencesProvider";
 
-function ThemeWrapper({ children }: { children: ReactNode }) {
+export function TestProviders({ children }: { children: ReactNode }) {
   return <PreferencesProvider>{children}</PreferencesProvider>;
 }
 
@@ -13,7 +13,7 @@ export function renderWithTheme(
 ) {
   return {
     user: userEvent.setup(),
-    ...render(ui, { wrapper: ThemeWrapper, ...options }),
+    ...render(ui, { wrapper: TestProviders, ...options }),
   };
 }
 

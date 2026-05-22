@@ -7,7 +7,7 @@ export function useNameCatalogDialogLabels(
   editTitleKey: MessageKey,
   nameLabelKey: MessageKey = "common.name",
 ) {
-  const { locale, t } = useTranslation();
+  const { t } = useTranslation();
 
   return useMemo(
     () => ({
@@ -28,6 +28,6 @@ export function useNameCatalogDialogLabels(
         confirm: t("common.delete"),
       },
     }),
-    [createTitleKey, editTitleKey, locale, nameLabelKey, t],
+    [createTitleKey, editTitleKey, nameLabelKey, t],
   );
 }

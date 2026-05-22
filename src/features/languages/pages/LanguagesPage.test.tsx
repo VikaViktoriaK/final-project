@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithTheme } from "@/features/auth/test-utils/render-with-theme";
 import { LanguagesPage } from "./LanguagesPage";
 
 jest.mock("../hooks/useLanguagesPage", () => ({
@@ -41,7 +42,7 @@ describe("LanguagesPage", () => {
       handleDeleteConfirm: jest.fn(),
     });
 
-    render(<LanguagesPage />);
+    renderWithTheme(<LanguagesPage />);
     expect(screen.getByText("Languages")).toBeInTheDocument();
     expect(screen.getAllByText("English").length).toBeGreaterThan(0);
     expect(

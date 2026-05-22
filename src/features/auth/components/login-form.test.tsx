@@ -31,7 +31,7 @@ describe("LoginForm", () => {
     mockLoginUser.mockClear();
     useLoginMock.mockReturnValue({
       loading: false,
-      error: undefined,
+      error: null,
       loginUser: mockLoginUser,
     });
   });
@@ -94,7 +94,7 @@ describe("LoginForm", () => {
   it("disables submit button while loading", () => {
     useLoginMock.mockReturnValue({
       loading: true,
-      error: undefined,
+      error: null,
       loginUser: mockLoginUser,
     });
 

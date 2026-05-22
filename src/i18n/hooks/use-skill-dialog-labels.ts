@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useTranslation } from "@/i18n/use-translation";
 
 export function useSkillDialogLabels() {
-  const { locale, t } = useTranslation();
+  const { t } = useTranslation();
 
   return useMemo(
     () => ({
@@ -26,6 +26,6 @@ export function useSkillDialogLabels() {
         confirm: t("common.delete"),
       },
     }),
-    [locale, t],
+    [t],
   );
 }

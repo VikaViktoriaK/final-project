@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useTranslation } from "@/i18n/use-translation";
 
 export function useLanguageDialogLabels() {
-  const { locale, t } = useTranslation();
+  const { t } = useTranslation();
 
   return useMemo(
     () => ({
@@ -28,6 +28,6 @@ export function useLanguageDialogLabels() {
         confirm: t("common.delete"),
       },
     }),
-    [locale, t],
+    [t],
   );
 }

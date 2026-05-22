@@ -1,17 +1,22 @@
 import { act, renderHook } from "@testing-library/react";
+import { TestProviders } from "@/features/auth/test-utils/render-with-theme";
 import { useLanguageFormDialog } from "./useLanguageFormDialog";
+
+const wrapper = TestProviders;
 
 describe("useLanguageFormDialog", () => {
   it("submits normalized language values in create mode", async () => {
     const onClose = jest.fn();
     const onSubmit = jest.fn().mockResolvedValue(undefined);
-    const { result } = renderHook(() =>
-      useLanguageFormDialog({
-        mode: "create",
-        language: null,
-        onClose,
-        onSubmit,
-      }),
+    const { result } = renderHook(
+      () =>
+        useLanguageFormDialog({
+          mode: "create",
+          language: null,
+          onClose,
+          onSubmit,
+        }),
+      { wrapper },
     );
 
     act(() => result.current.setName(" Spanish "));
@@ -30,13 +35,15 @@ describe("useLanguageFormDialog", () => {
   });
 
   it("sets validation error for invalid ISO2 code", async () => {
-    const { result } = renderHook(() =>
-      useLanguageFormDialog({
-        mode: "create",
-        language: null,
-        onClose: jest.fn(),
-        onSubmit: jest.fn(),
-      }),
+    const { result } = renderHook(
+      () =>
+        useLanguageFormDialog({
+          mode: "create",
+          language: null,
+          onClose: jest.fn(),
+          onSubmit: jest.fn(),
+        }),
+      { wrapper },
     );
 
     act(() => result.current.setName("Spanish"));
