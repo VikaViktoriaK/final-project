@@ -1,6 +1,6 @@
 # HR Management System
 
-A modern HRM application built with Next.js, TypeScript, GraphQL, Apollo Client, Redux Toolkit, React Hook Form, Zod, Material UI, and Jest.
+A modern HRM application built with Next.js, TypeScript, GraphQL, Apollo Client, React Hook Form, Zod, Material UI, and Jest.
 
 ## Tech Stack
 
