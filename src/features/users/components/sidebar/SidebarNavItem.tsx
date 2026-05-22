@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
+import { useTranslation } from "@/i18n/use-translation";
 import type { SidebarNavItem as SidebarNavItemConfig } from "./sidebar.constants";
 import { navItemClassName, resolveHref } from "./sidebarNav.utils";
 
@@ -19,6 +20,8 @@ export function SidebarNavItem({
   userId,
   collapsed,
 }: SidebarNavItemProps) {
+  const { t } = useTranslation();
+  const label = t(item.labelKey);
   const navigable = item.navigable ?? false;
   const href = resolveHref(item.href, userId);
   const active = item.isActive(pathname, userId);
@@ -30,7 +33,7 @@ export function SidebarNavItem({
     <>
       <Icon aria-hidden />
       <Typography component="span" className="sidebar-nav-item__label">
-        {item.label}
+        {label}
       </Typography>
     </>
   );
@@ -51,7 +54,7 @@ export function SidebarNavItem({
   );
 
   const wrapped = collapsed ? (
-    <Tooltip title={item.label} placement="right">
+    <Tooltip title={label} placement="right">
       {link}
     </Tooltip>
   ) : (

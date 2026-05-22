@@ -1,4 +1,4 @@
-import * as React from "react";
+import { memo, useCallback, useState, type MouseEvent } from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -9,8 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { useTranslation } from "@/i18n/use-translation";
 import type { UserRow } from "@/features/users/types";
-import { useAuthSnapshot } from "@/features/auth/lib/auth-storage";
 import { catalogTableSx } from "@/shared/styles";
 
 function initials(firstName: string, lastName: string) {
@@ -21,39 +21,47 @@ function initials(firstName: string, lastName: string) {
 
 type UsersTableRowProps = {
   user: UserRow;
+  isAdmin: boolean;
+  canEdit: boolean;
   onEdit: (user: UserRow) => void;
   onView: (user: UserRow) => void;
   onDelete: (user: UserRow) => void;
 };
 
-export function UsersTableRow({
+function UsersTableRow({
   user,
+  isAdmin,
+  canEdit,
   onEdit,
   onView,
   onDelete,
 }: UsersTableRowProps) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { userId: currentUserId, role } = useAuthSnapshot();
-  const isAdmin = role === "Admin";
-  const canEdit = isAdmin || currentUserId === user.id;
+  const { t } = useTranslation();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = useCallback((event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleMenuClose = () => setAnchorEl(null);
-  const handleEdit = () => {
-    handleMenuClose();
+  }, []);
+
+  const handleMenuClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  const handleEdit = useCallback(() => {
+    setAnchorEl(null);
     onEdit(user);
-  };
-  const handleView = () => {
-    handleMenuClose();
+  }, [onEdit, user]);
+
+  const handleView = useCallback(() => {
+    setAnchorEl(null);
     onView(user);
-  };
-  const handleDelete = () => {
-    handleMenuClose();
+  }, [onView, user]);
+
+  const handleDelete = useCallback(() => {
+    setAnchorEl(null);
     onDelete(user);
-  };
+  }, [onDelete, user]);
 
   return (
     <TableRow sx={catalogTableSx.row}>
@@ -112,14 +120,16 @@ export function UsersTableRow({
           onClose={handleMenuClose}
           sx={catalogTableSx.rowMenu}
         >
-          <MenuItem onClick={handleView}>View profile</MenuItem>
-          {canEdit ? <MenuItem onClick={handleEdit}>Edit</MenuItem> : null}
+          <MenuItem onClick={handleView}>{t("users.viewProfile")}</MenuItem>
+          {canEdit ? (
+            <MenuItem onClick={handleEdit}>{t("common.edit")}</MenuItem>
+          ) : null}
           {isAdmin ? (
             <MenuItem
               onClick={handleDelete}
               sx={catalogTableSx.rowMenuDeleteItem}
             >
-              Delete
+              {t("common.delete")}
             </MenuItem>
           ) : null}
         </Menu>
@@ -127,3 +137,6 @@ export function UsersTableRow({
     </TableRow>
   );
 }
+
+const MemoizedUsersTableRow = memo(UsersTableRow);
+export { MemoizedUsersTableRow as UsersTableRow };

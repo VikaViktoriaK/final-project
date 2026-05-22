@@ -90,10 +90,33 @@ export const cvsStyles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 3,
-    flexWrap: "nowrap",
+    gap: 2,
     width: "100%",
     maxWidth: "100%",
+    "@media (max-width: 768px)": {
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
+  },
+
+  pageToolbarSearch: {
+    flex: 1,
+    minWidth: 0,
+    pr: 2,
+    "@media (max-width: 768px)": {
+      pr: 0,
+    },
+  },
+
+  pageToolbarActions: {
+    display: "flex",
+    alignItems: "center",
+    gap: 1.5,
+    flexShrink: 0,
+    "@media (max-width: 768px)": {
+      width: "100%",
+      justifyContent: "flex-end",
+    },
   },
 
   searchField: {
@@ -1601,26 +1624,36 @@ export const cvsStyles = {
 
   projectsToolbar: {
     display: "flex",
-    flexDirection: { xs: "column", sm: "row" },
-    alignItems: { xs: "stretch", sm: "center" },
     justifyContent: "space-between",
+    alignItems: "center",
     gap: 2,
     width: "100%",
     pt: 1,
     mb: 2,
+    "@media (max-width: 768px)": {
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
   },
 
   projectsToolbarSearch: {
-    flex: { xs: "1 1 auto", sm: "0 1 auto" },
+    flex: 1,
     minWidth: 0,
-    width: { xs: "100%", sm: "auto" },
+    pr: 2,
+    "@media (max-width: 768px)": {
+      pr: 0,
+    },
   },
 
   projectsToolbarActions: {
     display: "flex",
     alignItems: "center",
-    justifyContent: { xs: "flex-end", sm: "flex-end" },
+    gap: 1.5,
     flexShrink: 0,
+    "@media (max-width: 768px)": {
+      width: "100%",
+      justifyContent: "flex-end",
+    },
   },
 
   /** Shared column layout for projects header + rows (even 24px gaps). */

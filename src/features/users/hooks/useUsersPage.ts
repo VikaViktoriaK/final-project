@@ -73,6 +73,18 @@ export function useUsersPage() {
     void refetch();
   }, [refetch]);
 
+  const handleSort = React.useCallback(
+    (field: UserSortField) => {
+      if (field === orderBy) {
+        setOrder((previous) => (previous === "asc" ? "desc" : "asc"));
+        return;
+      }
+      setOrderBy(field);
+      setOrder("asc");
+    },
+    [orderBy],
+  );
+
   return {
     isAdmin,
     loading,
@@ -80,9 +92,8 @@ export function useUsersPage() {
     query,
     setQuery,
     order,
-    setOrder,
     orderBy,
-    setOrderBy,
+    handleSort,
     processedUsers,
     editingUser,
     editOpen,

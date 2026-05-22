@@ -3,17 +3,14 @@
 import Button from "@mui/material/Button";
 import { CatalogPageShell } from "@/components/CatalogPageShell";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
+import { useTranslation } from "@/i18n/use-translation";
 import { catalogPageSx } from "@/shared/styles/catalogPage.styles";
 import { LanguageFormDialog } from "../components/LanguageFormDialog";
 import { LanguagesTable } from "../components/LanguagesTable";
-import {
-  LANGUAGES_CREATE_LABEL,
-  LANGUAGES_PAGE_TITLE,
-  LANGUAGE_DELETE_DIALOG,
-} from "../constants/languages.constants";
 import { useLanguagesPage } from "../hooks/useLanguagesPage";
 
 export function LanguagesPage() {
+  const { t } = useTranslation();
   const {
     isAdmin,
     loading,
@@ -35,7 +32,7 @@ export function LanguagesPage() {
   return (
     <>
       <CatalogPageShell
-        title={LANGUAGES_PAGE_TITLE}
+        title={t("nav.languages")}
         searchQuery={query}
         onSearchChange={setQuery}
         action={
@@ -45,7 +42,7 @@ export function LanguagesPage() {
               sx={catalogPageSx.createButton}
               onClick={form.openCreate}
             >
-              {LANGUAGES_CREATE_LABEL}
+              {t("languages.createButton")}
             </Button>
           ) : null
         }
@@ -74,15 +71,15 @@ export function LanguagesPage() {
 
       <ConfirmDeleteDialog
         open={deleteDialog.open}
-        title={LANGUAGE_DELETE_DIALOG.title}
-        cancelLabel={LANGUAGE_DELETE_DIALOG.cancel}
-        confirmLabel={LANGUAGE_DELETE_DIALOG.confirm}
+        title={t("languages.dialog.deleteTitle")}
+        cancelLabel={t("common.cancel")}
+        confirmLabel={t("common.delete")}
         deleting={deleting}
         canConfirm={Boolean(deleteDialog.target)}
         onClose={deleteDialog.close}
         onConfirm={handleDeleteConfirm}
       >
-        Are you sure you want to delete language{" "}
+        {t("languages.deleteConfirm")}{" "}
         <strong>{deleteDialog.target?.name}</strong>?
       </ConfirmDeleteDialog>
     </>

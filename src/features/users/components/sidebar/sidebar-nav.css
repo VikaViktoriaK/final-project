@@ -27,7 +27,7 @@
 
 .sidebar-nav-item--active {
   color: var(--app-text);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--app-nav-active-bg);
 }
 
 .sidebar-nav-item--disabled {
@@ -68,7 +68,7 @@
 
   .sidebar-nav-divider {
     margin: 4px 16px;
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--app-control-border);
     flex-shrink: 0;
   }
 
@@ -80,14 +80,14 @@
       .sidebar-nav-item--active
     ) {
     color: var(--app-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--app-nav-hover-bg);
     border-top-right-radius: 200px;
     border-bottom-right-radius: 200px;
   }
 
   .sidebar-nav-item--active:hover {
     color: var(--app-text);
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--app-nav-active-bg);
   }
 
   .sidebar-nav--collapsed .sidebar-nav-item {
@@ -163,7 +163,7 @@
       .sidebar-nav-item--active
     ) {
     color: var(--app-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--app-nav-hover-bg);
   }
 
   .sidebar-nav-item__label {

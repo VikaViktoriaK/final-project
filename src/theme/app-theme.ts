@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme, type PaletteMode } from "@mui/material/styles";
 
 /** Shared uppercase label (tabs, pill buttons, column headers). */
 export const labelTypography = {
@@ -8,17 +8,34 @@ export const labelTypography = {
   letterSpacing: "0.4px",
 } as const;
 
-const appText = "rgba(255, 255, 255, 0.92)";
-const appTextMuted = "rgba(255, 255, 255, 0.68)";
-const appSurface = "#353535";
-const appDialogSurface = "#2a2a2a";
-const appDivider = "rgba(255, 255, 255, 0.08)";
+const darkTokens = {
+  appText: "rgba(255, 255, 255, 0.92)",
+  appTextMuted: "rgba(255, 255, 255, 0.68)",
+  appSurface: "#353535",
+  appDialogSurface: "#2a2a2a",
+  appDivider: "rgba(255, 255, 255, 0.08)",
+  outlineBorder: "rgba(255, 255, 255, 0.12)",
+  outlineBorderHover: "rgba(255, 255, 255, 0.2)",
+};
+
+const lightTokens = {
+  appText: "rgba(0, 0, 0, 0.87)",
+  appTextMuted: "rgba(0, 0, 0, 0.6)",
+  appSurface: "#ffffff",
+  appDialogSurface: "#ffffff",
+  appDivider: "rgba(0, 0, 0, 0.12)",
+  outlineBorder: "rgba(0, 0, 0, 0.23)",
+  outlineBorderHover: "rgba(0, 0, 0, 0.4)",
+};
+
 const appPrimary = "#c63031";
 
-export function createAppTheme() {
+export function createAppTheme(mode: PaletteMode = "dark") {
+  const tokens = mode === "light" ? lightTokens : darkTokens;
+
   return createTheme({
     palette: {
-      mode: "dark",
+      mode,
       primary: {
         main: appPrimary,
         light: "#e85a5b",
@@ -29,21 +46,36 @@ export function createAppTheme() {
         main: "#d9534f",
       },
       background: {
-        default: appSurface,
-        paper: appDialogSurface,
+        default: tokens.appSurface,
+        paper: tokens.appDialogSurface,
       },
       text: {
-        primary: appText,
-        secondary: appTextMuted,
-        disabled: "rgba(255, 255, 255, 0.38)",
+        primary: tokens.appText,
+        secondary: tokens.appTextMuted,
+        disabled:
+          mode === "light"
+            ? "rgba(0, 0, 0, 0.38)"
+            : "rgba(255, 255, 255, 0.38)",
       },
-      divider: appDivider,
+      divider: tokens.appDivider,
       action: {
-        active: appText,
-        hover: "rgba(255, 255, 255, 0.08)",
-        selected: "rgba(255, 255, 255, 0.12)",
-        disabled: "rgba(255, 255, 255, 0.38)",
-        disabledBackground: "rgba(255, 255, 255, 0.12)",
+        active: tokens.appText,
+        hover:
+          mode === "light"
+            ? "rgba(0, 0, 0, 0.04)"
+            : "rgba(255, 255, 255, 0.08)",
+        selected:
+          mode === "light"
+            ? "rgba(0, 0, 0, 0.08)"
+            : "rgba(255, 255, 255, 0.12)",
+        disabled:
+          mode === "light"
+            ? "rgba(0, 0, 0, 0.38)"
+            : "rgba(255, 255, 255, 0.38)",
+        disabledBackground:
+          mode === "light"
+            ? "rgba(0, 0, 0, 0.12)"
+            : "rgba(255, 255, 255, 0.12)",
       },
     },
     typography: {
@@ -101,8 +133,8 @@ export function createAppTheme() {
             fontSize: 14,
             lineHeight: "20px",
             letterSpacing: "0.15px",
-            backgroundColor: appSurface,
-            color: appText,
+            backgroundColor: tokens.appSurface,
+            color: tokens.appText,
           },
         },
       },
@@ -117,7 +149,7 @@ export function createAppTheme() {
         styleOverrides: {
           paper: {
             backgroundImage: "none",
-            backgroundColor: appDialogSurface,
+            backgroundColor: tokens.appDialogSurface,
           },
         },
       },
@@ -140,7 +172,7 @@ export function createAppTheme() {
       MuiTableContainer: {
         styleOverrides: {
           root: {
-            backgroundColor: appSurface,
+            backgroundColor: tokens.appSurface,
             backgroundImage: "none",
           },
         },
@@ -156,7 +188,7 @@ export function createAppTheme() {
         styleOverrides: {
           root: {
             fontWeight: 500,
-            borderColor: appDivider,
+            borderColor: tokens.appDivider,
             backgroundColor: "transparent",
           },
           head: {
@@ -169,10 +201,10 @@ export function createAppTheme() {
         styleOverrides: {
           root: {
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "rgba(255, 255, 255, 0.12)",
+              borderColor: tokens.outlineBorder,
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "rgba(255, 255, 255, 0.2)",
+              borderColor: tokens.outlineBorderHover,
             },
           },
         },

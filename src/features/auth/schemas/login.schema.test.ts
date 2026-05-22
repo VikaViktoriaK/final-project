@@ -24,6 +24,18 @@ describe("loginSchema", () => {
     }
   });
 
+  it("rejects password longer than 20 characters", () => {
+    const result = loginSchema.safeParse({
+      email: "user@example.com",
+      password: "a".repeat(21),
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe("Password is too long.");
+    }
+  });
+
   it("rejects password shorter than 8 characters", () => {
     const result = loginSchema.safeParse({
       email: "user@example.com",
