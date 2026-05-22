@@ -8,7 +8,6 @@ A modern HRM application built with Next.js, TypeScript, GraphQL, Apollo Client,
 - TypeScript
 - GraphQL
 - Apollo Client
-- Redux Toolkit
 - React Hook Form
 - Zod
 - Material UI
