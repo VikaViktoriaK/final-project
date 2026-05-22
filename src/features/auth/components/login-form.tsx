@@ -54,6 +54,7 @@ function LoginForm() {
       onSubmit={handleSubmit(loginUser)}
       component="form"
       noValidate
+      data-testid="login-form"
     >
       <AuthFormTabs active="login" />
       <AuthFormBody>
@@ -73,6 +74,9 @@ function LoginForm() {
           error={!!errors.email}
           helperText={errors.email?.message}
           autoComplete="email"
+          slotProps={{
+            htmlInput: { "data-testid": "login-email" },
+          }}
         />
         <TextField
           sx={authFormStyles.textField}
@@ -83,6 +87,7 @@ function LoginForm() {
           helperText={errors.password?.message}
           autoComplete="current-password"
           slotProps={{
+            htmlInput: { "data-testid": "login-password" },
             input: {
               endAdornment: (
                 <InputAdornment position="end">
@@ -105,6 +110,7 @@ function LoginForm() {
           variant="contained"
           color="primary"
           disabled={isPending}
+          data-testid="login-submit"
         >
           {isPending ? <CircularProgress size={20} /> : "Sign in"}
         </Button>
@@ -116,7 +122,11 @@ function LoginForm() {
           Forgot password
         </Link>
         {error && (
-          <Alert sx={authFormStyles.formAlert} severity="error">
+          <Alert
+            sx={authFormStyles.formAlert}
+            severity="error"
+            data-testid="login-error"
+          >
             {error.message}
           </Alert>
         )}

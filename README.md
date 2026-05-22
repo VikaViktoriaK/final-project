@@ -43,6 +43,30 @@ pnpm format
 pnpm format:check
 ```
 
+## End-to-End Tests
+
+Playwright covers the primary user journey: login → users list → CV skills → add skill → logout.
+
+1. Copy `.env.example` to `.env.local` and set `E2E_USER_EMAIL`, `E2E_USER_PASSWORD`, and `NEXT_PUBLIC_GRAPHQL_URL`.
+2. Install browsers once:
+
+```bash
+pnpm exec playwright install chromium
+```
+
+3. Run E2E tests (starts `pnpm dev` automatically unless a server is already running):
+
+```bash
+pnpm test:e2e
+```
+
+Optional:
+
+```bash
+pnpm test:e2e:ui
+pnpm test:e2e:headed
+```
+
 ## Project Status
 
 Initial project setup is complete. Core features and pages are under development.

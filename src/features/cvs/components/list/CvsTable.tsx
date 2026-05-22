@@ -107,6 +107,7 @@ function CvNameCell({ cv }: CvNameCellProps) {
         component={NextLink}
         href={`/cvs/${cv.id}/details`}
         sx={cvsStyles.tableNamePrimary}
+        data-testid="cv-link"
       >
         {cv.name}
       </Box>
@@ -145,7 +146,7 @@ function CvsTable({
   return (
     <>
       <Box sx={cvsStyles.tableContainer}>
-        <Table sx={cvsStyles.table}>
+        <Table sx={cvsStyles.table} data-testid="cvs-table">
           <TableHead>
             <TableRow sx={cvsStyles.tableHeadRow}>
               <TableCell

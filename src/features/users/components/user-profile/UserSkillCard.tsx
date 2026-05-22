@@ -31,6 +31,8 @@ export function UserSkillCard({
   const progressColor = masteryToProgressColor(progressValue);
   const fillWidth = selected ? 0 : progressValue;
 
+  const skillTestId = `skill-card-${skill.name.trim().toLowerCase().replace(/\s+/g, "-")}`;
+
   return (
     <ButtonBase
       type="button"
@@ -44,6 +46,7 @@ export function UserSkillCard({
       aria-label={
         ariaLabel ?? `${skill.name}, ${skill.mastery}, ${progressValue}%`
       }
+      data-testid={skillTestId}
       sx={[
         profileRemoveModeSx.chip,
         selected ? profileRemoveModeSx.chipSelected : null,

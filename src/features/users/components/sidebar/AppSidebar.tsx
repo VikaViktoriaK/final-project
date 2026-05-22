@@ -111,6 +111,7 @@ export function AppSidebar() {
         <Box
           onClickCapture={handleMenuOpen}
           sx={{ cursor: "pointer", width: "100%" }}
+          data-testid="user-menu-trigger"
         >
           <SidebarProfileLink
             profileHref={profileHref}
@@ -170,7 +171,7 @@ export function AppSidebar() {
 
           <Divider sx={{ borderColor: "var(--app-control-border)", my: 0.5 }} />
 
-          <MenuItem onClick={handleLogout}>
+          <MenuItem onClick={handleLogout} data-testid="logout-menu-item">
             <ListItemIcon>
               <LogoutOutlined fontSize="small" />
             </ListItemIcon>
