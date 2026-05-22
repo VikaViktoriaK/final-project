@@ -97,4 +97,125 @@ describe("useUserProfileForm", () => {
     });
     expect(onUpdated).toHaveBeenCalledTimes(1);
   });
+
+  it("does not submit when form is not dirty", async () => {
+    const stableUser: UserRow = {
+      ...user,
+      departmentId: "dept-1",
+      department: "Engineering",
+      positionId: "pos-1",
+      position: "Developer",
+    };
+
+    const { result } = renderHook(() =>
+      useUserProfileForm({
+        user: stableUser,
+        canEditProfile: true,
+        onUpdated: jest.fn(),
+      }),
+    );
+
+    expect(result.current.canSubmit).toBe(false);
+
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+
+    expect(mockUpdateProfile).not.toHaveBeenCalled();
+  });
+
+  it("uploads avatar and clears submit errors on field change", async () => {
+    const onUpdated = jest.fn();
+    const { result } = renderHook(() =>
+      useUserProfileForm({
+        user: { ...user, avatarUrl: "old.png" },
+        canEditProfile: true,
+        avatarUpload: {
+          previewUrl: "new.png",
+          base64: "data:image/png;base64,abc",
+          size: 1024,
+          type: "image/png",
+        },
+        onUpdated,
+      }),
+    );
+
+    expect(result.current.canSubmit).toBe(true);
+
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+
+    expect(mockUpdateProfile).toHaveBeenCalled();
+    expect(mockUploadAvatar).toHaveBeenCalledWith({
+      variables: {
+        avatar: {
+          userId: "user-1",
+          base64: "data:image/png;base64,abc",
+          size: 1024,
+          type: "image/png",
+        },
+      },
+    });
+    expect(onUpdated).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows avatar size validation error", async () => {
+    const { result } = renderHook(() =>
+      useUserProfileForm({
+        user: { ...user, avatarUrl: "old.png" },
+        canEditProfile: true,
+        avatarUpload: {
+          previewUrl: "new.png",
+          base64: "data:image/png;base64,abc",
+          size: 10_000_000,
+          type: "image/png",
+        },
+        onUpdated: jest.fn(),
+      }),
+    );
+
+    act(() =>
+      result.current.handleFieldChange("firstName")({
+        target: { value: "Grace" },
+      } as ChangeEvent<HTMLInputElement>),
+    );
+
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+
+    expect(result.current.submitError).toContain("500 KB");
+    expect(mockUploadAvatar).not.toHaveBeenCalled();
+  });
+
+  it("stores submit errors from failed mutations", async () => {
+    mockUpdateProfile.mockRejectedValueOnce(new Error("Update failed"));
+    const { result } = renderHook(() =>
+      useUserProfileForm({
+        user,
+        canEditProfile: true,
+        onUpdated: jest.fn(),
+      }),
+    );
+
+    act(() =>
+      result.current.handleFieldChange("lastName")({
+        target: { value: "Byron" },
+      } as ChangeEvent<HTMLInputElement>),
+    );
+
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+
+    expect(result.current.submitError).toBe("Update failed");
+
+    act(() =>
+      result.current.handleFieldChange("lastName")({
+        target: { value: "Byron" },
+      } as ChangeEvent<HTMLInputElement>),
+    );
+    expect(result.current.submitError).toBeNull();
+  });
 });

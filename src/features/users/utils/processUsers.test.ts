@@ -44,4 +44,14 @@ describe("processUsers", () => {
       ),
     ).toEqual(["Grace", "Ada"]);
   });
+
+  it("sorts descending and keeps empty values at the end", () => {
+    expect(
+      processUsers(users, "", "department", "desc").map((user) => user.id),
+    ).toEqual(["2", "1"]);
+  });
+
+  it("returns all users when query is empty", () => {
+    expect(processUsers(users, "", "firstName", "asc")).toHaveLength(2);
+  });
 });

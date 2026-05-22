@@ -2,6 +2,7 @@ import {
   buildCategoryLabelMap,
   groupSkillsByCategory,
   resolveSkillCategoryLabel,
+  type SkillCategoryNode,
 } from "./skills";
 import {
   enrichProfileSkill,
@@ -37,6 +38,38 @@ describe("buildCategoryLabelMap", () => {
     expect(categoryMap.get("frontend")).toBe("Frontend");
     expect(categoryMap.get("react-category")).toBe("Frontend");
     expect(resolveSkillCategoryLabel("missing", categoryMap)).toBe("Other");
+  });
+
+  it("skips invalid categories and uses parent names when available", () => {
+    const categoryMap = buildCategoryLabelMap([
+      { id: "", name: "Invalid" },
+      {
+        id: "parent",
+        name: "ChildParent",
+        parent: { id: "root", name: "Parent Group" },
+        children: [{ id: "", name: "Bad child" }],
+      },
+      {
+        id: "child-only",
+        name: "ChildParent",
+        children: [{ id: "valid-child", name: "Child" }],
+      },
+    ] as SkillCategoryNode[]);
+
+    expect(categoryMap.has("")).toBe(false);
+    expect(categoryMap.get("parent")).toBe("Parent Group");
+    expect(categoryMap.get("valid-child")).toBe("ChildParent");
+  });
+});
+
+describe("resolveSkillCategoryLabel", () => {
+  it("returns unknown label for missing category id", () => {
+    const categoryMap = buildCategoryLabelMap(treeCategories);
+
+    expect(resolveSkillCategoryLabel(null, categoryMap)).toBe("Other");
+    expect(resolveSkillCategoryLabel(undefined, categoryMap, "Unknown")).toBe(
+      "Unknown",
+    );
   });
 });
 
@@ -74,5 +107,84 @@ describe("groupSkillsByCategory", () => {
       name: "React",
       categoryName: "Frontend",
     });
+  });
+
+  it("includes unnamed skills when skipUnnamed is false", () => {
+    const grouped = groupSkillsByCategory(
+      [{ name: "", categoryId: "frontend" }],
+      treeCategories,
+      { skipUnnamed: false },
+    );
+
+    expect(grouped[0].skills).toHaveLength(1);
+  });
+
+  it("uses custom unknown labels in label mode", () => {
+    const grouped = groupSkillsByCategory(
+      [{ name: "Orphan", categoryId: "missing" }],
+      [],
+      { unknownLabel: "Uncategorized" },
+    );
+
+    expect(grouped[0].categoryLabel).toBe("Uncategorized");
+  });
+
+  it("resolves catalog titles from skill categoryName when catalog misses", () => {
+    const result = groupSkillsByCategory(
+      [{ name: "Docker", categoryId: "devops" }],
+      [],
+      {
+        mode: "catalog",
+        mapSkill: (skill) => ({
+          name: skill.name,
+          categoryName: "DevOps",
+        }),
+      },
+    );
+
+    expect(result[0].title).toBe("DevOps");
+  });
+
+  it("falls back to category id when catalog title cannot be resolved", () => {
+    const result = groupSkillsByCategory(
+      [{ name: "Rust", categoryId: "systems" }],
+      [],
+      {
+        mode: "catalog",
+        mapSkill: (skill) => ({ name: skill.name }),
+      },
+    );
+
+    expect(result[0].title).toBe("systems");
+  });
+
+  it("uses default category id when skill categoryId is blank", () => {
+    const result = groupSkillsByCategory(
+      [{ name: "General", categoryId: "   " }],
+      [{ id: "other", name: "Other" }],
+      {
+        mode: "catalog",
+        mapSkill: (skill) => skill,
+      },
+    );
+
+    expect(result[0].id).toBe("other");
+  });
+
+  it("skips empty catalog categories and keeps populated ones", () => {
+    const result = groupSkillsByCategory(
+      [{ name: "Go", categoryId: "backend" }],
+      [
+        { id: "frontend", name: "Frontend" },
+        { id: "backend", name: "Backend" },
+      ],
+      {
+        mode: "catalog",
+        mapSkill: (skill) => skill,
+      },
+    );
+
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe("backend");
   });
 });

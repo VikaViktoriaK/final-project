@@ -57,4 +57,84 @@ describe("useLanguageFormDialog", () => {
       "ISO2 code must be exactly 2 characters.",
     );
   });
+
+  it("validates required fields", async () => {
+    const { result } = renderHook(
+      () =>
+        useLanguageFormDialog({
+          mode: "create",
+          language: null,
+          onClose: jest.fn(),
+          onSubmit: jest.fn(),
+        }),
+      { wrapper },
+    );
+
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+    expect(result.current.submitError).toBe("Enter a language name.");
+
+    act(() => result.current.setName("Spanish"));
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+    expect(result.current.submitError).toBe("Enter a native name.");
+
+    act(() => result.current.setNativeName("Español"));
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+    expect(result.current.submitError).toBe("Enter an ISO2 code.");
+  });
+
+  it("closes edit dialog without submit when values are unchanged", async () => {
+    const onClose = jest.fn();
+    const onSubmit = jest.fn();
+    const { result } = renderHook(
+      () =>
+        useLanguageFormDialog({
+          mode: "edit",
+          language: {
+            id: "1",
+            name: "English",
+            nativeName: "English",
+            iso2: "EN",
+          },
+          onClose,
+          onSubmit,
+        }),
+      { wrapper },
+    );
+
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("stores submit errors from failed mutations", async () => {
+    const onSubmit = jest.fn().mockRejectedValue(new Error("Save failed"));
+    const { result } = renderHook(
+      () =>
+        useLanguageFormDialog({
+          mode: "create",
+          language: null,
+          onClose: jest.fn(),
+          onSubmit,
+        }),
+      { wrapper },
+    );
+
+    act(() => result.current.setName("Spanish"));
+    act(() => result.current.setNativeName("Español"));
+    act(() => result.current.setIso2("es"));
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+
+    expect(result.current.submitError).toBe("Save failed");
+  });
 });

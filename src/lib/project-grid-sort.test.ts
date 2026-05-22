@@ -22,6 +22,8 @@ describe("project grid sort", () => {
   it("reads sort values by field", () => {
     expect(getProjectGridSortValue(items[0], "domain")).toBe("HR");
     expect(getProjectGridSortValue(items[1], "endDate")).toBe("");
+    expect(getProjectGridSortValue(items[0], "startDate")).toBe("2024-01-01");
+    expect(getProjectGridSortValue(items[0], "name")).toBe("Zulu");
   });
 
   it("sorts rows by selected field and direction", () => {

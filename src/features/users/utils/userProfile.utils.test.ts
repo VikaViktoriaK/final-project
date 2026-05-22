@@ -32,5 +32,15 @@ describe("userProfile utils", () => {
     expect(formatMemberSince("2024-01-15T00:00:00.000Z")).toMatch(
       /A memmer sinse Jan 15, 2024/,
     );
+    expect(formatMemberSince("1705276800000")).toMatch(/A memmer sinse/);
+  });
+
+  it("returns fallback full name and avatar initial", () => {
+    expect(getUserFullName({ ...user, firstName: "", lastName: "" })).toBe(
+      "User",
+    );
+    expect(
+      getAvatarInitial({ ...user, firstName: "", email: "zoe@example.com" }),
+    ).toBe("Z");
   });
 });
