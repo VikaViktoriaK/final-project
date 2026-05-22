@@ -112,8 +112,6 @@ pnpm test:e2e:ui
 pnpm test:e2e:headed
 ```
 
-
-
 | Problem                      | What to check                                                                                           |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------- |
 | GraphQL 400 / network errors | Backend running; `NEXT_PUBLIC_GRAPHQL_URL` correct; schema matches queries in `src/features/**/graphql` |
