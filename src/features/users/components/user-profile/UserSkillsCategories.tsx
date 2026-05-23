@@ -46,13 +46,16 @@ export function UserSkillsCategories({
 }: UserSkillsCategoriesProps) {
   return (
     <Box sx={userSkillsSx.mainColumn}>
-      <Box sx={userSkillsSx.categoriesStack}>
-        {categories.length === 0 ? (
-          <Typography sx={userSkillsSx.emptyState}>
-            No skills listed yet.
-          </Typography>
-        ) : (
-          categories.map((category) => (
+      <Typography component="h2" sx={userSkillsSx.sectionTitle}>
+        Skills
+      </Typography>
+      {!hasSkills ? (
+        <Typography sx={userSkillsSx.emptyState}>
+          No skills listed yet.
+        </Typography>
+      ) : (
+        <Box sx={userSkillsSx.categoriesStack}>
+          {categories.map((category) => (
             <Box
               key={category.id}
               component="section"
@@ -61,7 +64,7 @@ export function UserSkillsCategories({
             >
               <Typography
                 id={`skill-category-${category.id}`}
-                component="h2"
+                component="h3"
                 sx={userSkillsSx.categoryTitle}
               >
                 {category.title}
@@ -92,9 +95,9 @@ export function UserSkillsCategories({
                 ))}
               </Box>
             </Box>
-          ))
-        )}
-      </Box>
+          ))}
+        </Box>
+      )}
       {canManage ? (
         <Box sx={profileRemoveModeSx.toolbarActionsRow}>
           {removeMode ? (

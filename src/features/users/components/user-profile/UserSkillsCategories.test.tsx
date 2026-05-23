@@ -70,6 +70,9 @@ describe("UserSkillsCategories", () => {
       />,
     );
 
+    expect(
+      screen.getByRole("heading", { name: "Skills", level: 2 }),
+    ).toBeInTheDocument();
     expect(screen.getByText("No skills listed yet.")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /remove skills/i }),

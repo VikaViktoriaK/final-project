@@ -206,20 +206,6 @@ export const dataTableSx = {
       px: 1.5,
     },
   },
-  actionsBtn: {
-    color: "var(--app-text-muted)",
-    "&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
-    "@media (max-width: 767px)": {
-      display: "none",
-    },
-  },
-  actionsBtnChevron: {
-    color: "var(--app-text-muted)",
-    "&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
-    "@media (min-width: 768px)": {
-      display: "none",
-    },
-  },
   emptyState: {
     color: "var(--app-text-muted)",
     textAlign: "center",

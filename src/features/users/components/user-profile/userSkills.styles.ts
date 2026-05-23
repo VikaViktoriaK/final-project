@@ -1,4 +1,12 @@
 export const userSkillsSx = {
+  sectionTitle: {
+    color: "var(--app-text-muted)",
+    fontSize: 13,
+    fontWeight: 600,
+    letterSpacing: 0.4,
+    textTransform: "none",
+    mb: 3,
+  },
   mainColumn: {
     display: "flex",
     flexDirection: "column",
@@ -70,7 +78,8 @@ export const userSkillsSx = {
   emptyState: {
     color: "var(--app-text-muted)",
     fontSize: 15,
-    py: 2,
+    textAlign: "center",
+    py: 4,
   },
   errorText: {
     color: "#ffb4b4",

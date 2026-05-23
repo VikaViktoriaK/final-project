@@ -8,7 +8,6 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useTranslation } from "@/i18n/use-translation";
 import type { UserRow } from "@/features/users/types";
 import { catalogTableSx } from "@/shared/styles";
@@ -100,13 +99,6 @@ function UsersTableRow({
         <Typography variant="body2">{user.position}</Typography>
       </TableCell>
       <TableCell sx={catalogTableSx.catalogActionsCell}>
-        <IconButton
-          size="small"
-          sx={catalogTableSx.actionsBtnChevron}
-          onClick={handleView}
-        >
-          <ChevronRightIcon fontSize="small" />
-        </IconButton>
         <IconButton
           size="small"
           sx={catalogTableSx.catalogActionsMenuButton}
