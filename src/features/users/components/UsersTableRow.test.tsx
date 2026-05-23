@@ -35,15 +35,17 @@ describe("UsersTableRow", () => {
       </Table>,
     );
 
-    const buttons = screen.getAllByRole("button");
-    fireEvent.click(buttons[0]);
+    const menuButton = screen.getByRole("button");
+
+    fireEvent.click(menuButton);
+    fireEvent.click(screen.getByRole("menuitem", { name: "View profile" }));
     expect(onView).toHaveBeenCalledWith(user);
 
-    fireEvent.click(buttons[1]);
+    fireEvent.click(menuButton);
     fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
     expect(onEdit).toHaveBeenCalledWith(user);
 
-    fireEvent.click(buttons[1]);
+    fireEvent.click(menuButton);
     fireEvent.click(screen.getByRole("menuitem", { name: "Delete" }));
     expect(onDelete).toHaveBeenCalledWith(user);
   });
