@@ -4,6 +4,8 @@ A human resources management frontend built with **Next.js (App Router)**, **Typ
 
 This repository contains the **web client only**. Data comes from an external **GraphQL API** (course / local backend). The UI covers authentication, employees, CVs, projects, and reference catalogs (departments, positions, skills, languages).
 
+## Deploy: [link](https://final-project-9yxj.vercel.app/)
+
 ## Tech stack
 
 | Layer              | Choice                                                    |
